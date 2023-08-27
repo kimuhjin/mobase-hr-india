@@ -1,0 +1,67 @@
+export const WORKER_DATA = [
+  {
+    id: "1",
+    name: "Alice",
+    firma: "mobase",
+    skill_matrix: "C",
+    info1: "1",
+    info2: "2",
+    info3: "3",
+    info4: "4",
+    info5: "5",
+    profileImage:
+      "https://images.unsplash.com/photo-1530785602389-07594beb8b73?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80",
+  },
+  {
+    id: "2",
+    name: "John",
+    firma: "mobase",
+    skill_matrix: "C",
+    info1: "1",
+    info2: "2",
+    info3: "3",
+    info4: "4",
+    info5: "5",
+    profileImage:
+      "https://images.unsplash.com/photo-1606122017369-d782bbb78f32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80",
+  },
+  {
+    id: "3",
+    name: "Lucas",
+    firma: "mobase",
+    skill_matrix: "C",
+    info1: "1",
+    info2: "2",
+    info3: "3",
+    info4: "4",
+    info5: "5",
+    profileImage:
+      "https://images.unsplash.com/photo-1527082395-e939b847da0d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3024&q=80",
+  },
+  {
+    id: "4",
+    name: "Eva",
+    firma: "mobase",
+    skill_matrix: "C",
+    info1: "1",
+    info2: "2",
+    info3: "3",
+    info4: "4",
+    info5: "5",
+    profileImage:
+      "https://images.unsplash.com/photo-1629747490241-624f07d70e1e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3024&q=80",
+  },
+  {
+    id: "5",
+    name: "Ben",
+    firma: "mobase",
+    skill_matrix: "C",
+    info1: "1",
+    info2: "2",
+    info3: "3",
+    info4: "4",
+    info5: "5",
+    profileImage:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3000&q=80",
+  },
+];
