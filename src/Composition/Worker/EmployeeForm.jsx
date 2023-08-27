@@ -9,31 +9,29 @@ import {
   InputLabel,
   Stack,
 } from "@mui/material";
+import { db } from "../../firebase-config";
+import { doc, setDoc } from "firebase/firestore";
+import uuid from "react-uuid";
 
-export const EmployeeForm = ({ employeeData }) => {
-  const { register, setValue, handleSubmit, control } = useForm({
-    defaultValues: employeeData || {},
-  });
+export const EmployeeForm = ({ isNew, workerInfo }) => {
+  const { setValue, handleSubmit, control } = useForm();
 
   useEffect(() => {
-    if (employeeData) {
-      for (const [key, value] of Object.entries(employeeData)) {
+    if (workerInfo) {
+      for (const [key, value] of Object.entries(workerInfo)) {
         setValue(key, value);
       }
     }
-  }, [employeeData, setValue]);
+  }, [workerInfo, setValue]);
   const onSubmit = async (data) => {
+    const { name } = data;
+    const id = uuid();
+    console.log(name);
     try {
-      const response = await fetch("http://localhost:8000/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const commentRef = doc(db, "worker", id);
+      const res = await setDoc(commentRef, { ...data, id }, { merge: true });
 
-      const result = await response.json();
-      console.log("User registered:", result);
+      console.log(res);
     } catch (error) {
       console.error("Error registering user:", error);
     }
@@ -68,7 +66,6 @@ export const EmployeeForm = ({ employeeData }) => {
         <Controller
           name="profileImage"
           control={control}
-          value=""
           render={({ field: { value } }) =>
             value && (
               <img
@@ -106,63 +103,132 @@ export const EmployeeForm = ({ employeeData }) => {
         </FormControl>
       </Stack>
       <Stack sx={{ width: "100%", gap: "12px", padding: "20px" }}>
-        <TextField label="Imię i Nazwisko" {...register("name")} fullWidth />
-        <TextField
-          label="Nr. Firmowy"
-          {...register("companyNumber")}
-          fullWidth
+        <Controller
+          name="name"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField label="Imię i Nazwisko" fullWidth {...field} />
+          )}
+        />
+
+        <Controller
+          name="companyNumber"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField label="Nr. Firmowy" fullWidth {...field} />
+          )}
         />
 
         <FormControl fullWidth>
           <InputLabel>Firma</InputLabel>
-          <Select {...register("firma")} control={control} defaultValue="">
-            <MenuItem value="mobase">Mobase</MenuItem>
-            <MenuItem value="outsourcing">Outsourcing</MenuItem>
-          </Select>
+          <Controller
+            name="firma"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <Select fullWidth {...field}>
+                <MenuItem value="mobase">Mobase</MenuItem>
+                <MenuItem value="outsourcing">Outsourcing</MenuItem>
+              </Select>
+            )}
+          />
         </FormControl>
 
         <FormControl fullWidth>
           <InputLabel>Skill Matrix</InputLabel>
-          <Select
-            {...register("skillMatrix")}
+          <Controller
+            name="skillMatrix"
             control={control}
             defaultValue=""
-          >
-            <MenuItem value="A">A</MenuItem>
-            <MenuItem value="B">B</MenuItem>
-            <MenuItem value="C">C</MenuItem>
-            <MenuItem value="D">D</MenuItem>
-            <MenuItem value="E">E</MenuItem>
-          </Select>
+            render={({ field }) => (
+              <Select fullWidth {...field}>
+                <MenuItem value="A">A</MenuItem>
+                <MenuItem value="B">B</MenuItem>
+                <MenuItem value="C">C</MenuItem>
+                <MenuItem value="D">D</MenuItem>
+                <MenuItem value="E">E</MenuItem>
+              </Select>
+            )}
+          />
         </FormControl>
 
-        <TextField
-          label="Data zatrudnienia"
-          type="date"
-          {...register("employmentDate")}
-          fullWidth
-          InputLabelProps={{ shrink: true }}
+        <Controller
+          name="employmentDate"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField
+              label="Data zatrudnienia"
+              type="date"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              {...field}
+            />
+          )}
         />
-        <TextField
-          label="Data zatrudnienia (Mobase)"
-          type="date"
-          {...register("mobaseEmploymentDate")}
-          fullWidth
-          InputLabelProps={{ shrink: true }}
+
+        <Controller
+          name="mobaseEmploymentDate"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField
+              label="Data zatrudnienia (Mobase)"
+              type="date"
+              fullWidth
+              InputLabelProps={{ shrink: true }}
+              {...field}
+            />
+          )}
         />
-        <TextField label="Stanowisko" {...register("position")} fullWidth />
-        <TextField label="Obszar" {...register("area")} fullWidth />
-        <TextField
-          label="Certyfikat inspektora"
-          {...register("inspectorCertificate")}
-          fullWidth
+
+        <Controller
+          name="position"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField label="Stanowisko" fullWidth {...field} />
+          )}
         />
-        <TextField
-          label="Certyfikat lutowania"
-          {...register("solderingCertificate")}
-          fullWidth
+
+        <Controller
+          name="area"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField label="Obszar" fullWidth {...field} />
+          )}
         />
-        <TextField label="Zastępca TL" {...register("deputyTL")} fullWidth />
+
+        <Controller
+          name="inspectorCertificate"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField label="Certyfikat inspektora" fullWidth {...field} />
+          )}
+        />
+
+        <Controller
+          name="solderingCertificate"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField label="Certyfikat lutowania" fullWidth {...field} />
+          )}
+        />
+
+        <Controller
+          name="deputyTL"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <TextField label="Zastępca TL" fullWidth {...field} />
+          )}
+        />
+
         <Stack
           sx={{
             width: "100%",
@@ -176,7 +242,7 @@ export const EmployeeForm = ({ employeeData }) => {
             variant="contained"
             color="primary"
           >
-            Submit
+            {isNew ? "Sumbit" : "Edit"}
           </Button>
         </Stack>
       </Stack>

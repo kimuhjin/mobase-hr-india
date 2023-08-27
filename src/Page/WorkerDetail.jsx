@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { WORKER_DATA } from "../Data/worker";
 
@@ -15,7 +15,7 @@ const WorkerDetail = () => {
     info2,
     info3,
     info4,
-  } = workerData;
+  } = workerData || {};
   console.log(workerData);
   return (
     <Stack sx={{ width: "100%", height: "100%", padding: "20px" }}>
