@@ -93,6 +93,56 @@ export const List = () => {
             >
               Name
             </Stack>
+            <Stack
+              sx={{
+                width: "100px",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "cemter",
+              }}
+            >
+              Name
+            </Stack>
+            <Stack
+              sx={{
+                width: "100px",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "cemter",
+              }}
+            >
+              Name
+            </Stack>
+            <Stack
+              sx={{
+                width: "100px",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "cemter",
+              }}
+            >
+              Name
+            </Stack>
+            <Stack
+              sx={{
+                width: "100px",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "cemter",
+              }}
+            >
+              Name
+            </Stack>
+            <Stack
+              sx={{
+                width: "100px",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "cemter",
+              }}
+            >
+              Name
+            </Stack>
           </Stack>
           {/* Body */}
           <Stack

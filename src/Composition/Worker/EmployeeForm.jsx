@@ -14,7 +14,7 @@ import { doc, setDoc } from "firebase/firestore";
 import uuid from "react-uuid";
 
 export const EmployeeForm = ({ isNew, workerInfo }) => {
-  const { setValue, handleSubmit, control } = useForm();
+  const { setValue, watch, handleSubmit, control } = useForm();
 
   useEffect(() => {
     if (workerInfo) {
@@ -61,21 +61,91 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
       }}
     >
       <Stack
-        sx={{ width: "300px", borderRight: "1px solid black", padding: "20px" }}
+        sx={{ width: "300px", borderRight: "1px solid black", padding: "8px" }}
       >
-        <Controller
-          name="profileImage"
-          control={control}
-          render={({ field: { value } }) =>
-            value && (
-              <img
-                src={value}
-                alt="Profile Preview"
-                style={{ width: "100%", marginBottom: "20px" }}
-              />
-            )
-          }
-        />
+        {watch("profileImage") && (
+          //  IMAGE SECTION
+          <Stack
+            sx={{
+              width: "100%",
+              height: "100%",
+              justifyContent: "center",
+              marginBottom: "20px",
+            }}
+          >
+            <Stack
+              sx={{
+                flexDirection: "row",
+                img: {
+                  width: "180px",
+                  height: "180px",
+                },
+              }}
+            >
+              {/* LEFT */}
+              <Stack
+                sx={{
+                  width: "20px",
+                  height: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "blue",
+                  maxHeight: "180px",
+                  writingMode: "vertical-lr",
+                  textOrientation: "upright",
+                  letterSpacing: "-5px",
+                }}
+              >
+                {watch("firma")}
+              </Stack>
+
+              <Stack sx={{ width: "100%" }}>
+                <Controller
+                  name="profileImage"
+                  control={control}
+                  render={({ field: { value } }) =>
+                    value && (
+                      <img
+                        src={value}
+                        alt="Profile Preview"
+                        style={{ width: "100%" }}
+                      />
+                    )
+                  }
+                />
+              </Stack>
+              {/* RIGHT */}
+
+              <Stack
+                sx={{
+                  width: "20px",
+                  height: "100%",
+                  maxHeight: "180px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "yellow",
+                  writingMode: "vertical-lr",
+                  textOrientation: "upright",
+                }}
+              >
+                {watch("skillMatrix")}
+              </Stack>
+            </Stack>
+            {/* BOTTOM */}
+
+            <Stack
+              sx={{
+                width: "100%",
+                height: "20px",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "green",
+              }}
+            >
+              {watch("name")}
+            </Stack>
+          </Stack>
+        )}
 
         <FormControl
           sx={{
@@ -94,7 +164,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
           <Stack
             htmlFor="profile-image-upload"
             component={"label"}
-            sx={{ width: "fit-content" }}
+            sx={{ width: "fit-content", marginTop: "12px" }}
           >
             <Button variant="contained" component="span">
               Upload Image
