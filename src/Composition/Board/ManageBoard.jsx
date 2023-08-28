@@ -201,7 +201,7 @@ export const ManageBoard = ({ data }) => {
         sx={{ marginTop: "8px" }}
         variant="contained"
       >
-        {isLoading ? <CircularProgress /> : "Submit"}
+        {isLoading ? "Submitting..." : "Submit"}
       </Button>
     </Stack>
   );
