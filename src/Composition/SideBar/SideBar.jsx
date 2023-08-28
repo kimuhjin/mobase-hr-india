@@ -1,7 +1,8 @@
 import { Button, Stack } from "@mui/material";
 import { BsClipboardData } from "react-icons/bs";
+import { RiTeamFill } from "react-icons/ri";
 import { FaUserFriends } from "react-icons/fa";
-import { BOARD, WORKER } from "../../Constant/route";
+import { BOARD, TEAM, WORKER } from "../../Constant/route";
 import { useNavigate } from "react-router-dom";
 
 export const SideBar = () => {
@@ -27,6 +28,10 @@ export const SideBar = () => {
         <NavigateButton route={WORKER}>
           <FaUserFriends size={"18px"} />
           Worker
+        </NavigateButton>
+        <NavigateButton route={TEAM}>
+          <RiTeamFill size={"18px"} />
+          Team
         </NavigateButton>
       </Stack>
       <Stack
