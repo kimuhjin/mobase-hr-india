@@ -1,21 +1,87 @@
-import React, { useState } from "react";
-import { Stack, TextField, Button } from "@mui/material";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "../../firebase-config";
+import React, { useEffect, useState } from "react";
+import {
+  Stack,
+  TextField,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Typography,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { LoadingDim } from "../Common/LoadingDim";
-export const ManageBoard = ({ data }) => {
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase-config";
+export const ManageBoard = ({ data, updateBoardData, groupId, readonly }) => {
   const [draggedUser, setDraggedUser] = useState(null);
   const [boardData, setBoardData] = useState(data.item);
   const [columns, setColumns] = useState(data.column);
   const [rows, setRows] = useState(data.row);
   const [draggedIndex, setDraggedIndex] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [openUserDialog, setOpenUserDialog] = useState(false);
+  const [openAddUserDialog, setOpenAddUserDialog] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedCell, setSelectedCell] = useState(null);
+
+  const handleUserClick = (user) => {
+    if (!readonly) {
+      setSelectedUser(user);
+      setOpenUserDialog(true);
+    }
+  };
+
+  const handleEmptyCellClick = (rowKey, colKey) => {
+    if (!readonly) {
+      setSelectedCell({ row: rowKey, column: colKey });
+      setOpenAddUserDialog(true);
+    }
+  };
+
+  const handleUserDialogClose = () => {
+    setOpenUserDialog(false);
+    setSelectedUser(null);
+  };
+
+  const handleAddUserDialogClose = () => {
+    setOpenAddUserDialog(false);
+    setSelectedCell(null);
+  };
+
+  const handleDeleteUser = () => {
+    const newBoardData = boardData.filter(
+      (item) =>
+        item?.user !== selectedUser &&
+        item?.row !== selectedCell?.row &&
+        item?.column !== selectedCell?.column
+    );
+    setBoardData(newBoardData);
+    handleUserDialogClose();
+  };
+
+  const handleAddUser = (newUser) => {
+    const newBoardData = [
+      ...boardData,
+      {
+        row: rows.indexOf(selectedCell.row),
+        column: columns.indexOf(selectedCell.column),
+        user: newUser,
+      },
+    ];
+    setBoardData(newBoardData);
+    handleAddUserDialogClose();
+  };
   const handleDragStart = (index, user) => {
     setDraggedUser(user);
     setDraggedIndex(index);
   };
-
+  useEffect(() => {
+    updateBoardData(data.label, {
+      column: columns,
+      row: rows,
+      item: boardData,
+    });
+  }, [columns, rows, boardData, data.label]);
   const handleDrop = (targetRow, targetColumn) => {
     if (draggedUser) {
       let newData = [...boardData];
@@ -90,38 +156,24 @@ export const ManageBoard = ({ data }) => {
     newRows.splice(index, 1);
     setRows(newRows);
   };
-  const handleSubmit = async () => {
-    const data = { column: columns, row: rows, item: boardData };
-    try {
-      const commentRef = doc(db, "board", "1ks_4mt");
-      setIsLoading(true);
-      const res = await setDoc(commentRef, data, { merge: true });
-      alert("save successfully");
-      console.log(res);
-    } catch (error) {
-      console.error("Error registering user:", error);
-    } finally {
-      setIsLoading(false);
-    }
-    console.log(data);
-  };
 
   return (
     <>
-      <LoadingDim isLoading={isLoading} />
       <Stack sx={{ width: "100%", height: "100%" }}>
-        <Stack sx={{ marginBottom: "8px", flexDirection: "row" }}>
-          <Button
-            onClick={handleAddColumn}
-            sx={{ marginRight: "8px" }}
-            variant="contained"
-          >
-            Add Column
-          </Button>
-          <Button onClick={handleAddRow} variant="contained">
-            Add Row
-          </Button>
-        </Stack>
+        {!readonly && (
+          <Stack sx={{ marginBottom: "8px", flexDirection: "row" }}>
+            <Button
+              onClick={handleAddColumn}
+              sx={{ marginRight: "8px" }}
+              variant="contained"
+            >
+              Add Column
+            </Button>
+            <Button onClick={handleAddRow} variant="contained">
+              Add Row
+            </Button>
+          </Stack>
+        )}
         <Stack sx={{ border: "1px solid black" }}>
           <Stack
             sx={{
@@ -158,20 +210,27 @@ export const ManageBoard = ({ data }) => {
                   alignItems: "center",
                 }}
               >
-                <TextField
-                  sx={{
-                    ".MuiInputBase-input": {
-                      fontSize: "14px",
-                      padding: "2px",
-                    },
-                  }}
-                  value={colKey}
-                  onChange={(event) => handleColumnLabelChange(idx, event)}
-                />
-                <DeleteIcon
-                  onClick={() => handleDeleteColumn(idx)}
-                  sx={{ cursor: "pointer" }}
-                />
+                {!readonly ? (
+                  <TextField
+                    sx={{
+                      ".MuiInputBase-input": {
+                        fontSize: "14px",
+                        padding: "2px",
+                      },
+                    }}
+                    value={colKey}
+                    onChange={(event) => handleColumnLabelChange(idx, event)}
+                  />
+                ) : (
+                  <Typography>{colKey}</Typography>
+                )}
+
+                {!readonly && (
+                  <DeleteIcon
+                    onClick={() => handleDeleteColumn(idx)}
+                    sx={{ cursor: "pointer" }}
+                  />
+                )}
               </Stack>
             ))}
             {rows.map((rowKey, rowIndex) => (
@@ -188,20 +247,29 @@ export const ManageBoard = ({ data }) => {
                     alignItems: "center",
                   }}
                 >
-                  <TextField
-                    sx={{
-                      ".MuiInputBase-input": {
-                        fontSize: "14px",
-                        padding: "2px",
-                      },
-                    }}
-                    value={rowKey}
-                    onChange={(event) => handleRowLabelChange(rowIndex, event)}
-                  />
-                  <DeleteIcon
-                    onClick={() => handleDeleteRow(rowIndex)}
-                    sx={{ cursor: "pointer" }}
-                  />
+                  {!readonly ? (
+                    <TextField
+                      sx={{
+                        ".MuiInputBase-input": {
+                          fontSize: "14px",
+                          padding: "2px",
+                        },
+                      }}
+                      value={rowKey}
+                      onChange={(event) =>
+                        handleRowLabelChange(rowIndex, event)
+                      }
+                    />
+                  ) : (
+                    <Typography>{rowKey}</Typography>
+                  )}
+
+                  {!readonly && (
+                    <DeleteIcon
+                      onClick={() => handleDeleteRow(rowIndex)}
+                      sx={{ cursor: "pointer" }}
+                    />
+                  )}
                 </Stack>
                 {columns.map((colKey, colIndex) => {
                   const cellIndex = boardData.findIndex(
@@ -223,32 +291,126 @@ export const ManageBoard = ({ data }) => {
                           rowIndex === rows.length - 1
                             ? "none"
                             : "1px solid black",
-                        padding: 1,
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
+                      onClick={() =>
+                        user
+                          ? handleUserClick(user)
+                          : handleEmptyCellClick(rowKey, colKey)
+                      }
                     >
                       {user ? (
                         <Stack
                           sx={{
-                            height: "100%",
-                            flexDirection: "row",
+                            width: "100%",
                             justifyContent: "center",
-                            alignItems: "center",
-                            backgroundColor: "transparent",
                           }}
-                          draggable
+                          draggable={!readonly}
                           onDragStart={() => handleDragStart(cellIndex, user)}
                         >
-                          <img
-                            src={user.profileImage}
-                            alt={user.name}
-                            style={{
-                              pointerEvents: "none",
-                              width: "30px",
-                              height: "30px",
+                          <Stack
+                            sx={{
+                              flexDirection: "row",
+                              img: {
+                                width: "48px",
+                                height: "48px",
+                              },
                             }}
-                          />
+                          >
+                            {/* LEFT */}
+                            <Stack
+                              sx={{
+                                width: "20px",
+                                height: "100%",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                backgroundColor:
+                                  user.company === "mobase"
+                                    ? "blue"
+                                    : "skyblue",
+                                maxHeight: "28px",
+                                writingMode: "vertical-lr",
+                                textOrientation: "upright",
+                                letterSpacing: "-5px",
+                              }}
+                            ></Stack>
+
+                            <Stack
+                              sx={{
+                                width: "100%",
+                                flexDirection: "row",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <img
+                                src={user.profileImage}
+                                alt={user.name}
+                                style={{
+                                  pointerEvents: "none",
+                                  width: "28px",
+                                  height: "28px",
+                                }}
+                              />
+                            </Stack>
+                            {/* RIGHT */}
+
+                            <Stack
+                              sx={{
+                                width: "20px",
+                                height: "100%",
+                                maxHeight: "28px",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                backgroundColor: "yellow",
+                                writingMode: "vertical-lr",
+                                textOrientation: "upright",
+                                fontSize: "14px",
+                              }}
+                            >
+                              {user.skillMatrix}
+                            </Stack>
+                          </Stack>
+                          {/* BOTTOM */}
+
+                          <Stack
+                            sx={{
+                              width: "100%",
+                              height: "20px",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              backgroundColor: "green",
+                              fontSize: "14px",
+                            }}
+                          >
+                            {user.name}
+                          </Stack>
                         </Stack>
                       ) : (
+                        // <Stack
+                        //   sx={{
+                        //     width: "48px",
+                        //     height: "100%",
+                        //     flexDirection: "row",
+                        //     justifyContent: "center",
+                        //     alignItems: "center",
+                        //     backgroundColor: "transparent",
+                        //   }}
+                        //   draggable
+                        //   onDragStart={() => handleDragStart(cellIndex, user)}
+                        // >
+                        //   <img
+                        //     src={user.profileImage}
+                        //     alt={user.name}
+                        //     style={{
+                        //       pointerEvents: "none",
+                        //       width: "30px",
+                        //       height: "30px",
+                        //     }}
+                        //   />
+                        // </Stack>
                         <Stack sx={{ height: "100%" }} />
                       )}
                     </Stack>
@@ -258,14 +420,119 @@ export const ManageBoard = ({ data }) => {
             ))}
           </Stack>
         </Stack>
-        <Button
-          onClick={handleSubmit}
-          sx={{ marginTop: "8px" }}
-          variant="contained"
-        >
-          {isLoading ? "Submitting..." : "Submit"}
-        </Button>
       </Stack>
+      {!readonly && (
+        <Dialog open={openUserDialog} onClose={handleUserDialogClose}>
+          <DialogTitle>User Info</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Name: {selectedUser && selectedUser.name}
+            </DialogContentText>
+            {/* Add other user info here */}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleUserDialogClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleDeleteUser} color="primary">
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
+      {!readonly && (
+        <AddDialogue
+          groupId={groupId}
+          openAddUserDialog={openAddUserDialog}
+          handleAddUserDialogClose={handleAddUserDialogClose}
+          handleAddUser={handleAddUser}
+        />
+      )}
     </>
+  );
+};
+const AddDialogue = ({
+  groupId,
+  openAddUserDialog,
+  handleAddUserDialogClose,
+  handleAddUser,
+}) => {
+  const [workerList, setWorkerList] = React.useState([]);
+
+  const getWorkerList = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "worker"));
+      const workers = querySnapshot.docs.map((doc) => doc.data());
+      setWorkerList(workers);
+    } catch (err) {
+      alert("error! get worker list");
+      console.error(err);
+    } finally {
+    }
+  };
+  React.useEffect(() => {
+    getWorkerList();
+  }, []);
+  console.log(workerList);
+  return (
+    <Dialog open={openAddUserDialog} onClose={handleAddUserDialogClose}>
+      <DialogTitle>Add User</DialogTitle>
+      <DialogContent>
+        <Stack
+          sx={{
+            width: "500px",
+            height: "600px",
+            gap: "8px",
+            overflowY: "scroll",
+          }}
+        >
+          {workerList
+            .filter((db) => db.group === groupId)
+            .map((worker) => {
+              return (
+                <Stack
+                  key={worker.id}
+                  sx={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    border: "1px solid black",
+                    borderRadius: "12px",
+                    padding: "8px",
+                    height: "64px",
+                    boxSizing: "border-box",
+                    ":hover": {
+                      cursor: "pointer",
+                      backgroundColor: "#0083ca",
+                    },
+                  }}
+                  onClick={() =>
+                    handleAddUser({
+                      profileImage: worker.profileImage,
+                      name: worker.name,
+                      id: worker.id,
+                      company: worker.company,
+                      skillMatrix: worker.skillMatrix,
+                    })
+                  }
+                >
+                  <img
+                    src={worker.profileImage}
+                    alt=""
+                    style={{ width: "48px", height: "48px" }}
+                  />
+                  <Typography sx={{ marginLeft: "24px" }}>
+                    {worker.name}
+                  </Typography>
+                </Stack>
+              );
+            })}
+        </Stack>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleAddUserDialogClose} color="primary">
+          Cancel
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };

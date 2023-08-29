@@ -6,8 +6,10 @@ import {
   Typography,
 } from "@mui/material";
 import { GridExpandMoreIcon } from "@mui/x-data-grid";
+import { BoardsContainer } from "../Composition/Board/BoardsContainer";
+import { useState } from "react";
 
-const GROUP_LIST = [
+export const GROUP_LIST = [
   { label: "0th floor (1KS & 4MT)", id: "1ks_4mt" },
   { label: "0th floor  (OFD)", id: "ofd" },
   { label: "clean room (5SR)", id: "5sr" },
@@ -16,16 +18,28 @@ const GROUP_LIST = [
   { label: "smt  (SMT)", id: "smt" },
 ];
 export const Team = () => {
+  const [focused, setFocused] = useState([]);
+
   return (
-    <Stack sx={{ width: "100%", padding: "20px" }}>
+    <Stack sx={{ width: "100%", padding: "20px", overflowY: "scroll" }}>
       <Typography
         sx={{ fontSize: "28px", fontWeight: "700", marginBottom: "20px" }}
       >
         Worker List
       </Typography>
-      {GROUP_LIST.map(({ label }, index) => {
+      {GROUP_LIST.map(({ label, id }, index) => {
         return (
-          <Accordion key={index}>
+          <Accordion
+            key={index}
+            onChange={(e, expanded) => {
+              if (expanded) {
+                setFocused((prev) => [...prev, id]);
+              } else {
+                const newFocused = focused.filter((i) => i !== id);
+                setFocused(newFocused);
+              }
+            }}
+          >
             <AccordionSummary
               expandIcon={<GridExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -33,12 +47,8 @@ export const Team = () => {
             >
               <Typography>{label}</Typography>
             </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget.
-              </Typography>
+            <AccordionDetails sx={{ width: "100%", height: "100%" }}>
+              {focused.includes(id) && <BoardsContainer id={id} />}
             </AccordionDetails>
           </Accordion>
         );

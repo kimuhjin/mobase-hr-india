@@ -8,7 +8,7 @@ import { db } from "../firebase-config";
 const WorkerCRUD = () => {
   const { type, id } = useParams();
   const [workerInfo, setWorkerInfo] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(false);
   const getWorker = async () => {
     try {
       const docRef = doc(db, "worker", id);
@@ -20,13 +20,17 @@ const WorkerCRUD = () => {
       } else {
       }
     } catch (err) {
+      alert("error! worker crud get");
       console.error(err);
     } finally {
       setIsLoading(false);
     }
   };
   React.useEffect(() => {
-    getWorker();
+    if (type.toLowerCase() !== "new") {
+      setIsLoading(true);
+      getWorker();
+    }
   }, []);
 
   return (

@@ -1,8 +1,6 @@
-import { CircularProgress, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import React from "react";
 import { ManageBoard } from "./ManageBoard";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebase-config";
 
 export const Team = () => {
   const teamInfomation = {
@@ -14,27 +12,7 @@ export const Team = () => {
     Attendance: 1,
   };
   const { name } = teamInfomation;
-  const [board_data, setBoard_data] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const getBoard = async () => {
-    try {
-      const docRef = doc(db, "board", "1ks_4mt");
-      const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        setBoard_data(docSnap.data());
-      } else {
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  React.useEffect(() => {
-    getBoard();
-  }, []);
-  console.log(board_data);
   return (
     <Stack
       sx={{
@@ -61,21 +39,8 @@ export const Team = () => {
         <TeamLeader />
         <TeamStatus employmentStatus={employmentStatus_} />
       </Stack>
-      {isLoading ? (
-        <Stack
-          sx={{
-            width: "100%",
-            height: "100%",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress />
-        </Stack>
-      ) : (
-        <ManageBoard data={board_data} />
-      )}
+
+      <ManageBoard id={"1ks_4mt"} />
     </Stack>
   );
 };

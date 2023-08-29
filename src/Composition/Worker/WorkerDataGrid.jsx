@@ -17,17 +17,18 @@ const columns = [
       />
     ),
   },
-  { field: "name", headerName: "Imię i Nazwisko" },
-  { field: "companyNumber", headerName: "Nr. Firmowy" },
-  { field: "area", headerName: "area" },
-  { field: "firma", headerName: "firma" },
-  { field: "position", headerName: "position" },
-  { field: "skillMatrix", headerName: "skillMatrix" },
-  { field: "solderingCertificate", headerName: "solderingCertificate" },
-  { field: "mobaseEmploymentDate", headerName: "mobaseEmploymentDate" },
-  { field: "inspectorCertificate", headerName: "inspectorCertificate" },
-  { field: "employmentDate", headerName: "employmentDate" },
-  { field: "deputyTL", headerName: "deputyTL" },
+  { field: "group", headerName: "Group" },
+  { field: "name", headerName: "Name" },
+  { field: "employeeNumber", headerName: "employeeNumber" },
+  { field: "company", headerName: "Company" },
+  { field: "skillMatrix", headerName: "Skill Matrix" },
+  { field: "employmentDate", headerName: "Date of employment" },
+  { field: "employmentDate_Mobase", headerName: "Date of employment (Mobase)" },
+  { field: "position", headerName: "Position" },
+  { field: "area", headerName: "Area" },
+  { field: "inspectorCertificate", headerName: "Inspector Certificate" },
+  { field: "solderingCertificate", headerName: "Soldering Certificate" },
+  { field: "deputyTeamLeader", headerName: "Deputy Team Leader" },
 ];
 
 export const WorkerDataGrid = () => {
@@ -44,6 +45,7 @@ export const WorkerDataGrid = () => {
       const workers = querySnapshot.docs.map((doc) => doc.data());
       setWorkerList(workers);
     } catch (err) {
+      alert("error! datagrid");
       console.error(err);
     } finally {
       setIsLoading(false);
