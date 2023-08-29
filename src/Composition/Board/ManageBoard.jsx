@@ -13,6 +13,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase-config";
+import { WorkerCard } from "./WorkerCard";
 export const ManageBoard = ({ data, updateBoardData, groupId, readonly }) => {
   const [draggedUser, setDraggedUser] = useState(null);
   const [boardData, setBoardData] = useState(data.item);
@@ -302,115 +303,13 @@ export const ManageBoard = ({ data, updateBoardData, groupId, readonly }) => {
                       }
                     >
                       {user ? (
-                        <Stack
-                          sx={{
-                            width: "100%",
-                            justifyContent: "center",
-                          }}
-                          draggable={!readonly}
-                          onDragStart={() => handleDragStart(cellIndex, user)}
-                        >
-                          <Stack
-                            sx={{
-                              flexDirection: "row",
-                              img: {
-                                width: "48px",
-                                height: "48px",
-                              },
-                            }}
-                          >
-                            {/* LEFT */}
-                            <Stack
-                              sx={{
-                                width: "20px",
-                                height: "100%",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                backgroundColor:
-                                  user.company === "mobase"
-                                    ? "blue"
-                                    : "skyblue",
-                                maxHeight: "28px",
-                                writingMode: "vertical-lr",
-                                textOrientation: "upright",
-                                letterSpacing: "-5px",
-                              }}
-                            ></Stack>
-
-                            <Stack
-                              sx={{
-                                width: "100%",
-                                flexDirection: "row",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                            >
-                              <img
-                                src={user.profileImage}
-                                alt={user.name}
-                                style={{
-                                  pointerEvents: "none",
-                                  width: "28px",
-                                  height: "28px",
-                                }}
-                              />
-                            </Stack>
-                            {/* RIGHT */}
-
-                            <Stack
-                              sx={{
-                                width: "20px",
-                                height: "100%",
-                                maxHeight: "28px",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                backgroundColor: "yellow",
-                                writingMode: "vertical-lr",
-                                textOrientation: "upright",
-                                fontSize: "14px",
-                              }}
-                            >
-                              {user.skillMatrix}
-                            </Stack>
-                          </Stack>
-                          {/* BOTTOM */}
-
-                          <Stack
-                            sx={{
-                              width: "100%",
-                              height: "20px",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              backgroundColor: "green",
-                              fontSize: "14px",
-                            }}
-                          >
-                            {user.name}
-                          </Stack>
-                        </Stack>
+                        <WorkerCard
+                          readonly={readonly}
+                          handleDragStart={handleDragStart}
+                          cellIndex={cellIndex}
+                          user={user}
+                        />
                       ) : (
-                        // <Stack
-                        //   sx={{
-                        //     width: "48px",
-                        //     height: "100%",
-                        //     flexDirection: "row",
-                        //     justifyContent: "center",
-                        //     alignItems: "center",
-                        //     backgroundColor: "transparent",
-                        //   }}
-                        //   draggable
-                        //   onDragStart={() => handleDragStart(cellIndex, user)}
-                        // >
-                        //   <img
-                        //     src={user.profileImage}
-                        //     alt={user.name}
-                        //     style={{
-                        //       pointerEvents: "none",
-                        //       width: "30px",
-                        //       height: "30px",
-                        //     }}
-                        //   />
-                        // </Stack>
                         <Stack sx={{ height: "100%" }} />
                       )}
                     </Stack>
@@ -451,7 +350,7 @@ export const ManageBoard = ({ data, updateBoardData, groupId, readonly }) => {
     </>
   );
 };
-const AddDialogue = ({
+export const AddDialogue = ({
   groupId,
   openAddUserDialog,
   handleAddUserDialogClose,
@@ -507,11 +406,7 @@ const AddDialogue = ({
                   }}
                   onClick={() =>
                     handleAddUser({
-                      profileImage: worker.profileImage,
-                      name: worker.name,
                       id: worker.id,
-                      company: worker.company,
-                      skillMatrix: worker.skillMatrix,
                     })
                   }
                 >
