@@ -4,6 +4,7 @@ import { Button, CircularProgress, Stack, Typography } from "@mui/material";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase-config";
 import { LoadingDim } from "../Common/LoadingDim";
+import { LeaderCard } from "./LeaderCard";
 
 export const BoardsContainer = ({ id, readonly = false }) => {
   const [boards, setBoards] = useState([]);
@@ -70,6 +71,7 @@ export const BoardsContainer = ({ id, readonly = false }) => {
     setLeader(newUser);
     setOpenAddUserDialog(false);
   };
+
   return (
     <Stack sx={{ width: "100%" }}>
       <AddDialogue
@@ -104,17 +106,7 @@ export const BoardsContainer = ({ id, readonly = false }) => {
                 }}
               >
                 <Typography sx={{ fontWeight: 700 }}>Leader</Typography>
-                <Stack
-                  id={leader?.id}
-                  sx={{ alignItems: "center", justifyContent: "center" }}
-                >
-                  <img
-                    src={leader?.profileImage}
-                    alt={leader?.name}
-                    style={{ width: "50px", height: "50px" }}
-                  />
-                  <Typography>{leader?.name}</Typography>
-                </Stack>
+                <LeaderCard leaderId={leader?.id} />
               </Stack>
               {!readonly && (
                 <Button
