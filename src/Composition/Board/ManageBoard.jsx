@@ -106,7 +106,11 @@ export const ManageBoard = ({ data }) => {
             sx={{
               borderRight: "1px solid black",
               borderBottom: "1px solid black",
-              padding: 1,
+              padding: "2px",
+              fontSize: "14px",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             line
@@ -118,10 +122,20 @@ export const ManageBoard = ({ data }) => {
                 borderRight:
                   idx === columns.length - 1 ? "none" : "1px solid black",
                 borderBottom: "1px solid black",
-                padding: 1,
+                padding: "2px",
+                minHeight: "48px",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
               <TextField
+                sx={{
+                  ".MuiInputBase-input": {
+                    fontSize: "14px",
+                    padding: "2px",
+                  },
+                }}
                 value={colKey}
                 onChange={(event) => handleColumnLabelChange(idx, event)}
               />
@@ -132,11 +146,22 @@ export const ManageBoard = ({ data }) => {
               <Stack
                 sx={{
                   borderRight: "1px solid black",
-                  borderBottom: "1px solid black",
-                  padding: 1,
+                  borderBottom:
+                    rowIndex === rows.length - 1 ? "none" : "1px solid black",
+                  padding: "2px",
+                  minHeight: "48px",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 <TextField
+                  sx={{
+                    ".MuiInputBase-input": {
+                      fontSize: "14px",
+                      padding: "2px",
+                    },
+                  }}
                   value={rowKey}
                   onChange={(event) => handleRowLabelChange(rowIndex, event)}
                 />
