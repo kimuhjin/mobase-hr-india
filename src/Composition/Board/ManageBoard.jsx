@@ -14,7 +14,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase-config";
 import { WorkerCard } from "./WorkerCard";
-export const ManageBoard = ({ data, updateBoardData, groupId, readonly }) => {
+export const ManageBoard = ({
+  data,
+  updateBoardData,
+  groupId,
+  readonly,
+  boards,
+}) => {
   const [draggedUser, setDraggedUser] = useState(null);
   const [boardData, setBoardData] = useState(data.item);
   const [columns, setColumns] = useState(data.column);
@@ -206,7 +212,7 @@ export const ManageBoard = ({ data, updateBoardData, groupId, readonly }) => {
                   borderBottom: "1px solid black",
                   padding: "2px",
                   minHeight: "48px",
-                  flexDirection: "row",
+                  minWidth: "48px",
                   justifyContent: "center",
                   alignItems: "center",
                 }}
@@ -223,7 +229,7 @@ export const ManageBoard = ({ data, updateBoardData, groupId, readonly }) => {
                     onChange={(event) => handleColumnLabelChange(idx, event)}
                   />
                 ) : (
-                  <Typography>{colKey}</Typography>
+                  <Typography textAlign={"center"}>{colKey}</Typography>
                 )}
 
                 {!readonly && (
@@ -243,7 +249,7 @@ export const ManageBoard = ({ data, updateBoardData, groupId, readonly }) => {
                       rowIndex === rows.length - 1 ? "none" : "1px solid black",
                     padding: "2px",
                     minHeight: "48px",
-                    flexDirection: "row",
+                    minWidth: "48px",
                     justifyContent: "center",
                     alignItems: "center",
                   }}
@@ -262,7 +268,7 @@ export const ManageBoard = ({ data, updateBoardData, groupId, readonly }) => {
                       }
                     />
                   ) : (
-                    <Typography>{rowKey}</Typography>
+                    <Typography textAlign={"center"}>{rowKey}</Typography>
                   )}
 
                   {!readonly && (
@@ -345,6 +351,7 @@ export const ManageBoard = ({ data, updateBoardData, groupId, readonly }) => {
           openAddUserDialog={openAddUserDialog}
           handleAddUserDialogClose={handleAddUserDialogClose}
           handleAddUser={handleAddUser}
+          boardData={boards}
         />
       )}
     </>
@@ -355,9 +362,10 @@ export const AddDialogue = ({
   openAddUserDialog,
   handleAddUserDialogClose,
   handleAddUser,
+  boardData,
 }) => {
   const [workerList, setWorkerList] = React.useState([]);
-
+  const [existIds, setExistIds] = React.useState([]);
   const getWorkerList = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "worker"));
@@ -372,7 +380,18 @@ export const AddDialogue = ({
   React.useEffect(() => {
     getWorkerList();
   }, []);
-  console.log(workerList);
+  React.useEffect(() => {
+    const existIds = [];
+    boardData?.forEach((shift) => {
+      shift?.item?.forEach((item) => {
+        console.log(item.user.id);
+        console.log(item);
+        existIds.push(item.user.id);
+      });
+    });
+    setExistIds(existIds);
+  }, [boardData]);
+
   return (
     <Dialog open={openAddUserDialog} onClose={handleAddUserDialogClose}>
       <DialogTitle>Add User</DialogTitle>
@@ -386,7 +405,9 @@ export const AddDialogue = ({
           }}
         >
           {workerList
-            .filter((db) => db.group === groupId)
+
+            .filter((worker) => worker.group === groupId)
+            .filter((worker) => !existIds.includes(worker.id))
             .map((worker) => {
               return (
                 <Stack

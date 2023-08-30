@@ -44,7 +44,7 @@ export const LeaderCard = ({ leaderId }) => {
         />
       )}
 
-      <Typography>{workerInfo?.name}</Typography>
+      <Typography sx={{ textAlign: "center" }}>{workerInfo?.name}</Typography>
     </Stack>
   );
 };

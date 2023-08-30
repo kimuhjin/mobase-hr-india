@@ -119,7 +119,8 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
               justifyContent: "center",
               alignItems: "center",
               backgroundColor: "green",
-              fontSize: "14px",
+              fontSize: "10px",
+              textAlign: "center",
             }}
           >
             {workerInfo?.name}

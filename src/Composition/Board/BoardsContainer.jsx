@@ -73,7 +73,12 @@ export const BoardsContainer = ({ id, readonly = false }) => {
   };
 
   return (
-    <Stack sx={{ width: "100%" }}>
+    <Stack
+      sx={{
+        width: "100%",
+        height: "100%",
+      }}
+    >
       <AddDialogue
         openAddUserDialog={openAddUserDialog}
         groupId={id}
@@ -94,13 +99,12 @@ export const BoardsContainer = ({ id, readonly = false }) => {
           <CircularProgress />
         </Stack>
       ) : (
-        <>
+        <Stack sx={{ width: "100%" }}>
           {leader ? (
             <Stack sx={{ flexDirection: "row" }}>
               <Stack
                 sx={{
                   width: "100px",
-                  height: "100px",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
@@ -132,7 +136,7 @@ export const BoardsContainer = ({ id, readonly = false }) => {
             </>
           )}
 
-          <Stack sx={{ gap: "16px" }}>
+          <Stack sx={{ gap: "16px", width: "100%" }}>
             {boards?.map((board) => {
               return (
                 <Stack key={board.label}>
@@ -142,6 +146,7 @@ export const BoardsContainer = ({ id, readonly = false }) => {
                   <ManageBoard
                     readonly={readonly}
                     data={board}
+                    boards={boards}
                     updateBoardData={updateBoardData}
                     groupId={id}
                   />
@@ -158,7 +163,7 @@ export const BoardsContainer = ({ id, readonly = false }) => {
               Save
             </Button>
           )}
-        </>
+        </Stack>
       )}
     </Stack>
   );
