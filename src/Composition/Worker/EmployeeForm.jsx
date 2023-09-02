@@ -10,7 +10,7 @@ import {
   Stack,
 } from "@mui/material";
 import { db } from "../../firebase-config";
-import { deleteDoc, doc, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import uuid from "react-uuid";
 import { LoadingDim } from "../Common/LoadingDim";
 import { useNavigate } from "react-router-dom";
@@ -61,17 +61,64 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
   const deleteUser = async () => {
     try {
       setIsLoading(true);
-      const commentRef = doc(db, "worker", workerInfo.id);
-      const res = await deleteDoc(commentRef);
-      console.log(res);
-      alert("delete successfully");
-      navigate(WORKER);
+      try {
+        await deleteUserFromBoard(workerInfo.group, workerInfo.id);
+        console.log("deleteUserFromBoard success!");
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
+      try {
+        const commentRef = doc(db, "worker", workerInfo.id);
+        const res = await deleteDoc(commentRef);
+
+        console.log(res);
+        alert("delete successfully");
+        navigate(WORKER);
+      } catch (err) {
+        console.log(err);
+      }
     } catch (err) {
       alert("error! delete user");
     } finally {
       setIsLoading(false);
     }
   };
+
+  // 주어진 id와 동일한 leader 혹은 user를 boards 배열에서 제거하는 함수
+  function removeUserOrLeaderById(boards, idToRemove) {
+    return boards?.map((board) => {
+      const items = board?.item?.filter(
+        (item) => item?.user?.id !== idToRemove
+      );
+      const leader =
+        board?.leader?.id === idToRemove
+          ? null
+          : board?.leader
+          ? board?.leader
+          : null;
+      return { ...board, item: items, leader: leader };
+    });
+  }
+
+  const deleteUserFromBoard = async (group, id) => {
+    const collectionName = "boards";
+
+    const docGetRef = doc(db, collectionName, group);
+    const docSnapshot = await getDoc(docGetRef);
+    const originalBoard = docSnapshot.data()?.boards;
+
+    // 업데이트된 board 생성
+    const updatedBoard = removeUserOrLeaderById(originalBoard, id);
+    const docRef = doc(db, collectionName, group);
+    try {
+      await setDoc(docRef, { boards: updatedBoard });
+    } catch (err) {
+      console.log("특정 문서를 업데이트하는 함수");
+      console.error(err);
+    }
+  };
+
   return (
     <>
       <LoadingDim isLoading={isLoading} />{" "}

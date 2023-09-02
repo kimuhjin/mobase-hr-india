@@ -1,4 +1,4 @@
-const init = [
+export const init = [
   {
     column: ["no1", "no2", "no3"],
     item: [],
