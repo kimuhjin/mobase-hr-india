@@ -17,18 +17,30 @@ const columns = [
       />
     ),
   },
-  { field: "group", headerName: "Group" },
-  { field: "name", headerName: "Name" },
-  { field: "employeeNumber", headerName: "employeeNumber" },
-  { field: "company", headerName: "Company" },
-  { field: "skillMatrix", headerName: "Skill Matrix" },
-  { field: "employmentDate", headerName: "Date of employment" },
-  { field: "employmentDate_Mobase", headerName: "Date of employment (Mobase)" },
-  { field: "position", headerName: "Position" },
-  { field: "area", headerName: "Area" },
-  { field: "inspectorCertificate", headerName: "Inspector Certificate" },
-  { field: "solderingCertificate", headerName: "Soldering Certificate" },
-  { field: "deputyTeamLeader", headerName: "Deputy Team Leader" },
+  { field: "group", headerName: "Group", flex: 1 },
+  { field: "name", headerName: "Name", flex: 1 },
+  { field: "employeeNumber", headerName: "employeeNumber", flex: 1 },
+  { field: "company", headerName: "Company", flex: 1 },
+  { field: "skillMatrix", headerName: "Skill Matrix", flex: 1 },
+  { field: "employmentDate", headerName: "Date of employment", flex: 1 },
+  {
+    field: "employmentDate_Mobase",
+    headerName: "Date of employment (Mobase)",
+    flex: 1,
+  },
+  { field: "position", headerName: "Position", flex: 1 },
+  { field: "area", headerName: "Area", flex: 1 },
+  {
+    field: "inspectorCertificate",
+    headerName: "Inspector Certificate",
+    flex: 1,
+  },
+  {
+    field: "solderingCertificate",
+    headerName: "Soldering Certificate",
+    flex: 1,
+  },
+  { field: "deputyTeamLeader", headerName: "Deputy Team Leader", flex: 1 },
 ];
 
 export const WorkerDataGrid = () => {
