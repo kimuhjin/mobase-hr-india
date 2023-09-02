@@ -9,11 +9,13 @@ import {
   DialogContentText,
   DialogActions,
   Typography,
+  Chip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase-config";
 import { WorkerCard } from "./WorkerCard";
+import { LeaderCard } from "./LeaderCard";
 export const ManageBoard = ({
   data,
   updateBoardData,
@@ -25,12 +27,57 @@ export const ManageBoard = ({
   const [boardData, setBoardData] = useState(data.item);
   const [columns, setColumns] = useState(data.column);
   const [rows, setRows] = useState(data.row);
+  const [leader, setLeader] = useState(data.leader ?? null);
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [openUserDialog, setOpenUserDialog] = useState(false);
   const [openAddUserDialog, setOpenAddUserDialog] = useState(false);
+  const [openAddLeaderDialog, setOpenAddLeaderDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedCell, setSelectedCell] = useState(null);
+  const [sickAndVacation, setSickAndVacation] = useState({
+    sick: 0,
+    vacation: 0,
+  });
+  const countUsersInSickAndVacation = () => {
+    const sickIndices = [];
+    const vacationIndices = [];
 
+    columns.forEach((col, index) => {
+      if (col.includes("Sick")) sickIndices.push(index);
+      if (col.includes("Vacation")) vacationIndices.push(index);
+    });
+
+    const sickUsers = boardData.filter((item) =>
+      sickIndices.includes(item.column)
+    ).length;
+    const vacationUsers = boardData.filter((item) =>
+      vacationIndices.includes(item.column)
+    ).length;
+    setSickAndVacation({
+      sick: sickUsers,
+      vacation: vacationUsers,
+    });
+  };
+  useEffect(() => {
+    countUsersInSickAndVacation();
+  }, [boards]);
+  const handleAddLeader = (leader) => {
+    setLeader(leader);
+
+    setOpenAddLeaderDialog((prev) => !prev);
+  };
+  const handleAddUser = (newUser) => {
+    const newBoardData = [
+      ...boardData,
+      {
+        row: rows.indexOf(selectedCell.row),
+        column: columns.indexOf(selectedCell.column),
+        user: newUser,
+      },
+    ];
+    setBoardData(newBoardData);
+    handleAddUserDialogClose();
+  };
   const handleUserClick = (user) => {
     if (!readonly) {
       setSelectedUser(user);
@@ -66,18 +113,6 @@ export const ManageBoard = ({
     handleUserDialogClose();
   };
 
-  const handleAddUser = (newUser) => {
-    const newBoardData = [
-      ...boardData,
-      {
-        row: rows.indexOf(selectedCell.row),
-        column: columns.indexOf(selectedCell.column),
-        user: newUser,
-      },
-    ];
-    setBoardData(newBoardData);
-    handleAddUserDialogClose();
-  };
   const handleDragStart = (index, user) => {
     setDraggedUser(user);
     setDraggedIndex(index);
@@ -87,8 +122,9 @@ export const ManageBoard = ({
       column: columns,
       row: rows,
       item: boardData,
+      leader: leader ?? null,
     });
-  }, [columns, rows, boardData, data.label]);
+  }, [columns, rows, boardData, leader, data.label]);
   const handleDrop = (targetRow, targetColumn) => {
     if (draggedUser) {
       let newData = [...boardData];
@@ -166,7 +202,79 @@ export const ManageBoard = ({
 
   return (
     <>
-      <Stack sx={{ width: "100%", height: "100%" }}>
+      <Stack
+        sx={{
+          width: "100%",
+          height: "100%",
+          flexDirection: readonly ? "row" : "column",
+        }}
+      >
+        <Stack
+          sx={{
+            gap: "8px",
+            flexDirection: readonly ? "column" : "row",
+            marginRight: readonly ? "4px" : "0px",
+          }}
+        >
+          {leader ? (
+            <Stack sx={{ flexDirection: "row" }}>
+              <Stack
+                sx={{
+                  width: "100px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography sx={{ fontWeight: 700 }}>Leader</Typography>
+                <LeaderCard leaderId={leader?.id} />
+              </Stack>
+
+              {!readonly && (
+                <Stack sx={{ gap: "8px" }}>
+                  <Button
+                    variant="contained"
+                    sx={{ width: "200px", height: "48px", marginLeft: "16px" }}
+                    onClick={() => setOpenAddLeaderDialog(true)}
+                  >
+                    Change Leader
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    sx={{ width: "200px" }}
+                    onClick={() => setLeader(null)}
+                  >
+                    Remove Leader
+                  </Button>
+                </Stack>
+              )}
+            </Stack>
+          ) : (
+            <>
+              {!readonly && (
+                <Button
+                  variant="contained"
+                  sx={{ width: "200px" }}
+                  onClick={() => setOpenAddLeaderDialog(true)}
+                >
+                  Add Leader
+                </Button>
+              )}
+            </>
+          )}
+          <Stack>
+            <Chip label={`Total : ${boardData.length}`} />
+            <Chip label={`Sick : ${sickAndVacation.sick}`} />
+            <Chip label={`Vacation : ${sickAndVacation.vacation}`} />
+            <Chip
+              label={`Working : ${
+                boardData.length -
+                sickAndVacation.sick -
+                sickAndVacation.vacation
+              }`}
+            />
+          </Stack>
+        </Stack>
         {!readonly && (
           <Stack sx={{ marginBottom: "8px", flexDirection: "row" }}>
             <Button
@@ -347,10 +455,22 @@ export const ManageBoard = ({
       )}
       {!readonly && (
         <AddDialogue
+          title="Leader"
           groupId={groupId}
+          openAddUserDialog={openAddLeaderDialog}
+          handleAddUserDialogClose={() => setOpenAddLeaderDialog(false)}
+          handleAddUser={handleAddLeader}
+          boardData={boards}
+          isLeader={true}
+        />
+      )}
+      {!readonly && (
+        <AddDialogue
+          title="Add User"
           openAddUserDialog={openAddUserDialog}
-          handleAddUserDialogClose={handleAddUserDialogClose}
+          groupId={groupId}
           handleAddUser={handleAddUser}
+          handleAddUserDialogClose={handleAddUserDialogClose}
           boardData={boards}
         />
       )}
@@ -358,14 +478,17 @@ export const ManageBoard = ({
   );
 };
 export const AddDialogue = ({
+  title,
   groupId,
   openAddUserDialog,
   handleAddUserDialogClose,
   handleAddUser,
   boardData,
+  isLeader = false,
 }) => {
   const [workerList, setWorkerList] = React.useState([]);
   const [existIds, setExistIds] = React.useState([]);
+  const [existLeaderIds, setExistLeaderIds] = React.useState([]);
   const getWorkerList = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "worker"));
@@ -380,21 +503,30 @@ export const AddDialogue = ({
   React.useEffect(() => {
     getWorkerList();
   }, []);
+
   React.useEffect(() => {
+    const existLeaderIds = [];
+    boardData?.forEach((shift) => {
+      existLeaderIds.push(shift?.leader?.id);
+    });
+    setExistLeaderIds(existLeaderIds);
+
     const existIds = [];
     boardData?.forEach((shift) => {
       shift?.item?.forEach((item) => {
-        console.log(item.user.id);
-        console.log(item);
-        existIds.push(item.user.id);
+        existIds.push(item?.user?.id);
       });
     });
     setExistIds(existIds);
-  }, [boardData]);
+  }, [boardData, isLeader]);
 
+  const filteredList = workerList
+    .filter((worker) => worker.group === groupId)
+    .filter((worker) => !existIds.includes(worker.id))
+    .filter((worker) => !existLeaderIds.includes(worker.id));
   return (
     <Dialog open={openAddUserDialog} onClose={handleAddUserDialogClose}>
-      <DialogTitle>Add User</DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <Stack
           sx={{
@@ -404,44 +536,40 @@ export const AddDialogue = ({
             overflowY: "scroll",
           }}
         >
-          {workerList
-
-            .filter((worker) => worker.group === groupId)
-            .filter((worker) => !existIds.includes(worker.id))
-            .map((worker) => {
-              return (
-                <Stack
-                  key={worker.id}
-                  sx={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    border: "1px solid black",
-                    borderRadius: "12px",
-                    padding: "8px",
-                    height: "64px",
-                    boxSizing: "border-box",
-                    ":hover": {
-                      cursor: "pointer",
-                      backgroundColor: "#0083ca",
-                    },
-                  }}
-                  onClick={() =>
-                    handleAddUser({
-                      id: worker.id,
-                    })
-                  }
-                >
-                  <img
-                    src={worker.profileImage}
-                    alt=""
-                    style={{ width: "48px", height: "48px" }}
-                  />
-                  <Typography sx={{ marginLeft: "24px" }}>
-                    {worker.name}
-                  </Typography>
-                </Stack>
-              );
-            })}
+          {filteredList.map((worker) => {
+            return (
+              <Stack
+                key={worker?.id}
+                sx={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  border: "1px solid black",
+                  borderRadius: "12px",
+                  padding: "8px",
+                  height: "64px",
+                  boxSizing: "border-box",
+                  ":hover": {
+                    cursor: "pointer",
+                    backgroundColor: "#0083ca",
+                  },
+                }}
+                onClick={() =>
+                  handleAddUser({
+                    id: worker?.id,
+                  })
+                }
+              >
+                <img
+                  src={worker.profileImage}
+                  alt=""
+                  style={{ width: "48px", height: "48px" }}
+                />
+                <Typography sx={{ marginLeft: "24px" }}>
+                  {worker.name}
+                </Typography>
+              </Stack>
+            );
+          })}
         </Stack>
       </DialogContent>
       <DialogActions>
