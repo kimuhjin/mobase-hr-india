@@ -5,7 +5,7 @@ import { BoardsContainer } from "../Composition/Board/BoardsContainer";
 import { useState } from "react";
 
 const Board = () => {
-  const [selectedBoardId, setSelectedBoardId] = useState("1ks_4mt");
+  const [selectedBoardId, setSelectedBoardId] = useState("1ks_4mf");
   return (
     <Stack sx={{ width: "100%", height: "100%", padding: "8px" }}>
       {/* <Header /> */}
@@ -16,7 +16,7 @@ const Board = () => {
           setSelectedBoardId(e.target.value);
         }}
       >
-        <MenuItem value="1ks_4mt">{`0th floor (1KS & 4MT)`}</MenuItem>
+        <MenuItem value="1ks_4mf">{`0th floor (1KS & 4MF)`}</MenuItem>
         <MenuItem value="ofd">{`0th floor  (OFD)`}</MenuItem>
         <MenuItem value="5sr">{`clean room (5SR)`}</MenuItem>
         <MenuItem value="3cl">{`clean room (3CL)`}</MenuItem>

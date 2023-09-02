@@ -40,7 +40,7 @@ export const Team = () => {
         <TeamStatus employmentStatus={employmentStatus_} />
       </Stack>
 
-      <ManageBoard id={"1ks_4mt"} />
+      <ManageBoard id={"1ks_4mf"} />
     </Stack>
   );
 };
