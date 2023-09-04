@@ -10,7 +10,7 @@ export const BoardsContainer = ({ id, readonly = false }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isGetLoading, setIsGetLoading] = useState(true);
-  console.log(boards);
+
   const getBoard = async (id) => {
     if (id) {
       try {
@@ -19,7 +19,7 @@ export const BoardsContainer = ({ id, readonly = false }) => {
 
         if (docSnap.exists()) {
           const { boards } = docSnap.data();
-          console.log(boards);
+
           setBoards(boards);
         }
       } catch (err) {
@@ -33,18 +33,15 @@ export const BoardsContainer = ({ id, readonly = false }) => {
   useEffect(() => {
     setIsGetLoading(true);
     getBoard(id);
-    console.log(id);
   }, [id]);
 
-  console.log(boards);
   const handleSave = async () => {
     try {
       const commentRef = doc(db, "boards", id);
       setIsLoading(true);
-      console.log(boards);
+
       const res = await setDoc(commentRef, { boards }, { merge: true });
       alert("save successfully");
-      console.log(res);
     } catch (error) {
       console.error("Error saving data:", error);
       alert("error! board save");

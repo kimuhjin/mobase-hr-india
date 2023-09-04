@@ -30,14 +30,13 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
   const onSubmit = async (data) => {
     const { name } = data;
     const id = workerInfo.id || uuid();
-    console.log(name);
+
     try {
       setIsLoading(true);
       const commentRef = doc(db, "worker", id);
       const res = await setDoc(commentRef, { ...data, id }, { merge: true });
       alert("save successfully");
       navigate(WORKER);
-      console.log(res);
     } catch (error) {
       alert("error! employee form");
       console.error("Error registering user:", error);

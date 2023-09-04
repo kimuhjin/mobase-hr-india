@@ -5,7 +5,6 @@ import { db } from "../../firebase-config";
 export const LeaderCard = ({ leaderId }) => {
   const [workerInfo, setWorkerInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  console.log(leaderId);
   const getWorker = async () => {
     try {
       setIsLoading(true);

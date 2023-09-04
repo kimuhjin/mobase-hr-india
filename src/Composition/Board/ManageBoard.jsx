@@ -70,8 +70,8 @@ export const ManageBoard = ({
     const newBoardData = [
       ...boardData,
       {
-        row: rows.indexOf(selectedCell.row),
-        column: columns.indexOf(selectedCell.column),
+        row: selectedCell.row,
+        column: selectedCell.column,
         user: newUser,
       },
     ];
@@ -422,7 +422,7 @@ export const ManageBoard = ({
                       onClick={() =>
                         user
                           ? handleUserClick(user)
-                          : handleEmptyCellClick(rowKey, colKey)
+                          : handleEmptyCellClick(rowIndex, colIndex)
                       }
                     >
                       {user && (
