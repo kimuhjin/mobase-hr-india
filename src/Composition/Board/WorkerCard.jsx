@@ -29,11 +29,12 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
   }, []);
 
   return (
-    <>
+    <Stack sx={{ width: "100%", height: "100%", backgroundColor: "white" }}>
       {isLoading ? (
         <Stack
           sx={{
             width: "100%",
+            height: "100%",
             justifyContent: "center",
             alignItems: "center",
           }}
@@ -44,6 +45,7 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
         <Stack
           sx={{
             width: "100%",
+            height: "100%",
             justifyContent: "center",
           }}
           draggable={!readonly}
@@ -51,6 +53,8 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
         >
           <Stack
             sx={{
+              width: "100%",
+              height: "100%",
               flexDirection: "row",
               img: {
                 width: "48px",
@@ -61,18 +65,18 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
             {/* LEFT */}
             <Stack
               sx={{
-                width: "20px",
-                height: "100%",
+                minWidth: "12px",
+                maxWidth: "12px",
                 justifyContent: "center",
                 alignItems: "center",
                 backgroundColor:
                   workerInfo?.company === "mobase" ? "blue" : "skyblue",
-                maxHeight: "28px",
+
                 writingMode: "vertical-lr",
                 textOrientation: "upright",
                 letterSpacing: "-5px",
               }}
-            ></Stack>
+            />
 
             <Stack
               sx={{
@@ -86,9 +90,8 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
                 src={workerInfo?.profileImage}
                 alt={workerInfo?.name}
                 style={{
+                  width: "100%",
                   pointerEvents: "none",
-                  width: "28px",
-                  height: "28px",
                 }}
               />
             </Stack>
@@ -96,9 +99,8 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
 
             <Stack
               sx={{
-                width: "20px",
-                height: "100%",
-                maxHeight: "28px",
+                minWidth: "12px",
+                maxWidth: "12px",
                 justifyContent: "center",
                 alignItems: "center",
                 backgroundColor: "yellow",
@@ -115,18 +117,22 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
           <Stack
             sx={{
               width: "100%",
-              height: "20px",
+              minHeight: "28px",
+              height: "28px",
+
               justifyContent: "center",
               alignItems: "center",
               backgroundColor: "green",
               fontSize: "10px",
               textAlign: "center",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
             }}
           >
             {workerInfo?.name}
           </Stack>
         </Stack>
       )}
-    </>
+    </Stack>
   );
 };

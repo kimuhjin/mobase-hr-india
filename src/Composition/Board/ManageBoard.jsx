@@ -289,12 +289,16 @@ export const ManageBoard = ({
             </Button>
           </Stack>
         )}
-        <Stack sx={{ border: "1px solid black" }}>
+        <Stack
+          sx={{ border: "1px solid black", width: "100%", height: "100%" }}
+        >
           <Stack
             sx={{
               position: "relative",
               display: "grid",
               gridTemplateColumns: `1fr repeat(${columns.length}, 1fr)`,
+              height: "100%",
+              width: "100%",
               gap: 0,
             }}
           >
@@ -356,8 +360,8 @@ export const ManageBoard = ({
                     borderBottom:
                       rowIndex === rows.length - 1 ? "none" : "1px solid black",
                     padding: "2px",
-                    minHeight: "48px",
-                    minWidth: "48px",
+                    minHeight: "60px",
+                    minWidth: "60px",
                     justifyContent: "center",
                     alignItems: "center",
                   }}
@@ -398,6 +402,8 @@ export const ManageBoard = ({
                       onDrop={() => handleDrop(rowKey, colKey)}
                       onDragOver={(event) => event.preventDefault()}
                       sx={{
+                        width: "100%",
+                        height: "100%",
                         borderRight:
                           colIndex === columns.length - 1
                             ? "none"
@@ -409,6 +415,9 @@ export const ManageBoard = ({
                         flexDirection: "row",
                         justifyContent: "center",
                         alignItems: "center",
+                        ":hover": {
+                          backgroundColor: "skyblue",
+                        },
                       }}
                       onClick={() =>
                         user
@@ -416,15 +425,13 @@ export const ManageBoard = ({
                           : handleEmptyCellClick(rowKey, colKey)
                       }
                     >
-                      {user ? (
+                      {user && (
                         <WorkerCard
                           readonly={readonly}
                           handleDragStart={handleDragStart}
                           cellIndex={cellIndex}
                           user={user}
                         />
-                      ) : (
-                        <Stack sx={{ height: "100%" }} />
                       )}
                     </Stack>
                   );
@@ -439,9 +446,8 @@ export const ManageBoard = ({
           <DialogTitle>User Info</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Name: {selectedUser && selectedUser.name}
+              <WorkerCard readonly={true} user={selectedUser} />
             </DialogContentText>
-            {/* Add other user info here */}
           </DialogContent>
           <DialogActions>
             <Button onClick={handleUserDialogClose} color="primary">
@@ -536,40 +542,63 @@ export const AddDialogue = ({
             overflowY: "scroll",
           }}
         >
-          {filteredList.map((worker) => {
-            return (
-              <Stack
-                key={worker?.id}
+          {filteredList.length === 0 ? (
+            <Stack
+              sx={{
+                width: "100%",
+                height: "100%",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography
                 sx={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  border: "1px solid black",
-                  borderRadius: "12px",
-                  padding: "8px",
-                  height: "64px",
-                  boxSizing: "border-box",
-                  ":hover": {
-                    cursor: "pointer",
-                    backgroundColor: "#0083ca",
-                  },
+                  fontSize: "20px",
+                  width: "100%",
+                  fontWeight: 700,
+                  textAlign: "center",
                 }}
-                onClick={() =>
-                  handleAddUser({
-                    id: worker?.id,
-                  })
-                }
               >
-                <img
-                  src={worker.profileImage}
-                  alt=""
-                  style={{ width: "48px", height: "48px" }}
-                />
-                <Typography sx={{ marginLeft: "24px" }}>
-                  {worker.name}
-                </Typography>
-              </Stack>
-            );
-          })}
+                Empty
+              </Typography>
+            </Stack>
+          ) : (
+            filteredList.map((worker) => {
+              return (
+                <Stack
+                  key={worker?.id}
+                  sx={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    border: "1px solid black",
+                    borderRadius: "12px",
+                    padding: "8px",
+                    height: "64px",
+                    boxSizing: "border-box",
+                    ":hover": {
+                      cursor: "pointer",
+                      backgroundColor: "#0083ca",
+                    },
+                  }}
+                  onClick={() =>
+                    handleAddUser({
+                      id: worker?.id,
+                    })
+                  }
+                >
+                  <img
+                    src={worker.profileImage}
+                    alt=""
+                    style={{ width: "48px", height: "48px" }}
+                  />
+                  <Typography sx={{ marginLeft: "24px" }}>
+                    {worker.name}
+                  </Typography>
+                </Stack>
+              );
+            })
+          )}
         </Stack>
       </DialogContent>
       <DialogActions>

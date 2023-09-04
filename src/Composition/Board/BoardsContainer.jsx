@@ -81,11 +81,24 @@ export const BoardsContainer = ({ id, readonly = false }) => {
           <CircularProgress />
         </Stack>
       ) : (
-        <Stack sx={{ width: "100%" }}>
-          <Stack sx={{ gap: "16px", width: "100%" }}>
+        <Stack sx={{ width: "100%", height: "100%" }}>
+          <Stack
+            sx={{
+              gap: "16px",
+              width: "100%",
+              height: "100%",
+              alignItems: "space-between",
+            }}
+          >
             {boards?.map((board) => {
               return (
-                <Stack key={board.label}>
+                <Stack
+                  key={board.label}
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
                   <Typography sx={{ fontWeight: "700", fontSize: "17px" }}>
                     {board.label}
                   </Typography>
