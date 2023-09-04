@@ -129,9 +129,7 @@ export const ManageBoard = ({
     if (draggedUser) {
       let newData = [...boardData];
       const targetIndex = newData.findIndex(
-        (item) =>
-          item.row === rows.indexOf(targetRow) &&
-          item.column === columns.indexOf(targetColumn)
+        (item) => item.row === targetRow && item.column === targetColumn
       );
       const draggedItem = newData[draggedIndex];
 
@@ -139,8 +137,8 @@ export const ManageBoard = ({
         newData[draggedIndex] = newData[targetIndex];
         newData[targetIndex] = draggedItem;
       } else {
-        draggedItem.row = rows.indexOf(targetRow);
-        draggedItem.column = columns.indexOf(targetColumn);
+        draggedItem.row = targetRow;
+        draggedItem.column = targetColumn;
         newData.push(draggedItem);
         newData.splice(draggedIndex, 1);
       }
@@ -399,7 +397,7 @@ export const ManageBoard = ({
                   return (
                     <Stack
                       key={colIndex}
-                      onDrop={() => handleDrop(rowKey, colKey)}
+                      onDrop={() => handleDrop(rowIndex, colIndex)}
                       onDragOver={(event) => event.preventDefault()}
                       sx={{
                         width: "100%",
