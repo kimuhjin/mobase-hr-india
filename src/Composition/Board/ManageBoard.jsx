@@ -12,10 +12,13 @@ import {
   Chip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase-config";
 import { WorkerCard } from "./WorkerCard";
 import { LeaderCard } from "./LeaderCard";
+
 export const ManageBoard = ({
   data,
   updateBoardData,
@@ -38,6 +41,7 @@ export const ManageBoard = ({
     sick: 0,
     vacation: 0,
   });
+  console.log(boardData);
   const countUsersInSickAndVacation = () => {
     const sickIndices = [];
     const vacationIndices = [];
@@ -171,33 +175,69 @@ export const ManageBoard = ({
     setRows(newRows);
   };
   const handleDeleteColumn = (index) => {
-    const newColumns = [...columns];
-    const newBoardData = [...boardData];
-    const hasUserInColumn = newBoardData.some((item) => item.column === index);
+    if (window.confirm("Do you want to delete this column?")) {
+      const newColumns = [...columns];
+      const newBoardData = [...boardData];
+      const hasUserInColumn = newBoardData.some(
+        (item) => item.column === index
+      );
 
-    if (hasUserInColumn) {
-      alert("Cannot delete a column with users.");
-      return;
+      if (hasUserInColumn) {
+        alert("Cannot delete a column with users.");
+        return;
+      }
+
+      newColumns.splice(index, 1);
+      setColumns(newColumns);
     }
-
-    newColumns.splice(index, 1);
-    setColumns(newColumns);
   };
 
   const handleDeleteRow = (index) => {
-    const newRows = [...rows];
-    const newBoardData = [...boardData];
-    const hasUserInRow = newBoardData.some((item) => item.row === index);
+    if (window.confirm("Do you want to delete this row?")) {
+      const newRows = [...rows];
+      const newBoardData = [...boardData];
+      const hasUserInRow = newBoardData.some((item) => item.row === index);
 
-    if (hasUserInRow) {
-      alert("Cannot delete a row with users.");
-      return;
+      if (hasUserInRow) {
+        alert("Cannot delete a row with users.");
+        return;
+      }
+
+      newRows.splice(index, 1);
+      setRows(newRows);
     }
+  };
+  const handleAddColumnAt = (index) => {
+    const newColumns = [...columns];
+    newColumns.splice(index, 0, "");
 
-    newRows.splice(index, 1);
-    setRows(newRows);
+    // boardData에서 column이 index보다 큰 항목들의 column 값을 1 증가시켜야 합니다.
+    const updatedBoardData = boardData.map((item) => {
+      if (item.column >= index) {
+        return { ...item, column: item.column + 1 };
+      }
+      return item;
+    });
+
+    setColumns(newColumns);
+    setBoardData(updatedBoardData);
   };
 
+  const handleAddRowAt = (index) => {
+    const newRows = [...rows];
+    newRows.splice(index, 0, "");
+
+    // boardData에서 row가 index보다 큰 항목들의 row 값을 1 증가시켜야 합니다.
+    const updatedBoardData = boardData.map((item) => {
+      if (item.row >= index) {
+        return { ...item, row: item.row + 1 };
+      }
+      return item;
+    });
+
+    setRows(newRows);
+    setBoardData(updatedBoardData);
+  };
   return (
     <>
       <Stack
@@ -343,10 +383,16 @@ export const ManageBoard = ({
                 )}
 
                 {!readonly && (
-                  <DeleteIcon
-                    onClick={() => handleDeleteColumn(idx)}
-                    sx={{ cursor: "pointer" }}
-                  />
+                  <>
+                    <ArrowRightIcon
+                      onClick={() => handleAddColumnAt(idx + 1)}
+                      sx={{ cursor: "pointer" }}
+                    />
+                    <DeleteIcon
+                      onClick={() => handleDeleteColumn(idx)}
+                      sx={{ cursor: "pointer" }}
+                    />
+                  </>
                 )}
               </Stack>
             ))}
@@ -382,10 +428,16 @@ export const ManageBoard = ({
                   )}
 
                   {!readonly && (
-                    <DeleteIcon
-                      onClick={() => handleDeleteRow(rowIndex)}
-                      sx={{ cursor: "pointer" }}
-                    />
+                    <>
+                      <ArrowDropDownIcon
+                        onClick={() => handleAddRowAt(rowIndex + 1)}
+                        sx={{ cursor: "pointer" }}
+                      />{" "}
+                      <DeleteIcon
+                        onClick={() => handleDeleteRow(rowIndex)}
+                        sx={{ cursor: "pointer" }}
+                      />
+                    </>
                   )}
                 </Stack>
                 {columns.map((colKey, colIndex) => {

@@ -26,7 +26,7 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
   };
   useEffect(() => {
     getWorker();
-  }, []);
+  }, [user.id]);
 
   return (
     <Stack sx={{ width: "100%", height: "100%", backgroundColor: "white" }}>
