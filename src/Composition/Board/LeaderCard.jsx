@@ -31,7 +31,7 @@ export const LeaderCard = ({ leaderId }) => {
   return (
     <Stack
       id={leaderId}
-      sx={{ alignItems: "center", justifyContent: "center" }}
+      sx={{ width: "100%", alignItems: "center", justifyContent: "center" }}
     >
       {isLoading ? (
         <CircularProgress />
@@ -39,11 +39,21 @@ export const LeaderCard = ({ leaderId }) => {
         <img
           src={workerInfo?.profileImage}
           alt={workerInfo?.name}
-          style={{ width: "120px", height: "120px" }}
+          style={{ width: "80px", height: "80px" }}
         />
       )}
 
-      <Typography sx={{ textAlign: "center", fontWeight: 700 }}>
+      <Typography
+        sx={{
+          textAlign: "center",
+          fontWeight: 700,
+          fontSize: "10px",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          wordBreak: "break-all",
+        }}
+      >
         {workerInfo?.name}
       </Typography>
     </Stack>

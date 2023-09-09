@@ -251,9 +251,11 @@ export const ManageBoard = ({
     setBoardData(updatedBoardData);
   };
   return (
-    <Stack>
+    <Stack sx={{ width: "100%", height: "100%" }}>
       {!readonly && (
-        <Stack sx={{ flexDirection: "row", marginBottom: "6px" }}>
+        <Stack
+          sx={{ flexDirection: "row", marginBottom: "6px", width: "100%" }}
+        >
           {leader ? (
             <Stack sx={{ gap: "8px", flexDirection: "row" }}>
               <Button
@@ -294,7 +296,7 @@ export const ManageBoard = ({
       >
         <Stack
           sx={{
-            width: "150px",
+            width: "100px",
             gap: "4px",
             flexDirection: readonly ? "column" : "column",
             marginRight: readonly ? "4px" : "0px",
@@ -305,7 +307,7 @@ export const ManageBoard = ({
           <Typography
             sx={{
               fontWeight: "700",
-              fontSize: "21px",
+              fontSize: "16px",
               textAlign: "left",
               color: "blue",
               padding: "0px 6px",
@@ -321,7 +323,9 @@ export const ManageBoard = ({
                   justifyContent: "center",
                 }}
               >
-                <Typography sx={{ fontWeight: 700 }}>Team Leader</Typography>
+                <Typography sx={{ fontWeight: 700, fontSize: "13px" }}>
+                  Team Leader
+                </Typography>
                 <LeaderCard leaderId={leader?.id} />
               </Stack>
             </Stack>
@@ -368,16 +372,19 @@ export const ManageBoard = ({
             height: "100%",
             borderRadius: "10px",
             overflow: "hidden",
+            // flex: 1, // Add this line
           }}
         >
           <Stack
             sx={{
               position: "relative",
               display: "grid",
-              gridTemplateColumns: `1fr repeat(${columns.length}, 1fr)`,
+              gridTemplateColumns: `50px repeat(${columns.length}, 1fr)`,
+              gridTemplateRows: `40px repeat(${rows.length}, 1fr)`,
               height: "100%",
-              width: "100%",
+              width: "100%", // Make sure it takes up full width
               gap: 0,
+              // flex: 1, // Add this line
             }}
           >
             <Stack
@@ -391,6 +398,7 @@ export const ManageBoard = ({
                 alignItems: "center",
                 backgroundColor: "#c7c7c7",
                 fontWeight: "700",
+                // width: "40px",
               }}
             >
               No
@@ -403,11 +411,12 @@ export const ManageBoard = ({
                     idx === columns.length - 1 ? "none" : "1px solid #a8a8a8",
                   borderBottom: "1px solid #a8a8a8",
                   padding: "2px",
-                  minHeight: "48px",
-                  minWidth: "48px",
+                  // minHeight: "48px",
+                  // minWidth: "48px",
                   justifyContent: "center",
                   alignItems: "center",
                   backgroundColor: "#c7c7c7",
+                  width: "100%",
                 }}
               >
                 {!readonly ? (
@@ -422,7 +431,14 @@ export const ManageBoard = ({
                     onChange={(event) => handleColumnLabelChange(idx, event)}
                   />
                 ) : (
-                  <Typography textAlign={"center"} sx={{ fontWeight: "700" }}>
+                  <Typography
+                    textAlign={"center"}
+                    sx={{
+                      fontWeight: "700",
+                      fontSize: `${adjustFontSize(colKey)}px`,
+                      wordBreak: "break-word",
+                    }}
+                  >
                     {colKey}
                   </Typography>
                 )}
@@ -442,17 +458,21 @@ export const ManageBoard = ({
               </Stack>
             ))}
             {rows.map((rowKey, rowIndex) => (
-              <React.Fragment key={rowIndex}>
+              <Stack
+                key={rowIndex}
+                sx={{ display: "contents", width: "100%", flex: 1 }}
+              >
                 <Stack
                   sx={{
+                    width: "100%",
+                    height: "100%",
                     borderRight: "1px solid #a8a8a8",
                     borderBottom:
                       rowIndex === rows.length - 1
                         ? "none"
                         : "1px solid #a8a8a8",
                     padding: "2px",
-                    minHeight: "60px",
-                    minWidth: "60px",
+
                     justifyContent: "center",
                     alignItems: "center",
                     backgroundColor: "#e6e6e6",
@@ -536,7 +556,7 @@ export const ManageBoard = ({
                     </Stack>
                   );
                 })}
-              </React.Fragment>
+              </Stack>
             ))}
           </Stack>
         </Stack>
@@ -674,7 +694,7 @@ export const AddDialogue = ({
                     border: "1px solid #a8a8a8",
                     borderRadius: "12px",
                     padding: "8px",
-                    height: "64px",
+                    // height: "64px",
                     boxSizing: "border-box",
                     ":hover": {
                       cursor: "pointer",
@@ -690,7 +710,7 @@ export const AddDialogue = ({
                   <img
                     src={worker.profileImage}
                     alt=""
-                    style={{ width: "48px", height: "48px" }}
+                    // style={{ width: "48px", height: "48px" }}
                   />
                   <Typography sx={{ marginLeft: "24px" }}>
                     {worker.name}
@@ -715,7 +735,7 @@ const BoardCount = ({ label, value }) => {
     <Stack
       sx={{
         width: "100%",
-        height: "24px",
+        height: "100%",
         borderTop: "1px solid black",
         borderRight: "1px solid black",
         borderLeft: "1px solid black",
@@ -725,7 +745,7 @@ const BoardCount = ({ label, value }) => {
       <Stack
         sx={{
           width: "80%",
-          fontSize: "14px",
+          fontSize: "9px",
           textAlign: "center",
           flexDirection: "row",
           alignItems: "center",
@@ -737,7 +757,7 @@ const BoardCount = ({ label, value }) => {
       <Stack
         sx={{
           width: "20%",
-          fontSize: "14px",
+          fontSize: "9px",
           borderLeft: "1px solid black",
           borderBottom: "none !important",
           textAlign: "center",
@@ -750,4 +770,11 @@ const BoardCount = ({ label, value }) => {
       </Stack>
     </Stack>
   );
+};
+const adjustFontSize = (text) => {
+  const baseSize = 10;
+  if (text.length > 10) {
+    return baseSize - 2; // 길이가 10 이상인 경우, 2px 감소
+  }
+  return baseSize;
 };

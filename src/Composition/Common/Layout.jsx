@@ -8,7 +8,7 @@ export const Layout = ({ children }) => {
         flexDirection: "row",
         width: "100vw",
         height: "100vh",
-        padding: "8px 16px",
+        padding: "4px",
         backgroundColor: "#303030",
       }}
     >

@@ -9,12 +9,13 @@ export const SideBar = () => {
   return (
     <Stack
       sx={{
-        width: "250px",
+        width: "150px",
         height: "100%",
         borderRadius: "12px",
         backgroundColor: "#303030",
-        marginRight: "16px",
-        padding: "16px 16px 32px 16px",
+        marginRight: "8px",
+        padding: "4px",
+
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
@@ -48,7 +49,7 @@ export const SideBar = () => {
       <Stack
         component={"img"}
         src="./images/logo.png"
-        sx={{ width: "150px" }}
+        sx={{ width: "100px", marginBottom: "24px" }}
       />
     </Stack>
   );

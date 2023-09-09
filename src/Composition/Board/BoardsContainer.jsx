@@ -94,6 +94,7 @@ export const BoardsContainer = ({ id, readonly = false }) => {
                   sx={{
                     width: "100%",
                     height: "100%",
+                    flex: 1,
                   }}
                 >
                   <ManageBoard

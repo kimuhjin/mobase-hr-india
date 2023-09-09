@@ -12,7 +12,7 @@ import { useState } from "react";
 export const GROUP_LIST = [
   { label: "0th floor (1KS & 4MF)", id: "1ks_4mf" },
   { label: "0th floor  (OFD)", id: "ofd" },
-  { label: "clean room (5SR)", id: "5sr" },
+  { label: "clean room (5RC)", id: "5sr" },
   { label: "clean room (3CL)", id: "3cl" },
   { label: "1st floor (Ren)", id: "ren" },
   { label: "smt  (SMT)", id: "smt" },

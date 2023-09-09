@@ -1,4 +1,4 @@
-import { CircularProgress, Stack } from "@mui/material";
+import { CircularProgress, Stack, Typography } from "@mui/material";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase-config";
@@ -63,17 +63,20 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
               width: "100%",
               height: "100%",
               flexDirection: "row",
+              overflow: "hidden",
               img: {
-                width: "48px",
-                height: "48px",
+                overflow: "hidden",
+                width: "100%",
+                maxHeight: "40px",
+                objectFit: "cover",
               },
             }}
           >
             {/* LEFT */}
             <Stack
               sx={{
-                minWidth: "12px",
-                maxWidth: "12px",
+                minWidth: "6px",
+                maxWidth: "6px",
                 justifyContent: "center",
                 alignItems: "center",
                 backgroundColor:
@@ -88,9 +91,11 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
             <Stack
               sx={{
                 width: "100%",
+                height: "100%",
                 flexDirection: "row",
                 justifyContent: "center",
                 alignItems: "center",
+                backgroundColor: "#e6e6e6",
               }}
             >
               <img
@@ -106,14 +111,14 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
 
             <Stack
               sx={{
-                minWidth: "12px",
-                maxWidth: "12px",
+                minWidth: "6px",
+                maxWidth: "6px",
                 justifyContent: "center",
                 alignItems: "center",
                 backgroundColor: "yellow",
                 writingMode: "vertical-lr",
                 textOrientation: "upright",
-                fontSize: "14px",
+                fontSize: "3px",
               }}
             >
               {workerInfo?.skillMatrix}
@@ -124,19 +129,27 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
           <Stack
             sx={{
               width: "100%",
-              minHeight: "28px",
-              height: "28px",
-
+              minHeight: "14px",
+              height: "14px",
               justifyContent: "center",
               alignItems: "center",
               backgroundColor: "green",
-              fontSize: "10px",
-              textAlign: "center",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
             }}
           >
-            {workerInfo?.name}
+            <Typography
+              sx={{
+                width: "100%",
+                maxWidth: "40px",
+                fontSize: "4px !important",
+                textAlign: "center",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                wordBreak: "break-all",
+              }}
+            >
+              {workerInfo?.name}
+            </Typography>
           </Stack>
         </Stack>
       )}

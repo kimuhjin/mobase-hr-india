@@ -259,7 +259,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                 <Select fullWidth {...field}>
                   <MenuItem value="1ks_4mf">{`0th floor (1KS & 4MF)`}</MenuItem>
                   <MenuItem value="ofd">{`0th floor  (OFD)`}</MenuItem>
-                  <MenuItem value="5sr">{`clean room (5SR)`}</MenuItem>
+                  <MenuItem value="5sr">{`clean room (5RC)`}</MenuItem>
                   <MenuItem value="3cl">{`clean room (3CL)`}</MenuItem>
                   <MenuItem value="ren">{`1st floor (Ren)`}</MenuItem>
                   <MenuItem value="smt">{`smt  (SMT)`}</MenuItem>
