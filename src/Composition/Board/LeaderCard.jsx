@@ -39,11 +39,13 @@ export const LeaderCard = ({ leaderId }) => {
         <img
           src={workerInfo?.profileImage}
           alt={workerInfo?.name}
-          style={{ width: "50px", height: "50px" }}
+          style={{ width: "120px", height: "120px" }}
         />
       )}
 
-      <Typography sx={{ textAlign: "center" }}>{workerInfo?.name}</Typography>
+      <Typography sx={{ textAlign: "center", fontWeight: 700 }}>
+        {workerInfo?.name}
+      </Typography>
     </Stack>
   );
 };

@@ -9,7 +9,6 @@ import {
   DialogContentText,
   DialogActions,
   Typography,
-  Chip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -18,7 +17,6 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase-config";
 import { WorkerCard } from "./WorkerCard";
 import { LeaderCard } from "./LeaderCard";
-
 export const ManageBoard = ({
   data,
   updateBoardData,
@@ -37,18 +35,22 @@ export const ManageBoard = ({
   const [openAddLeaderDialog, setOpenAddLeaderDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedCell, setSelectedCell] = useState(null);
-  const [sickAndVacation, setSickAndVacation] = useState({
+  const [specialCell, setSpecialCell] = useState({
     sick: 0,
     vacation: 0,
+    feederMaterial: 0,
+    feederTrash: 0,
   });
-  console.log(boardData);
-  const countUsersInSickAndVacation = () => {
+  const countUsersInspecialCell = () => {
     const sickIndices = [];
     const vacationIndices = [];
-
+    const feederMaterialIndices = [];
+    const feederTrashIndices = [];
     columns.forEach((col, index) => {
       if (col.includes("Sick")) sickIndices.push(index);
       if (col.includes("Vacation")) vacationIndices.push(index);
+      if (col.includes("Feeder material")) feederMaterialIndices.push(index);
+      if (col.includes("Feeder Trash")) feederTrashIndices.push(index);
     });
 
     const sickUsers = boardData.filter((item) =>
@@ -57,13 +59,23 @@ export const ManageBoard = ({
     const vacationUsers = boardData.filter((item) =>
       vacationIndices.includes(item.column)
     ).length;
-    setSickAndVacation({
+
+    const feederMaterialUsers = boardData.filter((item) =>
+      feederMaterialIndices.includes(item.column)
+    ).length;
+    const feederTrashUsers = boardData.filter((item) =>
+      feederTrashIndices.includes(item.column)
+    ).length;
+
+    setSpecialCell({
       sick: sickUsers,
       vacation: vacationUsers,
+      feederMaterial: feederMaterialUsers,
+      feederTrash: feederTrashUsers,
     });
   };
   useEffect(() => {
-    countUsersInSickAndVacation();
+    countUsersInspecialCell();
   }, [boards]);
   const handleAddLeader = (leader) => {
     setLeader(leader);
@@ -239,96 +251,131 @@ export const ManageBoard = ({
     setBoardData(updatedBoardData);
   };
   return (
-    <>
+    <Stack>
+      {!readonly && (
+        <Stack sx={{ flexDirection: "row", marginBottom: "6px" }}>
+          {leader ? (
+            <Stack sx={{ gap: "8px", flexDirection: "row" }}>
+              <Button
+                variant="contained"
+                sx={{ width: "200px", height: "48px" }}
+                onClick={() => setOpenAddLeaderDialog(true)}
+              >
+                Change Leader
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ width: "200px" }}
+                onClick={() => setLeader(null)}
+              >
+                Remove Leader
+              </Button>
+            </Stack>
+          ) : (
+            <>
+              <Button
+                variant="contained"
+                sx={{ width: "200px", height: "48px" }}
+                onClick={() => setOpenAddLeaderDialog(true)}
+              >
+                Add Leader
+              </Button>
+            </>
+          )}
+        </Stack>
+      )}
       <Stack
         sx={{
           width: "100%",
           height: "100%",
-          flexDirection: readonly ? "row" : "column",
+          flexDirection: readonly ? "row" : "row",
         }}
       >
         <Stack
           sx={{
-            gap: "8px",
-            flexDirection: readonly ? "column" : "row",
+            width: "150px",
+            gap: "4px",
+            flexDirection: readonly ? "column" : "column",
             marginRight: readonly ? "4px" : "0px",
+            backgroundColor: "#c7c7c7",
+            borderRadius: "10px",
           }}
         >
+          <Typography
+            sx={{
+              fontWeight: "700",
+              fontSize: "21px",
+              textAlign: "left",
+              color: "blue",
+              padding: "0px 6px",
+            }}
+          >
+            {data.label}
+          </Typography>
           {leader ? (
-            <Stack sx={{ flexDirection: "row" }}>
+            <Stack sx={{ flexDirection: "row", justifyContent: "center" }}>
               <Stack
                 sx={{
-                  width: "100px",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <Typography sx={{ fontWeight: 700 }}>Leader</Typography>
+                <Typography sx={{ fontWeight: 700 }}>Team Leader</Typography>
                 <LeaderCard leaderId={leader?.id} />
               </Stack>
-
-              {!readonly && (
-                <Stack sx={{ gap: "8px" }}>
-                  <Button
-                    variant="contained"
-                    sx={{ width: "200px", height: "48px", marginLeft: "16px" }}
-                    onClick={() => setOpenAddLeaderDialog(true)}
-                  >
-                    Change Leader
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    sx={{ width: "200px" }}
-                    onClick={() => setLeader(null)}
-                  >
-                    Remove Leader
-                  </Button>
-                </Stack>
-              )}
             </Stack>
           ) : (
-            <>
-              {!readonly && (
-                <Button
-                  variant="contained"
-                  sx={{ width: "200px" }}
-                  onClick={() => setOpenAddLeaderDialog(true)}
-                >
-                  Add Leader
-                </Button>
-              )}
-            </>
+            <></>
           )}
-          <Stack>
-            <Chip label={`Total : ${boardData.length}`} />
-            <Chip label={`Sick : ${sickAndVacation.sick}`} />
-            <Chip label={`Vacation : ${sickAndVacation.vacation}`} />
-            <Chip
-              label={`Working : ${
+          <Stack
+            sx={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: "#ededed",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "2px",
+              "& :last-of-type": {
+                borderBottom: "1px solid black",
+              },
+            }}
+          >
+            <BoardCount label={"Team Leader"} value={leader ? 1 : 0} />
+            <BoardCount
+              label={"Working"}
+              value={
                 boardData.length -
-                sickAndVacation.sick -
-                sickAndVacation.vacation
-              }`}
+                specialCell.sick -
+                specialCell.vacation +
+                leader
+                  ? 1
+                  : 0
+              }
             />
+            <BoardCount
+              label={"Feeder Material"}
+              value={specialCell.feederMaterial}
+            />
+            <BoardCount
+              label={"Feeder Trash"}
+              value={specialCell.feederTrash}
+            />
+            <BoardCount label={"Sick"} value={specialCell.sick} />
+            <BoardCount label={"Vacation"} value={specialCell.vacation} />
+
+            <BoardCount label={"Total"} value={boardData.length} />
           </Stack>
         </Stack>
-        {!readonly && (
-          <Stack sx={{ marginBottom: "8px", flexDirection: "row" }}>
-            <Button
-              onClick={handleAddColumn}
-              sx={{ marginRight: "8px" }}
-              variant="contained"
-            >
-              Add Column
-            </Button>
-            <Button onClick={handleAddRow} variant="contained">
-              Add Row
-            </Button>
-          </Stack>
-        )}
+
         <Stack
-          sx={{ border: "1px solid black", width: "100%", height: "100%" }}
+          sx={{
+            border: "1px solid #a8a8a8",
+            width: "100%",
+            height: "100%",
+            borderRadius: "10px",
+            overflow: "hidden",
+          }}
         >
           <Stack
             sx={{
@@ -342,29 +389,32 @@ export const ManageBoard = ({
           >
             <Stack
               sx={{
-                borderRight: "1px solid black",
-                borderBottom: "1px solid black",
+                borderRight: "1px solid #a8a8a8",
+                borderBottom: "1px solid #a8a8a8",
                 padding: "2px",
                 fontSize: "14px",
                 flexDirection: "row",
                 justifyContent: "center",
                 alignItems: "center",
+                backgroundColor: "#c7c7c7",
+                fontWeight: "700",
               }}
             >
-              line
+              No
             </Stack>
             {columns.map((colKey, idx) => (
               <Stack
                 key={idx}
                 sx={{
                   borderRight:
-                    idx === columns.length - 1 ? "none" : "1px solid black",
-                  borderBottom: "1px solid black",
+                    idx === columns.length - 1 ? "none" : "1px solid #a8a8a8",
+                  borderBottom: "1px solid #a8a8a8",
                   padding: "2px",
                   minHeight: "48px",
                   minWidth: "48px",
                   justifyContent: "center",
                   alignItems: "center",
+                  backgroundColor: "#c7c7c7",
                 }}
               >
                 {!readonly ? (
@@ -379,11 +429,13 @@ export const ManageBoard = ({
                     onChange={(event) => handleColumnLabelChange(idx, event)}
                   />
                 ) : (
-                  <Typography textAlign={"center"}>{colKey}</Typography>
+                  <Typography textAlign={"center"} sx={{ fontWeight: "700" }}>
+                    {colKey}
+                  </Typography>
                 )}
 
                 {!readonly && (
-                  <>
+                  <Stack sx={{ flexDirection: "row", gap: "4px" }}>
                     <ArrowRightIcon
                       onClick={() => handleAddColumnAt(idx + 1)}
                       sx={{ cursor: "pointer" }}
@@ -392,7 +444,7 @@ export const ManageBoard = ({
                       onClick={() => handleDeleteColumn(idx)}
                       sx={{ cursor: "pointer" }}
                     />
-                  </>
+                  </Stack>
                 )}
               </Stack>
             ))}
@@ -400,14 +452,17 @@ export const ManageBoard = ({
               <React.Fragment key={rowIndex}>
                 <Stack
                   sx={{
-                    borderRight: "1px solid black",
+                    borderRight: "1px solid #a8a8a8",
                     borderBottom:
-                      rowIndex === rows.length - 1 ? "none" : "1px solid black",
+                      rowIndex === rows.length - 1
+                        ? "none"
+                        : "1px solid #a8a8a8",
                     padding: "2px",
                     minHeight: "60px",
                     minWidth: "60px",
                     justifyContent: "center",
                     alignItems: "center",
+                    backgroundColor: "#e6e6e6",
                   }}
                 >
                   {!readonly ? (
@@ -428,16 +483,16 @@ export const ManageBoard = ({
                   )}
 
                   {!readonly && (
-                    <>
+                    <Stack sx={{ flexDirection: "row", gap: "4px" }}>
                       <ArrowDropDownIcon
                         onClick={() => handleAddRowAt(rowIndex + 1)}
                         sx={{ cursor: "pointer" }}
-                      />{" "}
+                      />
                       <DeleteIcon
                         onClick={() => handleDeleteRow(rowIndex)}
                         sx={{ cursor: "pointer" }}
                       />
-                    </>
+                    </Stack>
                   )}
                 </Stack>
                 {columns.map((colKey, colIndex) => {
@@ -457,17 +512,19 @@ export const ManageBoard = ({
                         borderRight:
                           colIndex === columns.length - 1
                             ? "none"
-                            : "1px solid black",
+                            : "1px solid #a8a8a8",
                         borderBottom:
                           rowIndex === rows.length - 1
                             ? "none"
-                            : "1px solid black",
+                            : "1px solid #a8a8a8",
                         flexDirection: "row",
                         justifyContent: "center",
                         alignItems: "center",
                         ":hover": {
                           backgroundColor: "skyblue",
                         },
+
+                        backgroundColor: "#e6e6e6",
                       }}
                       onClick={() =>
                         user
@@ -530,7 +587,7 @@ export const ManageBoard = ({
           boardData={boards}
         />
       )}
-    </>
+    </Stack>
   );
 };
 export const AddDialogue = ({
@@ -621,7 +678,7 @@ export const AddDialogue = ({
                   sx={{
                     flexDirection: "row",
                     alignItems: "center",
-                    border: "1px solid black",
+                    border: "1px solid #a8a8a8",
                     borderRadius: "12px",
                     padding: "8px",
                     height: "64px",
@@ -657,5 +714,47 @@ export const AddDialogue = ({
         </Button>
       </DialogActions>
     </Dialog>
+  );
+};
+
+const BoardCount = ({ label, value }) => {
+  return (
+    <Stack
+      sx={{
+        width: "100%",
+        height: "24px",
+        borderTop: "1px solid black",
+        borderRight: "1px solid black",
+        borderLeft: "1px solid black",
+        flexDirection: "row",
+      }}
+    >
+      <Stack
+        sx={{
+          width: "80%",
+          fontSize: "14px",
+          textAlign: "center",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {label}
+      </Stack>
+      <Stack
+        sx={{
+          width: "20%",
+          fontSize: "14px",
+          borderLeft: "1px solid black",
+          borderBottom: "none !important",
+          textAlign: "center",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {value}
+      </Stack>
+    </Stack>
   );
 };

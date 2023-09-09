@@ -15,10 +15,9 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
       if (docSnap.exists()) {
         const worker = docSnap.data();
         setWorkerInfo(worker);
-      } else {
       }
     } catch (err) {
-      alert("error! worker crud get");
+      console.error("error! worker crud get");
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -26,10 +25,18 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
   };
   useEffect(() => {
     getWorker();
-  }, [user.id]);
+  }, [user?.id]);
 
   return (
-    <Stack sx={{ width: "100%", height: "100%", backgroundColor: "white" }}>
+    <Stack
+      sx={{
+        width: "100%",
+        height: "100%",
+        backgroundColor: "white",
+        borderRadius: "4px",
+        overflow: "hidden",
+      }}
+    >
       {isLoading ? (
         <Stack
           sx={{

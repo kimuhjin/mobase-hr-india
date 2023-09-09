@@ -96,9 +96,6 @@ export const BoardsContainer = ({ id, readonly = false }) => {
                     height: "100%",
                   }}
                 >
-                  <Typography sx={{ fontWeight: "700", fontSize: "17px" }}>
-                    {board.label}
-                  </Typography>
                   <ManageBoard
                     readonly={readonly}
                     data={board}
