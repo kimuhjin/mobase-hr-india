@@ -344,14 +344,7 @@ export const ManageBoard = ({
             <BoardCount label={"Team Leader"} value={leader ? 1 : 0} />
             <BoardCount
               label={"Working"}
-              value={
-                boardData.length -
-                specialCell.sick -
-                specialCell.vacation +
-                leader
-                  ? 1
-                  : 0
-              }
+              value={boardData.length - specialCell.sick - specialCell.vacation}
             />
             <BoardCount
               label={"Feeder Material"}
