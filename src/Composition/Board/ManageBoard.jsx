@@ -569,7 +569,9 @@ export const ManageBoard = ({
           <DialogTitle>User Info</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              <WorkerCard readonly={true} user={selectedUser} />
+              <Stack sx={{ width: "200px", height: "200px" }}>
+                <WorkerCard readonly={true} user={selectedUser} />
+              </Stack>
             </DialogContentText>
           </DialogContent>
           <DialogActions>
