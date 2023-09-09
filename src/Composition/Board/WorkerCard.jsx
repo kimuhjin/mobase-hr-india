@@ -30,8 +30,8 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
   return (
     <Stack
       sx={{
-        width: "100%",
-        height: "100%",
+        width: readonly ? "200px" : "100%",
+        height: readonly ? "200px" : "100%",
         maxHeight: "100%",
         backgroundColor: "white",
         borderRadius: "4px",

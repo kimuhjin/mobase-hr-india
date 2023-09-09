@@ -713,7 +713,7 @@ export const AddDialogue = ({
                   <img
                     src={worker.profileImage}
                     alt=""
-                    // style={{ width: "48px", height: "48px" }}
+                    style={{ width: "48px", height: "48px" }}
                   />
                   <Typography sx={{ marginLeft: "24px" }}>
                     {worker.name}
