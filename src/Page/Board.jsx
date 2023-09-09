@@ -12,6 +12,7 @@ const Board = () => {
   };
   return (
     <Stack
+      id={"manageBoardGrid"}
       sx={{
         width: "100%",
         height: "100%",
@@ -92,7 +93,11 @@ const Board = () => {
           gap: "8px",
         }}
       >
-        <BoardsContainer id={selectedBoardId} readonly={true} />
+        <BoardsContainer
+          id={selectedBoardId}
+          readonly={true}
+          isExpand={isExpand}
+        />
       </Stack>
     </Stack>
   );

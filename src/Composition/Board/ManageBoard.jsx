@@ -23,6 +23,7 @@ export const ManageBoard = ({
   groupId,
   readonly,
   boards,
+  isExpand,
 }) => {
   const [draggedUser, setDraggedUser] = useState(null);
   const [boardData, setBoardData] = useState(data.item);
@@ -250,6 +251,7 @@ export const ManageBoard = ({
     setRows(newRows);
     setBoardData(updatedBoardData);
   };
+
   return (
     <Stack sx={{ width: "100%", height: "100%" }}>
       {!readonly && (
@@ -522,6 +524,7 @@ export const ManageBoard = ({
                       sx={{
                         width: "100%",
                         height: "100%",
+                        overflow: "hidden",
                         borderRight:
                           colIndex === columns.length - 1
                             ? "none"

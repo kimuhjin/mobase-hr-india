@@ -32,6 +32,7 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
       sx={{
         width: "100%",
         height: "100%",
+        maxHeight: "100%",
         backgroundColor: "white",
         borderRadius: "4px",
         overflow: "hidden",
@@ -54,6 +55,7 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
             width: "100%",
             height: "100%",
             justifyContent: "center",
+            overflow: "hidden",
           }}
           draggable={!readonly}
           onDragStart={() => handleDragStart(cellIndex, user)}
@@ -63,13 +65,6 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
               width: "100%",
               height: "100%",
               flexDirection: "row",
-              overflow: "hidden",
-              img: {
-                overflow: "hidden",
-                width: "100%",
-                maxHeight: "40px",
-                objectFit: "cover",
-              },
             }}
           >
             {/* LEFT */}
@@ -92,18 +87,23 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
               sx={{
                 width: "100%",
                 height: "100%",
+                maxWidth: "100%",
+                maxHeight: "100%",
                 flexDirection: "row",
                 justifyContent: "center",
                 alignItems: "center",
                 backgroundColor: "#e6e6e6",
+                overflow: "hidden",
               }}
             >
-              <img
-                src={workerInfo?.profileImage}
-                alt={workerInfo?.name}
-                style={{
+              <Stack
+                sx={{
                   width: "100%",
-                  pointerEvents: "none",
+                  height: "100%",
+                  backgroundPosition: "center",
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+                  backgroundImage: `url(${workerInfo?.profileImage})`,
                 }}
               />
             </Stack>
@@ -129,18 +129,19 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
           <Stack
             sx={{
               width: "100%",
-              minHeight: "14px",
-              height: "14px",
+              minHeight: "12px",
+              height: "12px",
               justifyContent: "center",
               alignItems: "center",
               backgroundColor: "green",
+              padding: "0px 2px",
             }}
           >
             <Typography
               sx={{
                 width: "100%",
-                maxWidth: "40px",
-                fontSize: "4px !important",
+                fontSize: "10px",
+                lineHeight: "10px",
                 textAlign: "center",
                 overflow: "hidden",
                 textOverflow: "ellipsis",

@@ -5,7 +5,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase-config";
 import { LoadingDim } from "../Common/LoadingDim";
 
-export const BoardsContainer = ({ id, readonly = false }) => {
+export const BoardsContainer = ({ id, readonly = false, isExpand }) => {
   const [boards, setBoards] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -103,6 +103,7 @@ export const BoardsContainer = ({ id, readonly = false }) => {
                     boards={boards}
                     updateBoardData={updateBoardData}
                     groupId={id}
+                    isExpand={isExpand}
                   />
                 </Stack>
               );
