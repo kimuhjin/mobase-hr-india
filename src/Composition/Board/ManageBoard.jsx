@@ -9,6 +9,8 @@ import {
   DialogContentText,
   DialogActions,
   Typography,
+  Box,
+  InputAdornment,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
@@ -17,6 +19,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase-config";
 import { WorkerCard } from "./WorkerCard";
 import { LeaderCard } from "./LeaderCard";
+import { AccountCircle } from "@mui/icons-material";
 export const ManageBoard = ({
   data,
   updateBoardData,
@@ -652,6 +655,7 @@ export const AddDialogue = ({
   const [workerList, setWorkerList] = React.useState([]);
   const [existIds, setExistIds] = React.useState([]);
   const [existLeaderIds, setExistLeaderIds] = React.useState([]);
+  const [searchValue, setSearchValue] = React.useState("");
   const getWorkerList = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "worker"));
@@ -686,11 +690,30 @@ export const AddDialogue = ({
   const filteredList = workerList
     .filter((worker) => worker.group === groupId)
     .filter((worker) => !existIds.includes(worker.id))
-    .filter((worker) => !existLeaderIds.includes(worker.id));
+    .filter((worker) => !existLeaderIds.includes(worker.id))
+    .sort((a, b) => {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+    })
+    .filter((i) => i.name.toLowerCase().includes(searchValue.toLowerCase()));
   return (
     <Dialog open={openAddUserDialog} onClose={handleAddUserDialogClose}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
+        <Box
+          sx={{ display: "flex", alignItems: "flex-end", marginBottom: "4px" }}
+        >
+          <TextField
+            id="input-with-sx"
+            label="Search name"
+            variant="filled"
+            sx={{ width: "100%" }}
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+            }}
+          />
+        </Box>
         <Stack
           sx={{
             width: "500px",
