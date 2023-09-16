@@ -45,10 +45,11 @@ export const LeaderCard = ({ leaderId }) => {
 
       <Typography
         sx={{
+          width: "80px",
+          wordBreak: "break-word",
           textAlign: "center",
           fontWeight: 700,
           fontSize: "9px",
-          wordBreak: "break-all",
         }}
       >
         {workerInfo?.name}

@@ -10,6 +10,10 @@ const Board = () => {
   const onExpandButtonClick = () => {
     setIsExpand((prev) => !prev);
   };
+  const date = new Date();
+  const today = `${date.getFullYear()}.${
+    date.getMonth() + 1
+  }.${date.getDate()}`;
   return (
     <Stack
       id={"manageBoardGrid"}
@@ -44,6 +48,7 @@ const Board = () => {
             lineHeight: "24px",
           }}
         >
+          {today}&nbsp;&nbsp;&nbsp;
           {GROUP_LIST?.find((i) => i.id === selectedBoardId)?.label}
         </Typography>
         <Stack
