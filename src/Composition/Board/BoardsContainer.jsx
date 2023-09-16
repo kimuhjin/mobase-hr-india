@@ -81,7 +81,7 @@ export const BoardsContainer = ({ id, readonly = false, isExpand }) => {
         <Stack sx={{ width: "100%", height: "100%" }}>
           <Stack
             sx={{
-              gap: "16px",
+              gap: "4px",
               width: "100%",
               height: "100%",
               alignItems: "space-between",

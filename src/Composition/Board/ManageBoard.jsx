@@ -298,8 +298,9 @@ export const ManageBoard = ({
       >
         <Stack
           sx={{
-            width: "100px",
-            gap: "4px",
+            width: "110px",
+            minWidth: "110px",
+            gap: "2px",
             flexDirection: readonly ? "column" : "column",
             marginRight: readonly ? "4px" : "0px",
             backgroundColor: "#c7c7c7",
@@ -332,7 +333,27 @@ export const ManageBoard = ({
               </Stack>
             </Stack>
           ) : (
-            <></>
+            <Stack sx={{ flexDirection: "row", justifyContent: "center" }}>
+              <Stack
+                sx={{
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography sx={{ fontWeight: 700, fontSize: "13px" }}>
+                  Team Leader
+                </Typography>
+                <Stack sx={{ width: "100%", height: "95px" }}>
+                  <Stack
+                    sx={{
+                      width: "80px",
+                      height: "80px",
+                      backgroundColor: "#fff",
+                    }}
+                  />
+                </Stack>
+              </Stack>
+            </Stack>
           )}
           <Stack
             sx={{
@@ -341,10 +362,12 @@ export const ManageBoard = ({
               backgroundColor: "#ededed",
               justifyContent: "center",
               alignItems: "center",
-              padding: "2px",
+              padding: "6px",
               "& :last-of-type": {
-                borderBottom: "1px solid black",
+                borderBottom: "1px solid #d7d7d7",
               },
+              borderBottomLeftRadius: "10px",
+              borderBottomRightRadius: "10px",
             }}
           >
             <BoardCount label={"Team Leader"} value={leader ? 1 : 0} />
@@ -750,16 +773,16 @@ const BoardCount = ({ label, value }) => {
       sx={{
         width: "100%",
         height: "100%",
-        borderTop: "1px solid black",
-        borderRight: "1px solid black",
-        borderLeft: "1px solid black",
+        borderTop: "1px solid #d7d7d7",
+        borderRight: "1px solid #d7d7d7",
+        borderLeft: "1px solid #d7d7d7",
         flexDirection: "row",
       }}
     >
       <Stack
         sx={{
           width: "80%",
-          fontSize: "9px",
+          fontSize: "6px",
           textAlign: "center",
           flexDirection: "row",
           alignItems: "center",
@@ -771,8 +794,8 @@ const BoardCount = ({ label, value }) => {
       <Stack
         sx={{
           width: "20%",
-          fontSize: "9px",
-          borderLeft: "1px solid black",
+          fontSize: "6px",
+          borderLeft: "1px solid #d7d7d7",
           borderBottom: "none !important",
           textAlign: "center",
           flexDirection: "row",

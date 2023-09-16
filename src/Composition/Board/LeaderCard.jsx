@@ -47,10 +47,7 @@ export const LeaderCard = ({ leaderId }) => {
         sx={{
           textAlign: "center",
           fontWeight: 700,
-          fontSize: "10px",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          whiteSpace: "nowrap",
+          fontSize: "9px",
           wordBreak: "break-all",
         }}
       >
