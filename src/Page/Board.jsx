@@ -43,7 +43,7 @@ const Board = () => {
           sx={{
             fontWeight: 700,
             fontSize: "24px",
-            color: "blue",
+            color: "#0a0a8f",
             width: "100%",
             lineHeight: "24px",
           }}

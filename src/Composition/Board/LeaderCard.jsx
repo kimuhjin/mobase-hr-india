@@ -42,18 +42,27 @@ export const LeaderCard = ({ leaderId }) => {
           style={{ width: "80px", height: "80px" }}
         />
       )}
-
-      <Typography
+      <Stack
         sx={{
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
           width: "80px",
-          wordBreak: "break-word",
-          textAlign: "center",
-          fontWeight: 700,
-          fontSize: "9px",
+          minHeight: "36px",
+          maxHeight: "36px",
         }}
       >
-        {workerInfo?.name}
-      </Typography>
+        <Typography
+          sx={{
+            wordBreak: "break-word",
+            textAlign: "center",
+            fontWeight: 700,
+            fontSize: "9px",
+          }}
+        >
+          {workerInfo?.name}
+        </Typography>
+      </Stack>
     </Stack>
   );
 };

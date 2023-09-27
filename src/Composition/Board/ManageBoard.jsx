@@ -346,7 +346,7 @@ export const ManageBoard = ({
                 <Typography sx={{ fontWeight: 700, fontSize: "13px" }}>
                   Team Leader
                 </Typography>
-                <Stack sx={{ width: "100%", height: "95px" }}>
+                <Stack sx={{ width: "100%" }}>
                   <Stack
                     sx={{
                       width: "80px",
@@ -355,6 +355,12 @@ export const ManageBoard = ({
                     }}
                   />
                 </Stack>
+                <Stack
+                  sx={{
+                    width: "100%",
+                    height: "36px",
+                  }}
+                />
               </Stack>
             </Stack>
           )}
