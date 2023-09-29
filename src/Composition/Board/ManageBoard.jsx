@@ -315,7 +315,7 @@ export const ManageBoard = ({
               fontWeight: "700",
               fontSize: "16px",
               textAlign: "left",
-              color: "blue",
+              color: "#0a0a8f",
               padding: "0px 6px",
             }}
           >
