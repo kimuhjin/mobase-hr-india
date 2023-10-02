@@ -254,7 +254,12 @@ export const ManageBoard = ({
     setRows(newRows);
     setBoardData(updatedBoardData);
   };
-
+  const handelClearBoard = () => {
+    if (window.confirm("Do you want to clear this board?")) {
+      setBoardData([]);
+      setLeader(null);
+    }
+  };
   return (
     <Stack sx={{ width: "100%", height: "100%" }}>
       {!readonly && (
@@ -265,7 +270,12 @@ export const ManageBoard = ({
             <Stack sx={{ gap: "8px", flexDirection: "row" }}>
               <Button
                 variant="contained"
-                sx={{ width: "200px", height: "48px" }}
+                sx={{
+                  width: "120px",
+                  height: "32px",
+                  fontSize: "10px",
+                  padding: "1px 2px",
+                }}
                 onClick={() => setOpenAddLeaderDialog(true)}
               >
                 Change Leader
@@ -273,7 +283,12 @@ export const ManageBoard = ({
               <Button
                 variant="contained"
                 color="error"
-                sx={{ width: "200px" }}
+                sx={{
+                  width: "120px",
+                  height: "32px",
+                  fontSize: "10px",
+                  padding: "1px 2px",
+                }}
                 onClick={() => setLeader(null)}
               >
                 Remove Leader
@@ -283,13 +298,32 @@ export const ManageBoard = ({
             <>
               <Button
                 variant="contained"
-                sx={{ width: "200px", height: "48px" }}
+                sx={{
+                  width: "120px",
+                  height: "32px",
+                  fontSize: "10px",
+                  padding: "1px 2px",
+                }}
                 onClick={() => setOpenAddLeaderDialog(true)}
               >
                 Add Leader
               </Button>
             </>
           )}
+          <Button
+            variant="contained"
+            sx={{
+              marginLeft: "8px",
+              width: "120px",
+              height: "32px",
+              fontSize: "10px",
+              padding: "1px 2px",
+            }}
+            color="warning"
+            onClick={handelClearBoard}
+          >
+            Clear Board
+          </Button>
         </Stack>
       )}
       <Stack
