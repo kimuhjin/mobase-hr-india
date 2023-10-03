@@ -34,7 +34,7 @@ const WorkerCRUD = () => {
   }, []);
 
   return (
-    <Stack sx={{ width: "100%", height: "100%", padding: "20px" }}>
+    <Stack sx={{ width: "100%", height: "100%", padding: "8px" }}>
       {isLoading ? (
         <Stack
           sx={{
