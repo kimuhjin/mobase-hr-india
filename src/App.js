@@ -20,8 +20,8 @@ function App() {
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Layout>
-          {/* <SideBar /> */}
-          <NewSideBar />
+          <SideBar />
+          {/* <NewSideBar /> */}
           <Body>
             <Router />
           </Body>

@@ -1,14 +1,15 @@
-import { CircularProgress, Stack } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { WORKER_CRUD } from "../../Constant/route";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase-config";
+import { LoadingDim } from "../Common/LoadingDim";
 const columns = [
   {
     field: "profileImage",
-    headerName: "",
+    headerName: "Photo",
     renderCell: (params) => (
       <img
         src={params.value}
@@ -50,7 +51,9 @@ export const WorkerDataGrid = () => {
   const onUserItemClick = (id) => {
     navigate(`${WORKER_CRUD}/edit/${id}/`);
   };
-
+  const onNewButtonClick = () => {
+    navigate(`${WORKER_CRUD}/new`);
+  };
   const getWorkerList = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "worker"));
@@ -66,50 +69,77 @@ export const WorkerDataGrid = () => {
   React.useEffect(() => {
     getWorkerList();
   }, []);
+
   return (
-    <Stack
-      sx={{
-        height: "100%",
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      {isLoading ? (
-        <Stack
-          sx={{
-            width: "100%",
-            height: "100%",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress />
-        </Stack>
-      ) : (
-        <DataGrid
-          sx={{
-            "& .MuiDataGrid-cell:focus": {
-              outline: " none",
-            },
-          }}
-          rows={workerList}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 10,
-              },
-            },
-          }}
-          pageSizeOptions={[5]}
-          disableRowSelectionOnClick
-          disableColumnSelector
-          onRowClick={(params) => onUserItemClick(params.id)}
-          isRowSelectable={false}
-        />
+    <Stack sx={{ width: "100%", height: "100%", padding: "20px" }}>
+      <LoadingDim isLoading={isLoading} />
+      {!isLoading && (
+        <>
+          <Stack
+            sx={{
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "16px",
+            }}
+          >
+            <Typography sx={{ fontSize: "28px", fontWeight: "700" }}>
+              Worker List
+            </Typography>
+            <Button
+              variant="contained"
+              sx={{ width: "100px", height: "48px" }}
+              onClick={onNewButtonClick}
+            >
+              <Typography variant="button" sx={{ fontSize: "16px" }}>
+                New
+              </Typography>
+            </Button>
+          </Stack>
+          <Stack
+            sx={{
+              width: "100%",
+              height: "calc(100% - 60px)",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "flex-start",
+            }}
+          >
+            <Stack
+              sx={{
+                width: "100%",
+                height: "100%",
+                ".MuiDataGrid-virtualScroller": {
+                  overflowY: "scroll !important",
+                },
+              }}
+            >
+              <DataGrid
+                sx={{
+                  "& .MuiDataGrid-cell:focus": {
+                    outline: " none",
+                  },
+                }}
+                rows={workerList}
+                columns={columns}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 20,
+                    },
+                  },
+                }}
+                autoHeight
+                pageSizeOptions={[5]}
+                disableRowSelectionOnClick
+                disableColumnSelector
+                onRowClick={(params) => onUserItemClick(params.id)}
+                isRowSelectable={false}
+              />
+            </Stack>
+          </Stack>
+        </>
       )}
     </Stack>
   );

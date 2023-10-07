@@ -1,4 +1,12 @@
-import { Button, Stack } from "@mui/material";
+import {
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Stack,
+} from "@mui/material";
 import { BsClipboardData } from "react-icons/bs";
 import { RiTeamFill } from "react-icons/ri";
 import { AiOutlineDesktop } from "react-icons/ai";
@@ -26,73 +34,73 @@ export const SideBar = () => {
       <Stack
         sx={{
           width: "100%",
-          svg: {
-            minWidth: "18px",
-            minHeight: "18px",
-          },
+          height: "100%",
+          color: "#fff",
+          justifyContent: "space-between",
         }}
       >
+        <Stack>
+          <List>
+            <NavigateButton route={BOARD} text={"Board"}>
+              <BsClipboardData size={"18px"} color="#fff" />
+            </NavigateButton>
+            <NavigateButton route={STATISTICS} text={"Statistics"}>
+              <AiOutlineDesktop size={"18px"} color="#fff" />
+            </NavigateButton>
+          </List>
+          <Divider sx={{ backgroundColor: "#686868", margin: "0px 8px" }} />
+          <List>
+            <NavigateButton route={WORKER} text={"Worker"}>
+              <FaUserFriends size={"18px"} color="#fff" />
+            </NavigateButton>
+            <NavigateButton route={TEAM} text={"Team"}>
+              <RiTeamFill size={"18px"} color="#fff" />
+            </NavigateButton>
+          </List>
+        </Stack>
         <Stack
           sx={{
-            padding: "6px 0px",
             width: "100%",
+            padding: "8px 8px",
             flexDirection: "row",
-            justifyContent: "flex-end",
+            justifyContent: "center",
             alignItems: "center",
           }}
-        ></Stack>
-
-        <NavigateButton route={BOARD}>
-          <BsClipboardData size={"18px"} />
-          Board
-        </NavigateButton>
-        <NavigateButton route={WORKER}>
-          <FaUserFriends size={"18px"} />
-          Worker
-        </NavigateButton>
-        <NavigateButton route={TEAM}>
-          <RiTeamFill size={"18px"} />
-          Team
-        </NavigateButton>
-        <NavigateButton route={STATISTICS}>
-          <AiOutlineDesktop size={"18px"} />
-          Statistics
-        </NavigateButton>
+        >
+          <Stack
+            component={"img"}
+            src="./images/logo.png"
+            sx={{ width: "100px", marginBottom: "24px" }}
+          />
+        </Stack>
       </Stack>
-
-      <Stack
-        component={"img"}
-        src="./images/logo.png"
-        sx={{ width: "100px", marginBottom: "24px" }}
-      />
     </Stack>
   );
 };
-const NavigateButton = ({ children, route }) => {
+const NavigateButton = ({ children, route, text }) => {
   const navigate = useNavigate();
   const onButtonClick = () => {
     navigate(route);
   };
   return (
-    <Button
-      variant="contained"
-      sx={{
-        width: "100%",
-        backgroundColor: "transparent",
-        boxShadow: "none",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        alignItems: "center",
-        ":hover": {
-          backgroundColor: "#303030",
-        },
-        gap: "16px",
-        marginBottom: "16px",
-      }}
+    <ListItem
+      key={text}
+      disablePadding
       onClick={onButtonClick}
+      sx={{
+        ".MuiListItemIcon-root": {
+          minWidth: "0px",
+          marginRight: "10px",
+        },
+        ".MuiButtonBase-root": {
+          justifyContent: "space-between",
+        },
+      }}
     >
-      {children}
-    </Button>
+      <ListItemButton>
+        <ListItemIcon>{children}</ListItemIcon>
+        <ListItemText primary={text} />
+      </ListItemButton>
+    </ListItem>
   );
 };

@@ -240,7 +240,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
               <FormControl
                 sx={{
                   width: "100%",
-                  height: "100%",
+
                   justifyContent: "center",
                   flexDirection: "row",
                 }}
@@ -252,7 +252,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                   type="file"
                   onChange={handleImageChange}
                 />
-                {/* <Stack
+                <Stack
                   htmlFor="profile-image-upload"
                   component={"label"}
                   sx={{ width: "fit-content", marginTop: "12px" }}
@@ -260,7 +260,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                   <Button variant="contained" component="span">
                     Upload Image
                   </Button>
-                </Stack> */}
+                </Stack>
               </FormControl>
             </Stack>
             <Stack sx={{ width: "100%", height: "100%" }}>
