@@ -137,7 +137,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
           <Stack
             sx={{
               width: "100%",
-              height: "100%",
+              height: "calc(100% - 30px)",
               flexDirection: "row",
               justifyContent: "space-between",
               border: "1px solid #E9ECF0",
@@ -147,6 +147,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
             <Stack
               sx={{
                 width: "300px",
+                height: "100%",
                 borderRight: "1px solid #E9ECF0",
                 padding: "8px",
               }}
@@ -239,6 +240,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
               <FormControl
                 sx={{
                   width: "100%",
+                  height: "100%",
                   justifyContent: "center",
                   flexDirection: "row",
                 }}
@@ -250,7 +252,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                   type="file"
                   onChange={handleImageChange}
                 />
-                <Stack
+                {/* <Stack
                   htmlFor="profile-image-upload"
                   component={"label"}
                   sx={{ width: "fit-content", marginTop: "12px" }}
@@ -258,147 +260,222 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                   <Button variant="contained" component="span">
                     Upload Image
                   </Button>
-                </Stack>
+                </Stack> */}
               </FormControl>
             </Stack>
-            <Stack sx={{ width: "100%", gap: "12px", padding: "20px" }}>
-              <FormControl fullWidth>
-                <InputLabel>Group</InputLabel>
-                <Controller
-                  name="group"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <Select fullWidth {...field}>
-                      <MenuItem value="1ks_4mf">{`0th floor (1KS & 4MF)`}</MenuItem>
-                      <MenuItem value="ofd">{`0th floor  (OFD)`}</MenuItem>
-                      <MenuItem value="5sr">{`clean room (5RC)`}</MenuItem>
-                      <MenuItem value="3cl">{`clean room (3CL)`}</MenuItem>
-                      <MenuItem value="ren">{`1st floor (Ren)`}</MenuItem>
-                      <MenuItem value="smt">{`smt  (SMT)`}</MenuItem>
-                    </Select>
-                  )}
-                />
-              </FormControl>
-              <Controller
-                name="name"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <TextField label="Name" fullWidth {...field} />
-                )}
-              />
-
-              <Controller
-                name="employeeNumber"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <TextField label="Employee Number" fullWidth {...field} />
-                )}
-              />
-
-              <FormControl fullWidth>
-                <InputLabel>Company</InputLabel>
-                <Controller
-                  name="company"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => (
-                    <Select fullWidth {...field}>
-                      <MenuItem value="mobase">Mobase</MenuItem>
-                      <MenuItem value="outsourcing">Outsourcing</MenuItem>
-                    </Select>
-                  )}
-                />
-              </FormControl>
-
-              <Controller
-                name="employmentDate"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <TextField
-                    label="Date of employment"
-                    type="date"
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                    {...field}
-                  />
-                )}
-              />
-
-              <Controller
-                name="employmentDate_Mobase"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <TextField
-                    label="Date of employment (Mobase)"
-                    type="date"
-                    fullWidth
-                    InputLabelProps={{ shrink: true }}
-                    {...field}
-                  />
-                )}
-              />
-
-              <Controller
-                name="position"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <TextField label="Position" fullWidth {...field} />
-                )}
-              />
-
-              <Controller
-                name="area"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <TextField label="Area" fullWidth {...field} />
-                )}
-              />
-
-              <Controller
-                name="inspectorCertificate"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <TextField
-                    label="Inspector Certificate"
-                    fullWidth
-                    {...field}
-                  />
-                )}
-              />
-
-              <Controller
-                name="solderingCertificate"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <TextField
-                    label="Soldering Certificate"
-                    fullWidth
-                    {...field}
-                  />
-                )}
-              />
-
-              <Controller
-                name="deputyTeamLeader"
-                control={control}
-                defaultValue=""
-                render={({ field }) => (
-                  <TextField label="Deputy Team Leader" fullWidth {...field} />
-                )}
-              />
-
+            <Stack sx={{ width: "100%", height: "100%" }}>
               <Stack
                 sx={{
                   width: "100%",
+                  gap: "12px",
+                  padding: "20px",
+
+                  overflowY: "scroll",
+                }}
+              >
+                <FormControl fullWidth>
+                  <InputLabel>Group</InputLabel>
+                  <Controller
+                    name="group"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Select fullWidth {...field} label={"Group"}>
+                        <MenuItem value="1ks_4mf">{`0th floor (1KS & 4MF)`}</MenuItem>
+                        <MenuItem value="ofd">{`0th floor  (OFD)`}</MenuItem>
+                        <MenuItem value="5sr">{`clean room (5RC)`}</MenuItem>
+                        <MenuItem value="3cl">{`clean room (3CL)`}</MenuItem>
+                        <MenuItem value="ren">{`1st floor (Ren)`}</MenuItem>
+                        <MenuItem value="smt">{`smt  (SMT)`}</MenuItem>
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+                <Controller
+                  name="name"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <TextField label="Name" fullWidth {...field} />
+                  )}
+                />
+
+                <Controller
+                  name="employeeNumber"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <TextField label="Employee Number" fullWidth {...field} />
+                  )}
+                />
+
+                <FormControl fullWidth>
+                  <InputLabel>Company</InputLabel>
+                  <Controller
+                    name="company"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Select fullWidth {...field} label={"Company"}>
+                        <MenuItem value="mobase">Mobase</MenuItem>
+                        <MenuItem value="outsourcing">Outsourcing</MenuItem>
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+
+                <Controller
+                  name="employmentDate"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <TextField
+                      label="Date of employment"
+                      type="date"
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+                      {...field}
+                    />
+                  )}
+                />
+
+                <Controller
+                  name="employmentDate_Mobase"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <TextField
+                      label="Date of employment (Mobase)"
+                      type="date"
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+                      {...field}
+                    />
+                  )}
+                />
+
+                <FormControl fullWidth>
+                  <InputLabel>Position</InputLabel>
+                  <Controller
+                    name="position"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Select fullWidth {...field} label={"Position"}>
+                        <MenuItem value="machine operator">
+                          machine operator
+                        </MenuItem>
+                        <MenuItem value="team_leader">team leader</MenuItem>
+                        <MenuItem value="feeder">feeder</MenuItem>
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+
+                <FormControl fullWidth>
+                  <InputLabel>Area</InputLabel>
+                  <Controller
+                    name="area"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Select fullWidth {...field} label={"Area"}>
+                        <MenuItem value="key_set">KEY SET</MenuItem>
+                        <MenuItem value="c_pad/0fd">C-PAD / 0FD</MenuItem>
+                        <MenuItem value="multifunction">MULTIFUNCTION</MenuItem>
+                        <MenuItem value="remocon">REMOCON</MenuItem>
+                        <MenuItem value="pw/console">PW / CONSOLE</MenuItem>
+                        <MenuItem value="renault">RENAULT</MenuItem>
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+
+                <FormControl fullWidth>
+                  <InputLabel>Inspector Certificate</InputLabel>
+                  <Controller
+                    name="inspectorCertificate"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Select
+                        fullWidth
+                        {...field}
+                        label={"Inspector Certificate"}
+                      >
+                        <MenuItem value="YES">YES</MenuItem>
+                        <MenuItem value="NO">NO</MenuItem>
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+                <Controller
+                  name="inspectorCertificateDate"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <TextField
+                      label="Inspector Certificate Date"
+                      type="date"
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+                      {...field}
+                    />
+                  )}
+                />
+                <FormControl fullWidth>
+                  <InputLabel>Soldering Certificate</InputLabel>
+                  <Controller
+                    name="solderingCertificate"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Select
+                        fullWidth
+                        {...field}
+                        label={"Soldering Certificate"}
+                      >
+                        <MenuItem value="YES">YES</MenuItem>
+                        <MenuItem value="NO">NO</MenuItem>
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+                <Controller
+                  name="solderingCertificateDate"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <TextField
+                      label="Soldering Certificate"
+                      type="date"
+                      fullWidth
+                      InputLabelProps={{ shrink: true }}
+                      {...field}
+                    />
+                  )}
+                />
+                <FormControl fullWidth>
+                  <InputLabel>Deputy Team Leader</InputLabel>
+                  <Controller
+                    name="deputyTeamLeader"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Select fullWidth {...field} label={"Deputy Team Leader"}>
+                        <MenuItem value="YES">YES</MenuItem>
+                        <MenuItem value="NO">NO</MenuItem>
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+              </Stack>
+              <Stack
+                sx={{
+                  margin: "12px 0px 6px",
+                  paddingRight: "20px",
+                  width: "100%",
+                  minHeight: "42px",
                   flexDirection: "row",
                   justifyContent: "flex-end",
                 }}

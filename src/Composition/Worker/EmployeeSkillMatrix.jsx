@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import uuid from "react-uuid";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { DEFAULT_PROCESS_AREA } from "../../Constant/defaultSkill";
 
 const AlphabetToNumber = (alphabet) => {
   switch (alphabet) {
@@ -50,8 +51,50 @@ export const EmployeeSkillMatrix = ({ setValue, watch }) => {
     }, 0);
   };
 
+  // useEffect(() => {
+  //   const defaultProcess = DEFAULT_PROCESS_AREA[watch("area")] || [];
+  //   const processNames = skillMatrix.map((i) => i.processName);
+
+  //   defaultProcess?.forEach((processName) => {
+  //     if (processNames.includes(processName)) {
+  //       return;
+  //     } else {
+  //       const newId = uuid();
+  //       const newSkill = {
+  //         id: newId,
+  //         processName: processName,
+  //         level: "E",
+  //       };
+  //       setSkillMatrix((prev) => [...prev, newSkill]);
+  //     }
+  //   });
+  // }, [watch("area")]);
+
+  const addAreaProcess = () => {
+    const defaultProcess = DEFAULT_PROCESS_AREA[watch("area")] || [];
+    const processNames = skillMatrix.map((i) => i.processName);
+
+    defaultProcess?.forEach((processName) => {
+      if (processNames.includes(processName)) {
+        return;
+      } else {
+        const newId = uuid();
+        const newSkill = {
+          id: newId,
+          processName: processName,
+          level: "E",
+        };
+        setSkillMatrix((prev) => [...prev, newSkill]);
+      }
+    });
+  };
+
   useEffect(() => {
-    if (watch("skillMatrixDetail") && skillMatrix.length === 0) {
+    if (
+      watch("skillMatrixDetail") &&
+      watch("skillMatrixDetail").length > 0 &&
+      skillMatrix.length === 0
+    ) {
       setSkillMatrix(watch("skillMatrixDetail"));
     }
   }, [watch("skillMatrixDetail")]);
@@ -64,7 +107,6 @@ export const EmployeeSkillMatrix = ({ setValue, watch }) => {
       );
     }
   }, [skillMatrix]);
-
   const handleAddSkill = () => {
     const newId = uuid();
     const newSkill = {
@@ -147,7 +189,13 @@ export const EmployeeSkillMatrix = ({ setValue, watch }) => {
             level
           </Typography>
         </Stack>
-        <Stack sx={{ width: "100%" }}>
+        <Stack
+          sx={{
+            width: "100%",
+            maxHeight: "calc(100vh - 190px)",
+            overflowY: "scroll",
+          }}
+        >
           {skillMatrix.map((data) => {
             return (
               <Stack
@@ -212,11 +260,41 @@ export const EmployeeSkillMatrix = ({ setValue, watch }) => {
           sx={{ marginBottom: "4px" }}
           size="small"
           variant="contained"
-          onClick={handleAddSkill}
+          color="error"
+          onClick={() => {
+            if (window.confirm("Do you want to clear all process?")) {
+              setSkillMatrix([]);
+            }
+          }}
         >
-          Add Skill
+          Clear All Process
         </Button>
-
+        <Stack
+          sx={{
+            marginBottom: "4px",
+            gap: "4px",
+            flexDirection: "row",
+            width: "100%",
+          }}
+        >
+          <Button
+            sx={{ width: "100%" }}
+            size="small"
+            variant="contained"
+            color="info"
+            onClick={addAreaProcess}
+          >
+            Add Current Area Process
+          </Button>
+          <Button
+            sx={{ width: "100%" }}
+            size="small"
+            variant="contained"
+            onClick={handleAddSkill}
+          >
+            Add Process
+          </Button>
+        </Stack>
         <Stack
           sx={{
             width: "100%",
