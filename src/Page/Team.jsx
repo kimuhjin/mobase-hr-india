@@ -25,7 +25,7 @@ export const Team = () => {
       <Typography
         sx={{ fontSize: "28px", fontWeight: "700", marginBottom: "20px" }}
       >
-        Worker List
+        Team
       </Typography>
       {GROUP_LIST.map(({ label, id }, index) => {
         return (
