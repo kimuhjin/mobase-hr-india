@@ -5,6 +5,7 @@ import { Body } from "./Composition/Common/Body";
 import { SideBar } from "./Composition/SideBar/SideBar";
 import Router from "./Router";
 import { BrowserRouter } from "react-router-dom";
+import NewSideBar from "./Composition/SideBar/NewSideBar";
 
 const theme = createTheme({
   typography: {
@@ -19,7 +20,8 @@ function App() {
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Layout>
-          <SideBar />
+          {/* <SideBar /> */}
+          <NewSideBar />
           <Body>
             <Router />
           </Body>
