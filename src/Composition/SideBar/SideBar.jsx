@@ -1,8 +1,10 @@
 import { Button, Stack } from "@mui/material";
 import { BsClipboardData } from "react-icons/bs";
 import { RiTeamFill } from "react-icons/ri";
+import { AiOutlineDesktop } from "react-icons/ai";
+
 import { FaUserFriends } from "react-icons/fa";
-import { BOARD, TEAM, WORKER } from "../../Constant/route";
+import { BOARD, STATISTICS, TEAM, WORKER } from "../../Constant/route";
 import { useNavigate } from "react-router-dom";
 
 export const SideBar = () => {
@@ -21,7 +23,15 @@ export const SideBar = () => {
         alignItems: "center",
       }}
     >
-      <Stack sx={{ width: "100%" }}>
+      <Stack
+        sx={{
+          width: "100%",
+          svg: {
+            minWidth: "18px",
+            minHeight: "18px",
+          },
+        }}
+      >
         <Stack
           sx={{
             padding: "6px 0px",
@@ -43,6 +53,10 @@ export const SideBar = () => {
         <NavigateButton route={TEAM}>
           <RiTeamFill size={"18px"} />
           Team
+        </NavigateButton>
+        <NavigateButton route={STATISTICS}>
+          <AiOutlineDesktop size={"18px"} />
+          Statistics
         </NavigateButton>
       </Stack>
 

@@ -9,36 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import uuid from "react-uuid";
 import DeleteIcon from "@mui/icons-material/Delete";
-const skillMatrix_D = [
-  {
-    processName: "PW/CONSOLE",
-    level: "A",
-  },
-  {
-    processName: "Skill A",
-    level: "B",
-  },
-  {
-    processName: "Skill B",
-    level: "C",
-  },
-  {
-    processName: "Skill C",
-    level: "D",
-  },
-  {
-    processName: "Skill D",
-    level: "E",
-  },
-  {
-    processName: "Skill E",
-    level: "E",
-  },
-  {
-    processName: "Skill F",
-    level: "A",
-  },
-];
+
 const AlphabetToNumber = (alphabet) => {
   switch (alphabet) {
     case "A":
