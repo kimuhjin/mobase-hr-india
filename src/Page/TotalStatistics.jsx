@@ -153,154 +153,166 @@ const TotalStatistics = () => {
       sx={{ width: "100%", height: "100%", padding: "8px", color: "#0a0a8f" }}
     >
       <LoadingDim isLoading={isGetLoading} />
-      <Stack sx={{ marginBottom: "20px" }}>
-        <Typography
-          sx={{
-            fontWeight: 700,
-            fontSize: "24px",
-            width: "100%",
-            lineHeight: "24px",
-          }}
-        >
-          {today}&nbsp;&nbsp;&nbsp; Attendance Status
-        </Typography>
-      </Stack>
+      {!isGetLoading && (
+        <>
+          <Stack sx={{ marginBottom: "20px" }}>
+            <Typography
+              sx={{
+                fontWeight: 700,
+                fontSize: "24px",
+                width: "100%",
+                lineHeight: "24px",
+              }}
+            >
+              {today}&nbsp;&nbsp;&nbsp; Attendance Status
+            </Typography>
+          </Stack>
 
-      <Stack
-        sx={{
-          width: "100%",
-          height: "100%",
-          border: "1px solid black",
-          fontSize: "10px",
-        }}
-      >
-        {/* HEADER */}
-        <Stack
-          sx={{
-            width: "100%",
-            height: "80px",
-            flexDirection: "row",
-            borderBottom: "1px solid black",
-            backgroundColor: "#d9cdb3",
-            fontWeight: "bold",
-            color: "#0a0a8f",
-
-            "> *": {
-              borderRight: "1px solid black",
-              "&:last-child": {
-                borderRight: "none",
-              },
-            },
-          }}
-        >
-          <Stack
-            sx={{
-              width: "5%",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            Area
-          </Stack>
-          <Stack
-            sx={{
-              width: "15%",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            Process
-          </Stack>
-          <Stack
-            sx={{
-              width: "80%",
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <HeaderShift title="Total" />
-            <HeaderShift title="1st Shift" />
-            <HeaderShift title="2nd Shift" />
-            <HeaderShift title="3rd Shift" isLast={true} />
-          </Stack>
-        </Stack>
-        <Area
-          area="ASS'Y"
-          boards={boards.filter((i) => i.process !== "smt")}
-          sum={sumBoard(boards.filter((i) => i.process !== "smt"))}
-        />
-        <Area
-          area="SMT"
-          boards={boards.filter((i) => i.process === "smt")}
-          sum={sumBoard(boards.filter((i) => i.process === "smt"))}
-        />
-        <Stack
-          sx={{
-            width: "100%",
-            flexDirection: "row",
-            borderBottom: "1px solid black",
-            backgroundColor: "#b5a991",
-          }}
-        >
           <Stack
             sx={{
               width: "100%",
-              height: "40px",
-              flexDirection: "row",
+              height: "100%",
+              border: "1px solid black",
+              fontSize: "10px",
             }}
           >
+            {/* HEADER */}
             <Stack
               sx={{
-                width: "20%",
-                height: "100%",
+                width: "100%",
+                height: "80px",
                 flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRight: "1px solid black",
+                borderBottom: "1px solid black",
+                backgroundColor: "#d9cdb3",
+                fontWeight: "bold",
+                color: "#0a0a8f",
+
+                "> *": {
+                  borderRight: "1px solid black",
+                  "&:last-child": {
+                    borderRight: "none",
+                  },
+                },
               }}
             >
-              Total
+              <Stack
+                sx={{
+                  width: "5%",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontSize: "20px",
+                  fontWeight: "700",
+                }}
+              >
+                Area
+              </Stack>
+              <Stack
+                sx={{
+                  width: "10%",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontSize: "20px",
+                  fontWeight: "700",
+                }}
+              >
+                Process
+              </Stack>
+              <Stack
+                sx={{
+                  width: "85%",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <HeaderShift title="Total" />
+                <HeaderShift title="1st Shift" />
+                <HeaderShift title="2nd Shift" />
+                <HeaderShift title="3rd Shift" isLast={true} />
+              </Stack>
             </Stack>
-            <Stack sx={{ width: "80%", flexDirection: "row" }}>
-              {sumBoard(boards).map((i, index) => {
-                const isLast = index === sumBoard(boards).length - 1;
-                return (
-                  <Stack
-                    sx={{
-                      width: "25%",
-                      flexDirection: "row",
-                      "> *": {
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderRight: "1px solid black",
-                        textAlign: "center",
-                      },
-                    }}
-                  >
-                    <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
-                    <Stack sx={{ width: "20%" }}>{i.worker}</Stack>
-                    <Stack sx={{ width: "20%" }}>{i.feederMaterial}</Stack>
-                    <Stack sx={{ width: "20%" }}>{i.feederTrash}</Stack>
-                    <Stack sx={{ width: "20%" }}>{i.sick}</Stack>
-                    <Stack
-                      sx={{
-                        width: "20%",
-                        borderRight: isLast
-                          ? "none !important"
-                          : "1px solid black",
-                      }}
-                    >
-                      {i.vacation}
-                    </Stack>
-                  </Stack>
-                );
-              })}
+            <Area
+              area="ASS'Y"
+              boards={boards.filter((i) => i.process !== "smt")}
+              sum={sumBoard(boards.filter((i) => i.process !== "smt"))}
+            />
+            <Area
+              area="SMT"
+              boards={boards.filter((i) => i.process === "smt")}
+              sum={sumBoard(boards.filter((i) => i.process === "smt"))}
+            />
+            <Stack
+              sx={{
+                width: "100%",
+                flexDirection: "row",
+                borderBottom: "1px solid black",
+                backgroundColor: "#b5a991",
+              }}
+            >
+              <Stack
+                sx={{
+                  width: "100%",
+                  height: "40px",
+                  flexDirection: "row",
+                }}
+              >
+                <Stack
+                  sx={{
+                    width: "15%",
+                    height: "100%",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRight: "1px solid black",
+                    fontSize: "20px",
+                    fontWeight: "700",
+                  }}
+                >
+                  Total
+                </Stack>
+                <Stack sx={{ width: "85%", flexDirection: "row" }}>
+                  {sumBoard(boards).map((i, index) => {
+                    const isLast = index === sumBoard(boards).length - 1;
+                    return (
+                      <Stack
+                        sx={{
+                          width: "25%",
+                          flexDirection: "row",
+                          "> *": {
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderRight: "1px solid black",
+                            textAlign: "center",
+                          },
+                          fontSize: "20px",
+                          fontWeight: "700",
+                        }}
+                      >
+                        <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
+                        <Stack sx={{ width: "20%" }}>{i.worker}</Stack>
+                        <Stack sx={{ width: "20%" }}>{i.feederMaterial}</Stack>
+                        <Stack sx={{ width: "20%" }}>{i.feederTrash}</Stack>
+                        <Stack sx={{ width: "20%" }}>{i.sick}</Stack>
+                        <Stack
+                          sx={{
+                            width: "20%",
+                            borderRight: isLast
+                              ? "none !important"
+                              : "1px solid black",
+                          }}
+                        >
+                          {i.vacation}
+                        </Stack>
+                      </Stack>
+                    );
+                  })}
+                </Stack>
+              </Stack>
             </Stack>
           </Stack>
-        </Stack>
-      </Stack>
+        </>
+      )}
     </Stack>
   );
 };
@@ -316,6 +328,8 @@ const HeaderShift = ({ title, isLast }) => {
           alignItems: "center",
           borderBottom: "1px solid black",
           borderRight: isLast ? "none" : "1px solid black",
+          fontSize: "20px",
+          fontWeight: "700",
         }}
       >
         {title}
@@ -333,6 +347,8 @@ const HeaderShift = ({ title, isLast }) => {
             "&:last-child": {
               borderRight: isLast ? "none" : "1px solid black",
             },
+            fontSize: "12px",
+            fontWeight: "700",
           },
         }}
       >
@@ -361,6 +377,8 @@ const Area = ({ area, boards, sum }) => {
           justifyContent: "center",
           alignItems: "center",
           borderRight: "1px solid black",
+          fontSize: "20px",
+          fontWeight: "700",
         }}
       >
         {area}
@@ -394,25 +412,28 @@ const Area = ({ area, boards, sum }) => {
           return (
             <Stack
               sx={{
+                width: "100%",
                 height: "40px",
                 flexDirection: "row",
               }}
             >
               <Stack
                 sx={{
-                  width: "15.789%",
+                  width: "10.527%",
                   height: "100%",
                   flexDirection: "row",
                   justifyContent: "center",
                   alignItems: "center",
                   borderRight: "1px solid black",
+                  fontSize: "14px",
+                  fontWeight: "700",
                 }}
               >
                 {label}
               </Stack>
               <Stack
                 sx={{
-                  width: "84.211%",
+                  width: "89.473%",
                   flexDirection: "row",
                 }}
               >
@@ -430,6 +451,8 @@ const Area = ({ area, boards, sum }) => {
                           borderRight: "1px solid black",
                           textAlign: "center",
                         },
+                        fontSize: "20px",
+                        fontWeight: "700",
                       }}
                     >
                       <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
@@ -457,25 +480,28 @@ const Area = ({ area, boards, sum }) => {
         <Stack
           sx={{
             height: "40px",
+            width: "100%",
             flexDirection: "row",
           }}
         >
           <Stack
             sx={{
-              width: "15.789%",
+              width: "10.527%",
               height: "100%",
               flexDirection: "row",
               justifyContent: "center",
               alignItems: "center",
               borderRight: "1px solid black",
               backgroundColor: "#d9cdb3",
+              fontSize: "20px",
+              fontWeight: "700",
             }}
           >
             Sum
           </Stack>
           <Stack
             sx={{
-              width: "84.211%",
+              width: "89.473%",
               flexDirection: "row",
             }}
           >
@@ -493,6 +519,8 @@ const Area = ({ area, boards, sum }) => {
                       textAlign: "center",
                       backgroundColor: "#d9cdb3",
                     },
+                    fontSize: "20px",
+                    fontWeight: "700",
                   }}
                 >
                   <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
