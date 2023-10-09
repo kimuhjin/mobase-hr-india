@@ -386,6 +386,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                         <MenuItem value="remocon">REMOCON</MenuItem>
                         <MenuItem value="pw/console">PW / CONSOLE</MenuItem>
                         <MenuItem value="renault">RENAULT</MenuItem>
+                        <MenuItem value="smt">SMT</MenuItem>
                       </Select>
                     )}
                   />
