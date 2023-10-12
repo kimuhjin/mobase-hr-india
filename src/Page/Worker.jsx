@@ -5,7 +5,7 @@ import { WorkerDataGrid } from "../Composition/Worker/WorkerDataGrid";
 
 const Worker = () => {
   return (
-    <Stack sx={{ width: "100%", height: "100%" }}>
+    <Stack sx={{ width: "100%", height: "100%", overflow: "hidden" }}>
       <WorkerDataGrid />
     </Stack>
   );

@@ -64,20 +64,8 @@ export const BoardsContainer = ({ id, readonly = false, isExpand }) => {
         height: "100%",
       }}
     >
-      <LoadingDim isLoading={isLoading} />
-      {isGetLoading ? (
-        <Stack
-          sx={{
-            width: "100%",
-            height: "100%",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress />
-        </Stack>
-      ) : (
+      <LoadingDim isLoading={isLoading || isGetLoading} fullSize={isExpand} />
+      {!isGetLoading && (
         <Stack sx={{ width: "100%", height: "100%" }}>
           <Stack
             sx={{

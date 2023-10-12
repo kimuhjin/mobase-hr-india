@@ -6,6 +6,7 @@ import { WORKER_CRUD } from "../../Constant/route";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase-config";
 import { LoadingDim } from "../Common/LoadingDim";
+import { auth } from "../../Util/auth";
 const columns = [
   {
     field: "profileImage",
@@ -48,6 +49,7 @@ export const WorkerDataGrid = () => {
   const navigate = useNavigate();
   const [workerList, setWorkerList] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const isAdmin = auth.role === "admin";
   const onUserItemClick = (id) => {
     navigate(`${WORKER_CRUD}/edit/${id}/`);
   };
@@ -58,7 +60,10 @@ export const WorkerDataGrid = () => {
     try {
       const querySnapshot = await getDocs(collection(db, "worker"));
       const workers = querySnapshot.docs.map((doc) => doc.data());
-      setWorkerList(workers);
+      const filteredWorkers = isAdmin
+        ? workers
+        : workers.filter((i) => i.group === auth.role);
+      setWorkerList(filteredWorkers);
     } catch (err) {
       alert("error! datagrid");
       console.error(err);
@@ -85,7 +90,7 @@ export const WorkerDataGrid = () => {
             }}
           >
             <Typography sx={{ fontSize: "28px", fontWeight: "700" }}>
-              Worker List
+              Worker
             </Typography>
             <Button
               variant="contained"
@@ -108,15 +113,18 @@ export const WorkerDataGrid = () => {
           >
             <Stack
               sx={{
-                width: "100%",
+                maxWidth: "calc(100vw - 210px)",
+                width: "calc(100vw - 210px)",
                 height: "100%",
                 ".MuiDataGrid-virtualScroller": {
-                  overflowY: "scroll !important",
+                  overflowY: "auto !important",
                 },
               }}
             >
               <DataGrid
                 sx={{
+                  maxWidth: "calc(100vw - 190px)",
+                  width: "calc(100vw - 190px)",
                   "& .MuiDataGrid-cell:focus": {
                     outline: " none",
                   },

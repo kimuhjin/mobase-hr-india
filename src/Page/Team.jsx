@@ -2,12 +2,15 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  MenuItem,
+  Select,
   Stack,
   Typography,
 } from "@mui/material";
 import { GridExpandMoreIcon } from "@mui/x-data-grid";
 import { BoardsContainer } from "../Composition/Board/BoardsContainer";
 import { useState } from "react";
+import { auth } from "../Util/auth";
 
 export const GROUP_LIST = [
   { label: "0th floor (1KS & 4MF)", id: "1ks_4mf" },
@@ -18,41 +21,57 @@ export const GROUP_LIST = [
   { label: "smt  (SMT)", id: "smt" },
 ];
 export const Team = () => {
-  const [focused, setFocused] = useState([]);
+  const [selectedBoardId, setSelectedBoardId] = useState("1ks_4mf");
+  const isAdmin = auth.role === "admin";
 
   return (
-    <Stack sx={{ width: "100%", padding: "20px", overflowY: "scroll" }}>
-      <Typography
-        sx={{ fontSize: "28px", fontWeight: "700", marginBottom: "20px" }}
+    <Stack sx={{ width: "100%", padding: "20px", overflowY: "auto" }}>
+      <Stack
+        sx={{
+          width: "100%",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
       >
-        Team
-      </Typography>
-      {GROUP_LIST.map(({ label, id }, index) => {
-        return (
-          <Accordion
-            key={index}
-            onChange={(e, expanded) => {
-              if (expanded) {
-                setFocused((prev) => [...prev, id]);
-              } else {
-                const newFocused = focused.filter((i) => i !== id);
-                setFocused(newFocused);
-              }
+        <Typography
+          sx={{ fontSize: "28px", fontWeight: "700", marginBottom: "20px" }}
+        >
+          Team
+        </Typography>
+        {isAdmin && (
+          <Select
+            sx={{ width: "300px", height: "36px" }}
+            value={selectedBoardId}
+            onChange={(e) => {
+              setSelectedBoardId(e.target.value);
             }}
           >
-            <AccordionSummary
-              expandIcon={<GridExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography>{label}</Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ width: "100%", height: "100%" }}>
-              {focused.includes(id) && <BoardsContainer id={id} />}
-            </AccordionDetails>
-          </Accordion>
-        );
-      })}
+            <MenuItem value="1ks_4mf">{`0th floor (1KS & 4MF)`}</MenuItem>
+            <MenuItem value="ofd">{`0th floor  (OFD)`}</MenuItem>
+            <MenuItem value="5sr">{`clean room (5RC)`}</MenuItem>
+            <MenuItem value="3cl">{`clean room (3CL)`}</MenuItem>
+            <MenuItem value="ren">{`1st floor (Ren)`}</MenuItem>
+            <MenuItem value="smt">{`smt  (SMT)`}</MenuItem>
+          </Select>
+        )}
+      </Stack>
+      <Stack
+        sx={{
+          width: "100%",
+          height: "calc(100% - 0px)",
+          overflowY: "auto",
+        }}
+      >
+        {isAdmin ? (
+          <Stack sx={{ width: "100%" }}>
+            <BoardsContainer id={selectedBoardId} />
+          </Stack>
+        ) : (
+          <Stack sx={{ width: "100%" }}>
+            <BoardsContainer id={auth.role} />
+          </Stack>
+        )}
+      </Stack>
     </Stack>
   );
 };

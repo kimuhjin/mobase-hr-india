@@ -17,11 +17,21 @@ import { LoadingDim } from "../Common/LoadingDim";
 import { useNavigate } from "react-router-dom";
 import { WORKER } from "../../Constant/route";
 import { EmployeeSkillMatrix } from "./EmployeeSkillMatrix";
+import { auth } from "../../Util/auth";
 
 export const EmployeeForm = ({ isNew, workerInfo }) => {
   const { setValue, watch, handleSubmit, control } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const isAdmin = auth.role === "admin";
+  const isDisabled = !isAdmin;
+  useEffect(() => {
+    if (!watch("group")) {
+      setValue("group", auth.role);
+    }
+  }, [auth.role]);
+
   useEffect(() => {
     if (workerInfo) {
       for (const [key, value] of Object.entries(workerInfo)) {
@@ -29,6 +39,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
       }
     }
   }, [workerInfo, setValue]);
+
   const onSubmit = async (data) => {
     const { name } = data;
     const id = workerInfo.id || uuid();
@@ -270,10 +281,10 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                   gap: "12px",
                   padding: "20px",
 
-                  overflowY: "scroll",
+                  overflowY: "auto",
                 }}
               >
-                <FormControl fullWidth>
+                <FormControl fullWidth disabled={isDisabled}>
                   <InputLabel>Group</InputLabel>
                   <Controller
                     name="group"

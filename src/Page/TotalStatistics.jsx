@@ -155,7 +155,14 @@ const TotalStatistics = () => {
       <LoadingDim isLoading={isGetLoading} />
       {!isGetLoading && (
         <>
-          <Stack sx={{ marginBottom: "20px" }}>
+          <Stack
+            sx={{
+              marginBottom: "20px",
+              height: "36px",
+              alignItems: "center",
+              flexDirection: "row",
+            }}
+          >
             <Typography
               sx={{
                 fontWeight: 700,

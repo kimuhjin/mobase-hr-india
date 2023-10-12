@@ -759,7 +759,7 @@ export const AddDialogue = ({
             width: "500px",
             height: "600px",
             gap: "8px",
-            overflowY: "scroll",
+            overflowY: "auto",
           }}
         >
           {filteredList.length === 0 ? (

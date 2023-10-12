@@ -1,4 +1,5 @@
 import {
+  Chip,
   Divider,
   List,
   ListItem,
@@ -8,79 +9,127 @@ import {
   Stack,
 } from "@mui/material";
 import { BsClipboardData } from "react-icons/bs";
-import { RiTeamFill } from "react-icons/ri";
+import { RiTeamFill, RiLoginBoxLine } from "react-icons/ri";
 import { AiOutlineDesktop } from "react-icons/ai";
 
 import { FaUserFriends } from "react-icons/fa";
 import { BOARD, STATISTICS, TEAM, WORKER } from "../../Constant/route";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Login } from "../Login/Login";
+import { Logout, auth } from "../../Util/auth";
+import { groupTitle } from "../../Constant/convert";
+import { Dev } from "../Common/Dev";
 
 export const SideBar = () => {
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [devOpen, setDevOpen] = useState(false);
   return (
-    <Stack
-      sx={{
-        width: "150px",
-        height: "100%",
-        borderRadius: "12px",
-        backgroundColor: "#303030",
-        marginRight: "8px",
-        padding: "4px",
-
-        flexDirection: "column",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
+    <Stack>
+      <Login open={loginOpen} onClose={() => setLoginOpen(false)} />
+      <Dev open={devOpen} onClose={() => setDevOpen(false)} />
       <Stack
         sx={{
-          width: "100%",
+          width: "140px",
           height: "100%",
-          color: "#fff",
+          borderRadius: "12px",
+          backgroundColor: "#303030",
+          marginRight: "8px",
+          padding: "4px",
+
+          flexDirection: "column",
           justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        <Stack>
-          <List>
-            <NavigateButton route={BOARD} text={"Board"}>
-              <BsClipboardData size={"18px"} color="#fff" />
-            </NavigateButton>
-            <NavigateButton route={STATISTICS} text={"Statistics"}>
-              <AiOutlineDesktop size={"18px"} color="#fff" />
-            </NavigateButton>
-          </List>
-          <Divider sx={{ backgroundColor: "#686868", margin: "0px 8px" }} />
-          <List>
-            <NavigateButton route={WORKER} text={"Worker"}>
-              <FaUserFriends size={"18px"} color="#fff" />
-            </NavigateButton>
-            <NavigateButton route={TEAM} text={"Team"}>
-              <RiTeamFill size={"18px"} color="#fff" />
-            </NavigateButton>
-          </List>
-        </Stack>
         <Stack
           sx={{
             width: "100%",
-            padding: "8px 8px",
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
+            height: "100%",
+            color: "#fff",
+            justifyContent: "space-between",
           }}
         >
-          <Stack
-            component={"img"}
-            src="./images/logo.png"
-            sx={{ width: "100px", marginBottom: "24px" }}
-          />
+          <Stack>
+            <List>
+              <NavigateButton route={BOARD} text={"Board"}>
+                <BsClipboardData size={"18px"} color="#fff" />
+              </NavigateButton>
+              <NavigateButton route={STATISTICS} text={"Statistics"}>
+                <AiOutlineDesktop size={"18px"} color="#fff" />
+              </NavigateButton>
+            </List>
+            {auth.success && (
+              <>
+                <Divider
+                  sx={{ backgroundColor: "#686868", margin: "0px 8px" }}
+                />
+                <List>
+                  <NavigateButton route={WORKER} text={"Worker"}>
+                    <FaUserFriends size={"18px"} color="#fff" />
+                  </NavigateButton>
+                  <NavigateButton route={TEAM} text={"Team"}>
+                    <RiTeamFill size={"18px"} color="#fff" />
+                  </NavigateButton>
+                </List>
+              </>
+            )}
+          </Stack>
+          <Stack>
+            {auth.success ? (
+              <Stack>
+                <Chip
+                  label={groupTitle(auth.role)}
+                  sx={{ backgroundColor: "#fff", fontWeight: "700" }}
+                />
+                <NavigateButton text={"Logout"} onClick={Logout}>
+                  <RiLoginBoxLine size={"18px"} color="#fff" />
+                </NavigateButton>
+              </Stack>
+            ) : (
+              <NavigateButton text={"Admin"} onClick={() => setLoginOpen(true)}>
+                <RiLoginBoxLine size={"18px"} color="#fff" />
+              </NavigateButton>
+            )}
+
+            <Stack
+              sx={{
+                width: "100%",
+                padding: "8px 8px",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                marginTop: "20px",
+              }}
+            >
+              <Stack
+                sx={{ cursor: "pointer" }}
+                onClick={() => {
+                  setDevOpen(true);
+                }}
+              >
+                <Stack
+                  component={"img"}
+                  src="./images/logo.png"
+                  sx={{
+                    width: "100px",
+                    marginBottom: "12px",
+                    pointerEvents: "none",
+                  }}
+                />
+              </Stack>
+            </Stack>
+          </Stack>
         </Stack>
       </Stack>
     </Stack>
   );
 };
-const NavigateButton = ({ children, route, text }) => {
+const NavigateButton = ({ children, route, text, onClick }) => {
   const navigate = useNavigate();
   const onButtonClick = () => {
-    navigate(route);
+    route && navigate(route);
+    onClick && onClick();
   };
   return (
     <ListItem
@@ -90,7 +139,7 @@ const NavigateButton = ({ children, route, text }) => {
       sx={{
         ".MuiListItemIcon-root": {
           minWidth: "0px",
-          marginRight: "10px",
+          marginRight: "14px",
         },
         ".MuiButtonBase-root": {
           justifyContent: "space-between",
@@ -99,7 +148,14 @@ const NavigateButton = ({ children, route, text }) => {
     >
       <ListItemButton>
         <ListItemIcon>{children}</ListItemIcon>
-        <ListItemText primary={text} />
+        <ListItemText
+          primary={text}
+          sx={{
+            ".MuiTypography-root": {
+              fontSize: "14px",
+            },
+          }}
+        />
       </ListItemButton>
     </ListItem>
   );

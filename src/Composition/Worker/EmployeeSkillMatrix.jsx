@@ -193,7 +193,7 @@ export const EmployeeSkillMatrix = ({ setValue, watch }) => {
           sx={{
             width: "100%",
             maxHeight: "calc(100vh - 190px)",
-            overflowY: "scroll",
+            overflowY: "auto",
           }}
         >
           {skillMatrix.map((data) => {

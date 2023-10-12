@@ -6,7 +6,8 @@ export const Layout = ({ children }) => {
       sx={{
         position: "relative",
         flexDirection: "row",
-        width: "100vw",
+        width: "fit-content",
+        minWidth: "100vw",
         height: "100vh",
         padding: "4px",
         backgroundColor: "#303030",

@@ -23,7 +23,7 @@ const Board = () => {
         padding: "8px",
         backgroundColor: "#fff",
 
-        overflow: "scroll",
+        overflow: "auto",
         ...(isExpand
           ? { position: "fixed", zIndex: 2, left: 0, top: 0, padding: "2px" }
           : { borderRadius: "12px" }),
@@ -35,7 +35,7 @@ const Board = () => {
           width: "100%",
           flexDirection: "row",
           justifyContent: "space-between",
-          alignItems: "flex-start",
+          alignItems: "center",
           marginBottom: "8px",
         }}
       >
@@ -73,7 +73,7 @@ const Board = () => {
             <MenuItem value="ren">{`1st floor (Ren)`}</MenuItem>
             <MenuItem value="smt">{`smt  (SMT)`}</MenuItem>
           </Select>
-          <IconButton
+          {/* <IconButton
             sx={{
               marginLeft: "16px",
               width: "30px",
@@ -86,7 +86,7 @@ const Board = () => {
             ) : (
               <BiExpand size={"24px"} color="#333333" />
             )}
-          </IconButton>
+          </IconButton> */}
         </Stack>
       </Stack>
 
