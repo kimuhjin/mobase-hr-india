@@ -1,26 +1,10 @@
 import { Stack, Typography } from "@mui/material";
-import {
-  Firestore,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-} from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase-config";
 import { GROUP_LIST } from "./Team";
 import { LoadingDim } from "../Composition/Common/LoadingDim";
-const orderObjectByArray = (obj, order) => {
-  const orderedObj = {};
-
-  order.forEach((key) => {
-    if (obj[key] !== undefined) {
-      orderedObj[key] = obj[key];
-    }
-  });
-
-  return orderedObj;
-};
+import { Details } from "../Composition/Statistics/Details";
 const TotalStatistics = () => {
   const [boards, setBoards] = useState([]);
 
@@ -30,8 +14,22 @@ const TotalStatistics = () => {
     date.getMonth() + 1
   }.${date.getDate()}`;
 
-  const getStatus = (boards) => {
-    const parsed = boards.map(({ item, column, row, leader }) => {
+  const getStatus = (boards, workers) => {
+    const mobaseBoards = boards.map((board) => {
+      const newItem = board.item.filter((i) => {
+        const worker = workers.find((worker) => worker?.id === i?.user?.id);
+        return worker.company === "mobase";
+      });
+      return { ...board, item: newItem };
+    });
+    const outsourcingBoards = boards.map((board) => {
+      const newItem = board.item.filter((i) => {
+        const worker = workers.find((worker) => worker?.id === i?.user?.id);
+        return worker.company !== "mobase";
+      });
+      return { ...board, item: newItem };
+    });
+    const totalParsed = boards.map(({ item, column, leader }) => {
       const sickIndices = [];
       const vacationIndices = [];
       const feederMaterialIndices = [];
@@ -71,23 +69,121 @@ const TotalStatistics = () => {
       };
     });
 
-    return parsed;
+    const mobaseParsed = mobaseBoards.map(({ item, column, leader }) => {
+      const sickIndices = [];
+      const vacationIndices = [];
+      const feederMaterialIndices = [];
+      const feederTrashIndices = [];
+      column.forEach((col, index) => {
+        if (col.includes("Sick")) sickIndices.push(index);
+        if (col.includes("Vacation")) vacationIndices.push(index);
+        if (col.includes("Feeder material")) feederMaterialIndices.push(index);
+        if (col.includes("Feeder Trash")) feederTrashIndices.push(index);
+      });
+
+      const leaderUser =
+        workers?.find((worker) => worker?.id === leader?.id)?.company ===
+        "mobase";
+      const sickUsers = item.filter((item) =>
+        sickIndices.includes(item.column)
+      ).length;
+      const vacationUsers = item.filter((item) =>
+        vacationIndices.includes(item.column)
+      ).length;
+
+      const feederMaterialUsers = item.filter((item) =>
+        feederMaterialIndices.includes(item.column)
+      ).length;
+      const feederTrashUsers = item.filter((item) =>
+        feederTrashIndices.includes(item.column)
+      ).length;
+      return {
+        leader: leaderUser ? 1 : 0,
+        worker:
+          item.length -
+          sickUsers -
+          vacationUsers -
+          feederMaterialUsers -
+          feederTrashUsers,
+        sick: sickUsers,
+        vacation: vacationUsers,
+        feederMaterial: feederMaterialUsers,
+        feederTrash: feederTrashUsers,
+      };
+    });
+    const outsourcingParsed = outsourcingBoards.map(
+      ({ item, column, leader }) => {
+        const sickIndices = [];
+        const vacationIndices = [];
+        const feederMaterialIndices = [];
+        const feederTrashIndices = [];
+        column.forEach((col, index) => {
+          if (col.includes("Sick")) sickIndices.push(index);
+          if (col.includes("Vacation")) vacationIndices.push(index);
+          if (col.includes("Feeder material"))
+            feederMaterialIndices.push(index);
+          if (col.includes("Feeder Trash")) feederTrashIndices.push(index);
+        });
+
+        const leaderUser = workers?.find((worker) => worker?.id === leader?.id)
+          ? workers?.find((worker) => worker?.id === leader?.id)?.company !==
+            "mobase"
+          : false;
+        const sickUsers = item.filter((item) =>
+          sickIndices.includes(item.column)
+        ).length;
+        const vacationUsers = item.filter((item) =>
+          vacationIndices.includes(item.column)
+        ).length;
+
+        const feederMaterialUsers = item.filter((item) =>
+          feederMaterialIndices.includes(item.column)
+        ).length;
+        const feederTrashUsers = item.filter((item) =>
+          feederTrashIndices.includes(item.column)
+        ).length;
+        return {
+          leader: leaderUser ? 1 : 0,
+          worker:
+            item.length -
+            sickUsers -
+            vacationUsers -
+            feederMaterialUsers -
+            feederTrashUsers,
+          sick: sickUsers,
+          vacation: vacationUsers,
+          feederMaterial: feederMaterialUsers,
+          feederTrash: feederTrashUsers,
+        };
+      }
+    );
+
+    return {
+      totalParsed,
+      mobaseParsed,
+      outsourcingParsed,
+    };
   };
 
   const getBoard = async () => {
     const temp = [];
     try {
       const querySnapshot = await getDocs(collection(db, "boards"));
+      const querySnapshot_worker = await getDocs(collection(db, "worker"));
+      const workers = querySnapshot_worker.docs.map((doc) => doc.data());
+
       querySnapshot.docs.forEach((doc) => {
         temp.push({
           process: doc.id,
           label: GROUP_LIST.find((i) => i.id === doc.id).label,
-          status: getStatus(doc.data().boards),
+          status: getStatus(doc.data().boards, workers),
         });
       });
-
-      ///
-      setBoards(temp);
+      const order = ["1ks_4mf", "ofd", "5sr", "3cl", "ren", "smt"]; // 원하는 순서
+      const sortedBoard = temp.sort((a, b) => {
+        return order.indexOf(a.process) - order.indexOf(b.process);
+      });
+      setBoards(sortedBoard);
     } catch (err) {
       alert("error! board con");
       console.error(err);
@@ -95,24 +191,18 @@ const TotalStatistics = () => {
       setIsGetLoading(false);
     }
   };
+
   useEffect(() => {
     setIsGetLoading(true);
     getBoard();
   }, []);
-  const order = [
-    "leader",
-    "worker",
-    "feederMaterial",
-    "feederTrash",
-    "sick",
-    "vacation",
-  ];
+
   const sumBoard = (boards) => {
     const data = boards.map(({ label, status }) => {
       let accumulatedStatus = {};
 
       // 각 status 객체를 순회하며
-      status.forEach((stat) => {
+      status?.["totalParsed"].forEach((stat) => {
         for (let key in stat) {
           // 해당 키가 누적 상태 객체에 없으면 추가하고, 있으면 값 누적
           if (!accumulatedStatus[key]) {
@@ -123,7 +213,7 @@ const TotalStatistics = () => {
       });
       return {
         label,
-        data: [accumulatedStatus, ...status],
+        data: [accumulatedStatus, ...status?.["totalParsed"]],
       };
     });
     const result = [];
@@ -157,8 +247,8 @@ const TotalStatistics = () => {
         <>
           <Stack
             sx={{
-              marginBottom: "20px",
-              height: "36px",
+              marginTop: "6px",
+              height: "30px",
               alignItems: "center",
               flexDirection: "row",
             }}
@@ -166,9 +256,9 @@ const TotalStatistics = () => {
             <Typography
               sx={{
                 fontWeight: 700,
-                fontSize: "24px",
+                fontSize: "20px",
                 width: "100%",
-                lineHeight: "24px",
+                lineHeight: "20px",
               }}
             >
               {today}&nbsp;&nbsp;&nbsp; Attendance Status
@@ -178,9 +268,12 @@ const TotalStatistics = () => {
           <Stack
             sx={{
               width: "100%",
-              height: "100%",
-              border: "1px solid black",
-              fontSize: "10px",
+              borderTop: "1px solid black",
+              borderLeft: "1px solid black",
+              borderRight: "1px solid black",
+              fontSize: "12px",
+              borderRadius: "6px",
+              overflow: "hidden",
             }}
           >
             {/* HEADER */}
@@ -204,11 +297,11 @@ const TotalStatistics = () => {
             >
               <Stack
                 sx={{
-                  width: "5%",
+                  width: "3%",
                   flexDirection: "row",
                   justifyContent: "center",
                   alignItems: "center",
-                  fontSize: "20px",
+                  fontSize: "12px",
                   fontWeight: "700",
                 }}
               >
@@ -216,11 +309,11 @@ const TotalStatistics = () => {
               </Stack>
               <Stack
                 sx={{
-                  width: "10%",
+                  width: "16%",
                   flexDirection: "row",
                   justifyContent: "center",
                   alignItems: "center",
-                  fontSize: "20px",
+                  fontSize: "12px",
                   fontWeight: "700",
                 }}
               >
@@ -228,7 +321,7 @@ const TotalStatistics = () => {
               </Stack>
               <Stack
                 sx={{
-                  width: "85%",
+                  width: "81%",
                   flexDirection: "row",
                   justifyContent: "space-between",
                 }}
@@ -260,19 +353,19 @@ const TotalStatistics = () => {
               <Stack
                 sx={{
                   width: "100%",
-                  height: "40px",
+                  height: "25px",
                   flexDirection: "row",
                 }}
               >
                 <Stack
                   sx={{
-                    width: "15%",
+                    width: "19.96%",
                     height: "100%",
                     flexDirection: "row",
                     justifyContent: "center",
                     alignItems: "center",
                     borderRight: "1px solid black",
-                    fontSize: "20px",
+                    fontSize: "12px",
                     fontWeight: "700",
                   }}
                 >
@@ -292,8 +385,8 @@ const TotalStatistics = () => {
                             borderRight: "1px solid black",
                             textAlign: "center",
                           },
-                          fontSize: "20px",
-                          fontWeight: "700",
+                          fontSize: "12px",
+                          fontWeight: "400",
                         }}
                       >
                         <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
@@ -317,14 +410,84 @@ const TotalStatistics = () => {
                 </Stack>
               </Stack>
             </Stack>
+            <Stack
+              sx={{
+                width: "100%",
+                flexDirection: "row",
+                borderBottom: "1px solid black",
+                backgroundColor: "#b5a991",
+              }}
+            >
+              <Stack
+                sx={{
+                  width: "100%",
+                  height: "30px",
+                  flexDirection: "row",
+                }}
+              >
+                <Stack
+                  sx={{
+                    width: "19.96%",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderRight: "1px solid black",
+                    fontSize: "12px",
+                    fontWeight: "700",
+                  }}
+                >
+                  Total Sum
+                </Stack>
+                <Stack sx={{ width: "85%", flexDirection: "row" }}>
+                  {sumBoard(boards).map((i, index) => {
+                    const isLast = index === sumBoard(boards).length - 1;
+                    return (
+                      <Stack
+                        sx={{
+                          width: "25%",
+                          flexDirection: "row",
+                          "> *": {
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderRight: "1px solid black",
+                            textAlign: "center",
+                          },
+                          fontSize: "12px",
+                          fontWeight: "400",
+                        }}
+                      >
+                        <Stack
+                          sx={{
+                            width: "100%",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderRight: isLast
+                              ? "none !important"
+                              : "1px solid black",
+                          }}
+                        >
+                          {i.leader +
+                            i.worker +
+                            i.feederMaterial +
+                            i.feederTrash +
+                            i.sick +
+                            i.vacation}
+                        </Stack>
+                      </Stack>
+                    );
+                  })}
+                </Stack>
+              </Stack>
+            </Stack>
           </Stack>
+          <Details boards={boards} />
         </>
       )}
     </Stack>
   );
 };
 export default TotalStatistics;
-const HeaderShift = ({ title, isLast }) => {
+export const HeaderShift = ({ title, isLast }) => {
   return (
     <Stack sx={{ width: "100%" }}>
       <Stack
@@ -335,7 +498,7 @@ const HeaderShift = ({ title, isLast }) => {
           alignItems: "center",
           borderBottom: "1px solid black",
           borderRight: isLast ? "none" : "1px solid black",
-          fontSize: "20px",
+          fontSize: "12px",
           fontWeight: "700",
         }}
       >
@@ -354,7 +517,7 @@ const HeaderShift = ({ title, isLast }) => {
             "&:last-child": {
               borderRight: isLast ? "none" : "1px solid black",
             },
-            fontSize: "12px",
+            fontSize: "10px",
             fontWeight: "700",
           },
         }}
@@ -380,11 +543,11 @@ const Area = ({ area, boards, sum }) => {
     >
       <Stack
         sx={{
-          width: "5%",
+          width: "3.07%",
           justifyContent: "center",
           alignItems: "center",
           borderRight: "1px solid black",
-          fontSize: "20px",
+          fontSize: "12px",
           fontWeight: "700",
         }}
       >
@@ -393,7 +556,7 @@ const Area = ({ area, boards, sum }) => {
 
       <Stack
         sx={{
-          width: "95%",
+          width: "100%",
           "> *": {
             borderBottom: "1px solid black",
             "&:last-child": {
@@ -406,7 +569,7 @@ const Area = ({ area, boards, sum }) => {
           let accumulatedStatus = {};
 
           // 각 status 객체를 순회하며
-          status.forEach((stat) => {
+          status?.["totalParsed"].forEach((stat) => {
             for (let key in stat) {
               // 해당 키가 누적 상태 객체에 없으면 추가하고, 있으면 값 누적
               if (!accumulatedStatus[key]) {
@@ -420,19 +583,19 @@ const Area = ({ area, boards, sum }) => {
             <Stack
               sx={{
                 width: "100%",
-                height: "40px",
+                height: "25px",
                 flexDirection: "row",
               }}
             >
               <Stack
                 sx={{
-                  width: "10.527%",
+                  width: "17.7%",
                   height: "100%",
                   flexDirection: "row",
                   justifyContent: "center",
                   alignItems: "center",
                   borderRight: "1px solid black",
-                  fontSize: "14px",
+                  fontSize: "12px",
                   fontWeight: "700",
                 }}
               >
@@ -444,63 +607,67 @@ const Area = ({ area, boards, sum }) => {
                   flexDirection: "row",
                 }}
               >
-                {[accumulatedStatus, ...status].map((i, index) => {
-                  const isLast =
-                    index === [accumulatedStatus, ...status].length - 1;
-                  return (
-                    <Stack
-                      sx={{
-                        width: "25%",
-                        flexDirection: "row",
-                        "> *": {
-                          justifyContent: "center",
-                          alignItems: "center",
-                          borderRight: "1px solid black",
-                          textAlign: "center",
-                        },
-                        fontSize: "20px",
-                        fontWeight: "700",
-                      }}
-                    >
-                      <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.worker}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.feederMaterial}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.feederTrash}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.sick}</Stack>
+                {[accumulatedStatus, ...status?.["totalParsed"]].map(
+                  (i, index) => {
+                    const isLast =
+                      index ===
+                      [accumulatedStatus, ...status?.["totalParsed"]].length -
+                        1;
+                    return (
                       <Stack
                         sx={{
-                          width: "20%",
-                          borderRight: isLast
-                            ? "none !important"
-                            : "1px solid black",
+                          width: "25%",
+                          flexDirection: "row",
+                          "> *": {
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderRight: "1px solid black",
+                            textAlign: "center",
+                          },
+                          fontSize: "12px",
+                          fontWeight: "400",
                         }}
                       >
-                        {i.vacation}
+                        <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
+                        <Stack sx={{ width: "20%" }}>{i.worker}</Stack>
+                        <Stack sx={{ width: "20%" }}>{i.feederMaterial}</Stack>
+                        <Stack sx={{ width: "20%" }}>{i.feederTrash}</Stack>
+                        <Stack sx={{ width: "20%" }}>{i.sick}</Stack>
+                        <Stack
+                          sx={{
+                            width: "20%",
+                            borderRight: isLast
+                              ? "none !important"
+                              : "1px solid black",
+                          }}
+                        >
+                          {i.vacation}
+                        </Stack>
                       </Stack>
-                    </Stack>
-                  );
-                })}
+                    );
+                  }
+                )}
               </Stack>
             </Stack>
           );
         })}
         <Stack
           sx={{
-            height: "40px",
+            height: "25px",
             width: "100%",
             flexDirection: "row",
           }}
         >
           <Stack
             sx={{
-              width: "10.527%",
+              width: "17.7%",
               height: "100%",
               flexDirection: "row",
               justifyContent: "center",
               alignItems: "center",
               borderRight: "1px solid black",
               backgroundColor: "#d9cdb3",
-              fontSize: "20px",
+              fontSize: "12px",
               fontWeight: "700",
             }}
           >
@@ -526,8 +693,8 @@ const Area = ({ area, boards, sum }) => {
                       textAlign: "center",
                       backgroundColor: "#d9cdb3",
                     },
-                    fontSize: "20px",
-                    fontWeight: "700",
+                    fontSize: "12px",
+                    fontWeight: "400",
                   }}
                 >
                   <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
