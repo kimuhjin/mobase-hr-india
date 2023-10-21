@@ -256,45 +256,6 @@ export const EmployeeSkillMatrix = ({ setValue, watch }) => {
         </Stack>
       </Stack>
       <Stack>
-        <Button
-          sx={{ marginBottom: "4px" }}
-          size="small"
-          variant="contained"
-          color="error"
-          onClick={() => {
-            if (window.confirm("Do you want to clear all process?")) {
-              setSkillMatrix([]);
-            }
-          }}
-        >
-          Clear All Process
-        </Button>
-        <Stack
-          sx={{
-            marginBottom: "4px",
-            gap: "4px",
-            flexDirection: "row",
-            width: "100%",
-          }}
-        >
-          <Button
-            sx={{ width: "100%" }}
-            size="small"
-            variant="contained"
-            color="info"
-            onClick={addAreaProcess}
-          >
-            Add Current Area Process
-          </Button>
-          <Button
-            sx={{ width: "100%" }}
-            size="small"
-            variant="contained"
-            onClick={handleAddSkill}
-          >
-            Add Process
-          </Button>
-        </Stack>
         <Stack
           sx={{
             width: "100%",
@@ -329,6 +290,45 @@ export const EmployeeSkillMatrix = ({ setValue, watch }) => {
               />
             </>
           )}
+        </Stack>
+        <Stack
+          sx={{
+            marginTop: "6px",
+            gap: "4px",
+            flexDirection: "row",
+            width: "100%",
+          }}
+        >
+          <Button
+            sx={{ width: "100%", fontSize: "11px" }}
+            size="small"
+            variant="contained"
+            color="info"
+            onClick={addAreaProcess}
+          >
+            Add Current Area Process
+          </Button>
+          <Button
+            sx={{ width: "100%", fontSize: "11px" }}
+            size="small"
+            variant="contained"
+            onClick={handleAddSkill}
+          >
+            Add Process
+          </Button>
+          <Button
+            sx={{ width: "100%", fontSize: "11px" }}
+            size="small"
+            variant="contained"
+            color="error"
+            onClick={() => {
+              if (window.confirm("Do you want to clear all process?")) {
+                setSkillMatrix([]);
+              }
+            }}
+          >
+            Clear All Process
+          </Button>
         </Stack>
       </Stack>
     </Stack>

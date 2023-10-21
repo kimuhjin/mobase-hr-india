@@ -9,6 +9,9 @@ import {
   InputLabel,
   Stack,
   Typography,
+  FormControlLabel,
+  Switch,
+  Chip,
 } from "@mui/material";
 import { db } from "../../firebase-config";
 import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
@@ -18,12 +21,13 @@ import { useNavigate } from "react-router-dom";
 import { WORKER } from "../../Constant/route";
 import { EmployeeSkillMatrix } from "./EmployeeSkillMatrix";
 import { auth } from "../../Util/auth";
+import { skillMatrixWithDate } from "../../Constant/convert";
 
 export const EmployeeForm = ({ isNew, workerInfo }) => {
   const { setValue, watch, handleSubmit, control } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
+  console.log(workerInfo);
   const isAdmin = auth.role === "admin";
   const isDisabled = !isAdmin;
   useEffect(() => {
@@ -71,29 +75,31 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
     }
   };
   const deleteUser = async () => {
-    try {
-      setIsLoading(true);
+    if (window.confirm("Do you want to delete worker?")) {
       try {
-        await deleteUserFromBoard(workerInfo.group, workerInfo.id);
-        console.log("deleteUserFromBoard success!");
-      } catch (err) {
-        console.log(err);
-        throw err;
-      }
-      try {
-        const commentRef = doc(db, "worker", workerInfo.id);
-        const res = await deleteDoc(commentRef);
+        setIsLoading(true);
+        try {
+          await deleteUserFromBoard(workerInfo.group, workerInfo.id);
+          console.log("deleteUserFromBoard success!");
+        } catch (err) {
+          console.log(err);
+          throw err;
+        }
+        try {
+          const commentRef = doc(db, "worker", workerInfo.id);
+          const res = await deleteDoc(commentRef);
 
-        console.log(res);
-        alert("delete successfully");
-        navigate(WORKER);
+          console.log(res);
+          alert("delete successfully");
+          navigate(WORKER);
+        } catch (err) {
+          console.log(err);
+        }
       } catch (err) {
-        console.log(err);
+        alert("error! delete user");
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      alert("error! delete user");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -150,7 +156,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
               width: "100%",
               height: "calc(100% - 30px)",
               flexDirection: "row",
-              justifyContent: "space-between",
+              alignItems: "space-between",
               border: "1px solid #E9ECF0",
               margin: "0px",
             }}
@@ -160,126 +166,202 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                 width: "300px",
                 height: "100%",
                 borderRight: "1px solid #E9ECF0",
-                padding: "8px",
+                justifyContent: "space-between",
               }}
             >
-              {watch("profileImage") && (
-                //  IMAGE SECTION
+              <Stack
+                sx={{
+                  width: "100%",
+                  minHeight: "28px",
+                  background: "#cccccc",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#0a0a8f",
+                }}
+              >
+                <Typography sx={{ textAlign: "center", fontWeight: "600" }}>
+                  Photo
+                </Typography>
+              </Stack>
+              <Stack
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  marginTop: "6px",
+                  padding: "0px 8px 8px 8px",
+                }}
+              >
+                <Stack sx={{ width: "100%", height: "100%" }}>
+                  {watch("profileImage") && (
+                    //  IMAGE SECTION
+                    <Stack
+                      sx={{
+                        width: "100%",
+                        justifyContent: "center",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      <Stack
+                        sx={{
+                          flexDirection: "row",
+                          img: {
+                            width: "180px",
+                            height: "180px",
+                          },
+                        }}
+                      >
+                        {/* LEFT */}
+                        <Stack
+                          sx={{
+                            width: "20px",
+                            height: "100%",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor:
+                              watch("company") === "mobase"
+                                ? "blue"
+                                : "skyblue",
+                            maxHeight: "180px",
+                            writingMode: "vertical-lr",
+                            textOrientation: "upright",
+                            letterSpacing: "-5px",
+                          }}
+                        >
+                          {watch("company")}
+                        </Stack>
+
+                        <Stack sx={{ width: "100%" }}>
+                          <Controller
+                            name="profileImage"
+                            control={control}
+                            render={({ field: { value } }) =>
+                              value && (
+                                <img
+                                  src={value}
+                                  alt="Profile Preview"
+                                  style={{ width: "100%" }}
+                                />
+                              )
+                            }
+                          />
+                        </Stack>
+                        {/* RIGHT */}
+
+                        <Stack
+                          sx={{
+                            width: "20px",
+                            height: "100%",
+                            maxHeight: "180px",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: "yellow",
+                            writingMode: "vertical-lr",
+                            textOrientation: "upright",
+                          }}
+                        >
+                          {skillMatrixWithDate(
+                            watch("employmentDate"),
+                            watch("skillMatrix")
+                          )}
+                          {}
+                        </Stack>
+                      </Stack>
+                      {/* BOTTOM */}
+
+                      <Stack
+                        sx={{
+                          width: "100%",
+                          height: "20px",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          backgroundColor: "green",
+                        }}
+                      >
+                        {watch("name")}
+                      </Stack>
+                    </Stack>
+                  )}
+
+                  <FormControl
+                    sx={{
+                      width: "100%",
+                      justifyContent: "center",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <input
+                      accept="image/jpeg, image/png"
+                      style={{ display: "none" }}
+                      id="profile-image-upload"
+                      type="file"
+                      onChange={handleImageChange}
+                    />
+                    <Stack
+                      htmlFor="profile-image-upload"
+                      component={"label"}
+                      sx={{ width: "fit-content", marginTop: "12px" }}
+                    >
+                      <Button variant="contained" component="span">
+                        Upload Image
+                      </Button>
+                    </Stack>
+                  </FormControl>
+                </Stack>
                 <Stack
                   sx={{
                     width: "100%",
-                    height: "100%",
-                    justifyContent: "center",
-                    marginBottom: "20px",
                   }}
                 >
-                  <Stack
-                    sx={{
-                      flexDirection: "row",
-                      img: {
-                        width: "180px",
-                        height: "180px",
-                      },
-                    }}
-                  >
-                    {/* LEFT */}
-                    <Stack
-                      sx={{
-                        width: "20px",
-                        height: "100%",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor:
-                          watch("company") === "mobase" ? "blue" : "skyblue",
-                        maxHeight: "180px",
-                        writingMode: "vertical-lr",
-                        textOrientation: "upright",
-                        letterSpacing: "-5px",
-                      }}
-                    >
-                      {watch("company")}
-                    </Stack>
-
-                    <Stack sx={{ width: "100%" }}>
-                      <Controller
-                        name="profileImage"
-                        control={control}
-                        render={({ field: { value } }) =>
-                          value && (
-                            <img
-                              src={value}
-                              alt="Profile Preview"
-                              style={{ width: "100%" }}
-                            />
-                          )
-                        }
-                      />
-                    </Stack>
-                    {/* RIGHT */}
-
-                    <Stack
-                      sx={{
-                        width: "20px",
-                        height: "100%",
-                        maxHeight: "180px",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        backgroundColor: "yellow",
-                        writingMode: "vertical-lr",
-                        textOrientation: "upright",
-                      }}
-                    >
-                      {watch("skillMatrix")}
-                    </Stack>
-                  </Stack>
-                  {/* BOTTOM */}
-
-                  <Stack
-                    sx={{
-                      width: "100%",
-                      height: "20px",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "green",
-                    }}
-                  >
-                    {watch("name")}
-                  </Stack>
+                  <FormControl fullWidth>
+                    <Chip
+                      sx={{ height: "42px" }}
+                      label={
+                        <Stack
+                          sx={{ flexDirection: "row", alignItems: "center" }}
+                        >
+                          Disabled
+                          <Controller
+                            name="disabled"
+                            control={control}
+                            defaultValue=""
+                            render={({ field }) => (
+                              <FormControlLabel
+                                {...field}
+                                checked={watch("disabled")}
+                                control={<Switch />}
+                                labelPlacement="top"
+                              />
+                            )}
+                          />
+                        </Stack>
+                      }
+                    />
+                  </FormControl>
                 </Stack>
-              )}
-
-              <FormControl
-                sx={{
-                  width: "100%",
-
-                  justifyContent: "center",
-                  flexDirection: "row",
-                }}
-              >
-                <input
-                  accept="image/jpeg, image/png"
-                  style={{ display: "none" }}
-                  id="profile-image-upload"
-                  type="file"
-                  onChange={handleImageChange}
-                />
-                <Stack
-                  htmlFor="profile-image-upload"
-                  component={"label"}
-                  sx={{ width: "fit-content", marginTop: "12px" }}
-                >
-                  <Button variant="contained" component="span">
-                    Upload Image
-                  </Button>
-                </Stack>
-              </FormControl>
+              </Stack>
             </Stack>
             <Stack sx={{ width: "100%", height: "100%" }}>
               <Stack
                 sx={{
                   width: "100%",
+                  minHeight: "28px",
+                  background: "#cccccc",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#0a0a8f",
+                }}
+              >
+                <Typography sx={{ textAlign: "center", fontWeight: "600" }}>
+                  Details
+                </Typography>
+              </Stack>
+              <Stack
+                sx={{
+                  width: "100%",
                   gap: "12px",
-                  padding: "20px",
+                  padding: "12px 8px 8px 8px",
 
                   overflowY: "auto",
                 }}
@@ -334,7 +416,42 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                     )}
                   />
                 </FormControl>
-
+                <FormControl fullWidth>
+                  <InputLabel>Area</InputLabel>
+                  <Controller
+                    name="area"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Select fullWidth {...field} label={"Area"}>
+                        <MenuItem value="key_set">KEY SET</MenuItem>
+                        <MenuItem value="c_pad/0fd">C-PAD / 0FD</MenuItem>
+                        <MenuItem value="multifunction">MULTIFUNCTION</MenuItem>
+                        <MenuItem value="remocon">REMOCON</MenuItem>
+                        <MenuItem value="pw/console">PW / CONSOLE</MenuItem>
+                        <MenuItem value="renault">RENAULT</MenuItem>
+                        <MenuItem value="smt">SMT</MenuItem>
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+                <FormControl fullWidth>
+                  <InputLabel>Position</InputLabel>
+                  <Controller
+                    name="position"
+                    control={control}
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Select fullWidth {...field} label={"Position"}>
+                        <MenuItem value="machine operator">
+                          machine operator
+                        </MenuItem>
+                        <MenuItem value="team_leader">team leader</MenuItem>
+                        <MenuItem value="feeder">feeder</MenuItem>
+                      </Select>
+                    )}
+                  />
+                </FormControl>
                 <Controller
                   name="employmentDate"
                   control={control}
@@ -364,44 +481,6 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                     />
                   )}
                 />
-
-                <FormControl fullWidth>
-                  <InputLabel>Position</InputLabel>
-                  <Controller
-                    name="position"
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                      <Select fullWidth {...field} label={"Position"}>
-                        <MenuItem value="machine operator">
-                          machine operator
-                        </MenuItem>
-                        <MenuItem value="team_leader">team leader</MenuItem>
-                        <MenuItem value="feeder">feeder</MenuItem>
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-
-                <FormControl fullWidth>
-                  <InputLabel>Area</InputLabel>
-                  <Controller
-                    name="area"
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                      <Select fullWidth {...field} label={"Area"}>
-                        <MenuItem value="key_set">KEY SET</MenuItem>
-                        <MenuItem value="c_pad/0fd">C-PAD / 0FD</MenuItem>
-                        <MenuItem value="multifunction">MULTIFUNCTION</MenuItem>
-                        <MenuItem value="remocon">REMOCON</MenuItem>
-                        <MenuItem value="pw/console">PW / CONSOLE</MenuItem>
-                        <MenuItem value="renault">RENAULT</MenuItem>
-                        <MenuItem value="smt">SMT</MenuItem>
-                      </Select>
-                    )}
-                  />
-                </FormControl>
 
                 <FormControl fullWidth>
                   <InputLabel>Inspector Certificate</InputLabel>
