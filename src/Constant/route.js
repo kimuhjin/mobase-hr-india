@@ -1,4 +1,6 @@
 export const BOARD = "/";
+export const BOARD_TEAM = "/board";
+export const BOARD_TEAMID = "/board/:id";
 export const WORKER = "/worker";
 export const DETAIL = "/detail";
 export const DETAIL_ID = "/detail/:id";

@@ -2,6 +2,8 @@ import { Suspense, lazy } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import {
   BOARD,
+  BOARD_TEAM,
+  BOARD_TEAMID,
   STATISTICS,
   TEAM,
   WORKER,
@@ -50,6 +52,8 @@ const Router = () => {
     <Suspense fallback={<div></div>}>
       <Routes>
         <Route path={BOARD} element={<Board />} />
+        <Route path={BOARD_TEAMID} element={<Board />} />
+
         <Route
           path={WORKER}
           element={

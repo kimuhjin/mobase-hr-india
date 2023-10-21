@@ -1,11 +1,12 @@
 import { IconButton, MenuItem, Select, Stack, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import { BoardsContainer } from "../Composition/Board/BoardsContainer";
 import { useState } from "react";
 import { BiExpand, BiCollapse } from "react-icons/bi";
 import { GROUP_LIST } from "./Team";
+import { useLocation, useParams } from "react-router-dom";
 const Board = () => {
-  const [selectedBoardId, setSelectedBoardId] = useState("1ks_4mf");
+  const [selectedBoardId, setSelectedBoardId] = useState("");
   const [isExpand, setIsExpand] = useState(false);
   const onExpandButtonClick = () => {
     setIsExpand((prev) => !prev);
@@ -14,6 +15,19 @@ const Board = () => {
   const today = `${date.getFullYear()}.${
     date.getMonth() + 1
   }.${date.getDate()}`;
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      setSelectedBoardId(id);
+    } else {
+      if (!selectedBoardId) {
+        setSelectedBoardId("1ks_4mf");
+      }
+    }
+  }, [id, selectedBoardId]);
+
   return (
     <Stack
       id={"manageBoardGrid"}
