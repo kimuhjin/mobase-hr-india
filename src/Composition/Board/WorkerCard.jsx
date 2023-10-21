@@ -2,6 +2,7 @@ import { CircularProgress, Stack, Typography } from "@mui/material";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase-config";
+import { skillMatrixWithDate } from "../../Constant/convert";
 
 export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
   const [workerInfo, setWorkerInfo] = useState(null);
@@ -118,10 +119,13 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
                 backgroundColor: "yellow",
                 writingMode: "vertical-lr",
                 textOrientation: "upright",
-                fontSize: "3px",
+                fontSize: "8px",
               }}
             >
-              {workerInfo?.skillMatrix}
+              {skillMatrixWithDate(
+                workerInfo?.employmentDate,
+                workerInfo?.skillMatrix
+              )}
             </Stack>
           </Stack>
           {/* BOTTOM */}

@@ -845,7 +845,7 @@ const BoardCount = ({ label, value }) => {
       <Stack
         sx={{
           width: "80%",
-          fontSize: "6px",
+          fontSize: "10px",
           textAlign: "center",
           flexDirection: "row",
           alignItems: "center",
@@ -857,7 +857,7 @@ const BoardCount = ({ label, value }) => {
       <Stack
         sx={{
           width: "20%",
-          fontSize: "6px",
+          fontSize: "10px",
           borderLeft: "1px solid #d7d7d7",
           borderBottom: "none !important",
           textAlign: "center",

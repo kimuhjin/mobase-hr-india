@@ -20,10 +20,12 @@ export const skillMatrixWithDate = (date, skill) => {
   let differenceInDays = Math.ceil(
     differenceInMilliseconds / (1000 * 60 * 60 * 24)
   );
-
-  if (differenceInDays > 7) {
-    return skill;
-  } else {
-    return differenceInDays;
+  if (!date) return skill;
+  else {
+    if (differenceInDays > 7) {
+      return skill;
+    } else {
+      return differenceInDays;
+    }
   }
 };
