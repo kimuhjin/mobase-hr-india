@@ -736,7 +736,8 @@ export const AddDialogue = ({
       if (a.name > b.name) return 1;
       return 0;
     })
-    .filter((i) => i.name.toLowerCase().includes(searchValue.toLowerCase()));
+    .filter((i) => i.name.toLowerCase().includes(searchValue.toLowerCase()))
+    .filter((i) => !i.disabled);
   return (
     <Dialog open={openAddUserDialog} onClose={handleAddUserDialogClose}>
       <DialogTitle>{title}</DialogTitle>
