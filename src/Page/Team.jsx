@@ -1,20 +1,11 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Button,
-  MenuItem,
-  Select,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { GridExpandMoreIcon } from "@mui/x-data-grid";
+import { Button, MenuItem, Select, Stack, Typography } from "@mui/material";
+
 import { BoardsContainer } from "../Composition/Board/BoardsContainer";
 import { useState } from "react";
 import { auth } from "../Util/auth";
 import { useNavigate } from "react-router-dom";
 import { BsClipboardData } from "react-icons/bs";
-import { BOARD, BOARD_TEAM } from "../Constant/route";
+import { BOARD_TEAM } from "../Constant/route";
 
 export const GROUP_LIST = [
   { label: "0th floor (1KS & 4MF)", id: "1ks_4mf" },
@@ -28,6 +19,7 @@ export const Team = () => {
   const [selectedBoardId, setSelectedBoardId] = useState("1ks_4mf");
   const isAdmin = auth.role === "admin";
   const navigate = useNavigate();
+  console.log(auth.role);
   return (
     <Stack sx={{ width: "100%", padding: "20px", overflowY: "auto" }}>
       <Stack
@@ -52,7 +44,9 @@ export const Team = () => {
               },
             }}
             onClick={() => {
-              navigate(`${BOARD_TEAM}/${selectedBoardId}`);
+              navigate(
+                `${BOARD_TEAM}/${isAdmin ? selectedBoardId : auth.role}`
+              );
             }}
           >
             <BsClipboardData size={"16px"} color="#fff" />
