@@ -137,7 +137,7 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
               height: "12px",
               justifyContent: "center",
               alignItems: "center",
-              backgroundColor: "green",
+              backgroundColor: "#f9c3c3",
               padding: "0px 2px",
             }}
           >

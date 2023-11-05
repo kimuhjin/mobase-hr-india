@@ -275,7 +275,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                           height: "20px",
                           justifyContent: "center",
                           alignItems: "center",
-                          backgroundColor: "green",
+                          backgroundColor: "#f9c3c3",
                         }}
                       >
                         {watch("name")}
