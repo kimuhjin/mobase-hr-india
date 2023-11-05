@@ -22,6 +22,9 @@ import { WORKER } from "../../Constant/route";
 import { EmployeeSkillMatrix } from "./EmployeeSkillMatrix";
 import { auth } from "../../Util/auth";
 import { skillMatrixWithDate } from "../../Constant/convert";
+import { AiOutlinePrinter } from "react-icons/ai";
+import { documentOpenToWindow } from "../../Util/pdf";
+import Pdfworker from "./PdfWorker";
 
 export const EmployeeForm = ({ isNew, workerInfo }) => {
   const { setValue, watch, handleSubmit, control } = useForm();
@@ -135,6 +138,32 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
       console.log("특정 문서를 업데이트하는 함수");
       console.error(err);
     }
+  };
+
+  const onPrint = async () => {
+    function base64ToBlob(base64, mimeType) {
+      const base64WithoutPrefix = base64.split(",")[1];
+      const binary_string = window.atob(base64WithoutPrefix);
+      let len = binary_string.length;
+      let bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+      }
+      return new Blob([bytes.buffer], { type: mimeType });
+    }
+    const base64Image = watch("profileImage");
+    const mimeType = "image/png";
+    const imageBlob = base64ToBlob(base64Image, mimeType);
+    const imageUrl = URL.createObjectURL(imageBlob);
+    const skillMatrix = watch("skillMatrixDetail").map(
+      ({ processName, level }) => {
+        return `${processName}: ${level}`;
+      }
+    );
+
+    await documentOpenToWindow(
+      <Pdfworker watch={watch} skillMatrix={skillMatrix} img={imageUrl} />
+    );
   };
 
   return (
@@ -282,31 +311,49 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                       </Stack>
                     </Stack>
                   )}
-
-                  <FormControl
+                  <Stack
                     sx={{
                       width: "100%",
                       justifyContent: "center",
-                      flexDirection: "row",
+                      alignItems: "center",
                     }}
                   >
-                    <input
-                      accept="image/jpeg, image/png"
-                      style={{ display: "none" }}
-                      id="profile-image-upload"
-                      type="file"
-                      onChange={handleImageChange}
-                    />
-                    <Stack
-                      htmlFor="profile-image-upload"
-                      component={"label"}
-                      sx={{ width: "fit-content", marginTop: "12px" }}
+                    <FormControl
+                      sx={{
+                        width: "100%",
+                        justifyContent: "center",
+                        flexDirection: "row",
+                      }}
                     >
-                      <Button variant="contained" component="span">
-                        Upload Image
-                      </Button>
-                    </Stack>
-                  </FormControl>
+                      <input
+                        accept="image/jpeg, image/png"
+                        style={{ display: "none" }}
+                        id="profile-image-upload"
+                        type="file"
+                        onChange={handleImageChange}
+                      />
+                      <Stack
+                        htmlFor="profile-image-upload"
+                        component={"label"}
+                        sx={{ width: "140px", marginTop: "12px" }}
+                      >
+                        <Button variant="contained" component="span">
+                          Upload Image
+                        </Button>
+                      </Stack>
+                    </FormControl>
+                    <Button
+                      variant="contained"
+                      component="span"
+                      sx={{ marginTop: "18px", width: "140px" }}
+                      onClick={onPrint}
+                    >
+                      <Stack sx={{ marginRight: "10px" }}>
+                        <AiOutlinePrinter size={"18px"} color="#fff" />
+                      </Stack>
+                      Print
+                    </Button>
+                  </Stack>
                 </Stack>
                 <Stack
                   sx={{
