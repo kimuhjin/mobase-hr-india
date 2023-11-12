@@ -25,6 +25,7 @@ import { skillMatrixWithDate } from "../../Constant/convert";
 import { AiOutlinePrinter } from "react-icons/ai";
 import { documentOpenToWindow } from "../../Util/pdf";
 import Pdfworker from "./PdfWorker";
+import PdfCetificate from "./PdfCetificate";
 
 export const EmployeeForm = ({ isNew, workerInfo }) => {
   const { setValue, watch, handleSubmit, control } = useForm();
@@ -164,6 +165,28 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
     await documentOpenToWindow(
       <Pdfworker watch={watch} skillMatrix={skillMatrix} img={imageUrl} />
     );
+  };
+
+  const onPrintCertificate = async () => {
+    function base64ToBlob(base64, mimeType) {
+      const base64WithoutPrefix = base64.split(",")[1];
+      const binary_string = window.atob(base64WithoutPrefix);
+      let len = binary_string.length;
+      let bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+      }
+      return new Blob([bytes.buffer], { type: mimeType });
+    }
+    const base64Image = watch("profileImage");
+    const mimeType = "image/png";
+    const imageBlob = base64ToBlob(base64Image, mimeType);
+    const imageUrl = URL.createObjectURL(imageBlob);
+
+    console.log(watch("inspectorCertificateDate"));
+    console.log(watch("solderingCertificateDate"));
+
+    await documentOpenToWindow(<PdfCetificate watch={watch} img={imageUrl} />);
   };
 
   return (
@@ -345,13 +368,41 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                     <Button
                       variant="contained"
                       component="span"
-                      sx={{ marginTop: "18px", width: "140px" }}
+                      sx={{
+                        marginTop: "18px",
+                        width: "140px",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        textAlign: "center",
+                        fontSize: "10px",
+                      }}
                       onClick={onPrint}
                     >
                       <Stack sx={{ marginRight: "10px" }}>
                         <AiOutlinePrinter size={"18px"} color="#fff" />
                       </Stack>
-                      Print
+                      <Stack sx={{ width: "100%" }}>Print Information</Stack>
+                    </Button>
+
+                    <Button
+                      variant="contained"
+                      component="span"
+                      sx={{
+                        marginTop: "18px",
+                        width: "140px",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        textAlign: "center",
+                        fontSize: "10px",
+                      }}
+                      onClick={onPrintCertificate}
+                    >
+                      <Stack sx={{ marginRight: "10px" }}>
+                        <AiOutlinePrinter size={"18px"} color="#fff" />
+                      </Stack>
+                      Print Certificate
                     </Button>
                   </Stack>
                 </Stack>
@@ -422,11 +473,11 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                     render={({ field }) => (
                       <Select fullWidth {...field} label={"Group"}>
                         <MenuItem value="1ks_4mf">{`0th floor (1KS & 4MF)`}</MenuItem>
-                        <MenuItem value="ofd">{`0th floor  (OFD)`}</MenuItem>
+                        <MenuItem value="ofd">{`0th floor (OFD)`}</MenuItem>
                         <MenuItem value="5sr">{`clean room (5RC)`}</MenuItem>
                         <MenuItem value="3cl">{`clean room (3CL)`}</MenuItem>
                         <MenuItem value="ren">{`1st floor (Ren)`}</MenuItem>
-                        <MenuItem value="smt">{`smt  (SMT)`}</MenuItem>
+                        <MenuItem value="smt">{`smt (SMT)`}</MenuItem>
                       </Select>
                     )}
                   />

@@ -7,6 +7,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase-config";
 import { LoadingDim } from "../Common/LoadingDim";
 import { auth } from "../../Util/auth";
+import { groupObj } from "../../Constant/convert";
 const columns = [
   {
     field: "profileImage",
@@ -19,7 +20,14 @@ const columns = [
       />
     ),
   },
-  { field: "group", headerName: "Group", flex: 1 },
+  {
+    field: "group",
+    headerName: "Group",
+    flex: 1,
+    renderCell: (params) => {
+      return groupObj[params.value];
+    },
+  },
   { field: "name", headerName: "Name", flex: 1 },
   { field: "employeeNumber", headerName: "employeeNumber", flex: 1 },
   { field: "company", headerName: "Company", flex: 1 },

@@ -8,6 +8,7 @@ import {
   View,
 } from "@react-pdf/renderer";
 import React from "react";
+import { groupObj } from "../../Constant/convert";
 const Pdfworker = ({ watch, skillMatrix, img }) => {
   Font.register({
     family: "Roboto",
@@ -64,7 +65,7 @@ const Pdfworker = ({ watch, skillMatrix, img }) => {
             <View>
               {watch("group") ? (
                 <Text style={{ fontSize: 14, marginBottom: 4 }}>
-                  Group: {watch("group")}
+                  Group: {groupObj[watch("group")]}
                 </Text>
               ) : null}
 

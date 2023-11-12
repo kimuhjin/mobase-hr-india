@@ -1,15 +1,15 @@
-const group = {
-  "1ks_4mf": "1KS & 4MF",
-  ofd: "OFD",
-  "5sr": "5RC",
-  "3cl": "3CL",
-  ren: " Ren",
-  smt: "SMT",
+export const groupObj = {
+  "1ks_4mf": "0th floor (1KS & 4MF)",
+  ofd: "0th floor  (OFD)",
+  "5sr": "clean room (5RC)",
+  "3cl": "clean room (3CL)",
+  ren: " 1st floor (Ren)",
+  smt: "smt (SMT)",
 };
 
 export const groupTitle = (value) => {
   if (value === "admin") return "Admin";
-  else return group[value];
+  else return groupObj[value];
 };
 
 export const skillMatrixWithDate = (date, skill) => {
