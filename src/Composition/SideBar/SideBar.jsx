@@ -16,31 +16,20 @@ import { FaUserFriends } from "react-icons/fa";
 import { BOARD, STATISTICS, TEAM, WORKER } from "../../Constant/route";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Login } from "../Login/Login";
-import { Logout, auth } from "../../Util/auth";
+import { Logout, auth, groupListObj, isGuest } from "../../Util/auth";
 
 import { Dev } from "../Common/Dev";
 
-const groupObj = {
-  "1ks_4mf": "1KS & 4MF",
-  ofd: "OFD",
-  "5sr": "5RC",
-  "3cl": "3CL",
-  ren: " Ren",
-  smt: "SMT",
-};
-
 const groupTitle = (value) => {
   if (value === "admin") return "Admin";
-  else return groupObj[value];
+  else return groupListObj[value];
 };
 
 export const SideBar = () => {
-  const [loginOpen, setLoginOpen] = useState(false);
   const [devOpen, setDevOpen] = useState(false);
+  if (auth.no_login) return null;
   return (
     <Stack>
-      <Login open={loginOpen} onClose={() => setLoginOpen(false)} />
       <Dev open={devOpen} onClose={() => setDevOpen(false)} />
       <Stack
         sx={{
@@ -73,7 +62,7 @@ export const SideBar = () => {
                 <AiOutlineDesktop size={"18px"} color="#fff" />
               </NavigateButton>
             </List>
-            {auth.success && (
+            {auth.success && !isGuest && (
               <>
                 <Divider
                   sx={{ backgroundColor: "#686868", margin: "0px 8px" }}
@@ -101,9 +90,7 @@ export const SideBar = () => {
                 </NavigateButton>
               </Stack>
             ) : (
-              <NavigateButton text={"Admin"} onClick={() => setLoginOpen(true)}>
-                <RiLoginBoxLine size={"18px"} color="#fff" />
-              </NavigateButton>
+              <></>
             )}
 
             <Stack

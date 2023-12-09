@@ -6,4 +6,5 @@ export const loginUserList = [
   { id: "3cl", password: "mobase", role: "3cl" },
   { id: "ren", password: "mobase", role: "ren" },
   { id: "smt", password: "mobase", role: "smt" },
+  { id: "mobase", password: "poland", role: "guest" },
 ];

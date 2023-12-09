@@ -1,8 +1,15 @@
 import Cookies from "js-cookie";
 import { loginUserList } from "../Constant/loginUserList";
 import CryptoJS from "crypto-js";
-import { useNavigate } from "react-router-dom";
-import { BOARD } from "../Constant/route";
+export const groupListObj = {
+  "1ks_4mf": "1KS & 4MF",
+  ofd: "OFD",
+  "5sr": "5RC",
+  "3cl": "3CL",
+  ren: " Ren",
+  smt: "SMT",
+  guest: "GUEST",
+};
 export const auth = (() => {
   const token = Cookies.get("mobase_auth_token");
   if (token) {
@@ -20,10 +27,10 @@ export const auth = (() => {
     }
     return { success: true, role };
   } else {
-    return { success: false };
+    return { success: false, no_login: true };
   }
 })();
-
+export const isGuest = auth.role === "guest";
 export const Logout = () => {
   Cookies.set("mobase_auth_id", "");
   Cookies.set("mobase_auth_token", "");
