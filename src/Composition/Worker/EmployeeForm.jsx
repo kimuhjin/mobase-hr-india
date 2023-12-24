@@ -473,6 +473,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                     render={({ field }) => (
                       <Select fullWidth {...field} label={"Group"}>
                         <MenuItem value="smt">{`SMD(smt)`}</MenuItem>
+                        <MenuItem value="eol">{`SMD(eol)`}</MenuItem>
                       </Select>
                     )}
                   />

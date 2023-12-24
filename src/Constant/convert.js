@@ -1,5 +1,6 @@
 export const groupObj = {
   smt: "SMD(smt)",
+  eol: "SMD(eol)",
 };
 
 export const groupTitle = (value) => {
