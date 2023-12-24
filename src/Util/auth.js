@@ -2,11 +2,6 @@ import Cookies from "js-cookie";
 import { loginUserList } from "../Constant/loginUserList";
 import CryptoJS from "crypto-js";
 export const groupListObj = {
-  "1ks_4mf": "1KS & 4MF",
-  ofd: "OFD",
-  "5sr": "5RC",
-  "3cl": "3CL",
-  ren: " Ren",
   smt: "SMT",
   guest: "GUEST",
 };

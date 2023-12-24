@@ -7,16 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { BsClipboardData } from "react-icons/bs";
 import { BOARD_TEAM } from "../Constant/route";
 
-export const GROUP_LIST = [
-  { label: "0th floor (1KS & 4MF)", id: "1ks_4mf" },
-  { label: "0th floor  (OFD)", id: "ofd" },
-  { label: "clean room (5RC)", id: "5sr" },
-  { label: "clean room (3CL)", id: "3cl" },
-  { label: "1st floor (Ren)", id: "ren" },
-  { label: "smt  (SMT)", id: "smt" },
-];
+export const GROUP_LIST = [{ label: "smt  (SMT)", id: "smt" }];
 export const Team = () => {
-  const [selectedBoardId, setSelectedBoardId] = useState("1ks_4mf");
+  const [selectedBoardId, setSelectedBoardId] = useState("smt");
   const isAdmin = auth.role === "admin";
   const navigate = useNavigate();
   console.log(auth.role);
@@ -60,11 +53,6 @@ export const Team = () => {
                 setSelectedBoardId(e.target.value);
               }}
             >
-              <MenuItem value="1ks_4mf">{`0th floor (1KS & 4MF)`}</MenuItem>
-              <MenuItem value="ofd">{`0th floor  (OFD)`}</MenuItem>
-              <MenuItem value="5sr">{`clean room (5RC)`}</MenuItem>
-              <MenuItem value="3cl">{`clean room (3CL)`}</MenuItem>
-              <MenuItem value="ren">{`1st floor (Ren)`}</MenuItem>
               <MenuItem value="smt">{`smt  (SMT)`}</MenuItem>
             </Select>
           )}

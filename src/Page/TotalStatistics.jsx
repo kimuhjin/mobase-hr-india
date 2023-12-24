@@ -179,7 +179,7 @@ const TotalStatistics = () => {
           status: getStatus(doc.data().boards, workers),
         });
       });
-      const order = ["1ks_4mf", "ofd", "5sr", "3cl", "ren", "smt"]; // 원하는 순서
+      const order = ["smt"]; // 원하는 순서
       const sortedBoard = temp.sort((a, b) => {
         return order.indexOf(a.process) - order.indexOf(b.process);
       });

@@ -23,7 +23,7 @@ const Board = () => {
       setSelectedBoardId(id);
     } else {
       if (!selectedBoardId) {
-        setSelectedBoardId("1ks_4mf");
+        setSelectedBoardId("smt");
       }
     }
   }, [id, selectedBoardId]);
@@ -80,11 +80,6 @@ const Board = () => {
               setSelectedBoardId(e.target.value);
             }}
           >
-            <MenuItem value="1ks_4mf">{`0th floor (1KS & 4MF)`}</MenuItem>
-            <MenuItem value="ofd">{`0th floor  (OFD)`}</MenuItem>
-            <MenuItem value="5sr">{`clean room (5RC)`}</MenuItem>
-            <MenuItem value="3cl">{`clean room (3CL)`}</MenuItem>
-            <MenuItem value="ren">{`1st floor (Ren)`}</MenuItem>
             <MenuItem value="smt">{`smt  (SMT)`}</MenuItem>
           </Select>
           {/* <IconButton
