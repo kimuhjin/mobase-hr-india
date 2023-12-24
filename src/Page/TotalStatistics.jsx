@@ -334,13 +334,17 @@ const TotalStatistics = () => {
             </Stack>
             <Area
               area="ASS'Y"
-              boards={boards.filter((i) => i.process !== "smt")}
-              sum={sumBoard(boards.filter((i) => i.process !== "smt"))}
+              boards={boards.filter((i) => !["smt", "eol"].includes(i.process))}
+              sum={sumBoard(
+                boards.filter((i) => !["smt", "eol"].includes(i.process))
+              )}
             />
             <Area
               area="SMT"
-              boards={boards.filter((i) => i.process === "smt")}
-              sum={sumBoard(boards.filter((i) => i.process === "smt"))}
+              boards={boards.filter((i) => ["smt", "eol"].includes(i.process))}
+              sum={sumBoard(
+                boards.filter((i) => ["smt", "eol"].includes(i.process))
+              )}
             />
             <Stack
               sx={{
