@@ -80,7 +80,7 @@ const Board = () => {
               setSelectedBoardId(e.target.value);
             }}
           >
-            <MenuItem value="smt">{`smt  (SMT)`}</MenuItem>
+            <MenuItem value="smt">{`SMD(smt)`}</MenuItem>
           </Select>
           {/* <IconButton
             sx={{

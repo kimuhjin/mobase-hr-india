@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { BsClipboardData } from "react-icons/bs";
 import { BOARD_TEAM } from "../Constant/route";
 
-export const GROUP_LIST = [{ label: "smt  (SMT)", id: "smt" }];
+export const GROUP_LIST = [{ label: "SMD(smt)", id: "smt" }];
 export const Team = () => {
   const [selectedBoardId, setSelectedBoardId] = useState("smt");
   const isAdmin = auth.role === "admin";
@@ -53,7 +53,7 @@ export const Team = () => {
                 setSelectedBoardId(e.target.value);
               }}
             >
-              <MenuItem value="smt">{`smt  (SMT)`}</MenuItem>
+              <MenuItem value="smt">{`SMD(smt)`}</MenuItem>
             </Select>
           )}
         </Stack>

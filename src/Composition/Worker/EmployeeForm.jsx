@@ -472,7 +472,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                     defaultValue=""
                     render={({ field }) => (
                       <Select fullWidth {...field} label={"Group"}>
-                        <MenuItem value="smt">{`smt (SMT)`}</MenuItem>
+                        <MenuItem value="smt">{`SMD(smt)`}</MenuItem>
                       </Select>
                     )}
                   />
