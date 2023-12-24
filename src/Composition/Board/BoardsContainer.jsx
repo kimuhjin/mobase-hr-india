@@ -4,6 +4,7 @@ import { Button, CircularProgress, Stack, Typography } from "@mui/material";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase-config";
 import { LoadingDim } from "../Common/LoadingDim";
+import { sample_board_data } from "../../Data/board";
 
 export const BoardsContainer = ({ id, readonly = false, isExpand }) => {
   const [boards, setBoards] = useState([]);
