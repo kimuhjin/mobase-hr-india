@@ -70,7 +70,7 @@ const Login = () => {
           },
         }}
       >
-        <DialogTitle>Login</DialogTitle>
+        <DialogTitle>Login(In)</DialogTitle>
         <DialogContent sx={{ margin: "0px" }}>
           <Stack
             component={"form"}
