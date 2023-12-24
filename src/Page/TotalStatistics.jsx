@@ -522,7 +522,7 @@ export const HeaderShift = ({ title, isLast }) => {
           },
         }}
       >
-        <Stack sx={{ width: "16.66%" }}>Team Leader</Stack>
+        <Stack sx={{ width: "16.66%" }}>Supervisor</Stack>
         <Stack sx={{ width: "16.66%" }}>Worker</Stack>
         <Stack sx={{ width: "16.66%" }}>Feeder Material</Stack>
         <Stack sx={{ width: "16.66%" }}>Feeder Trash</Stack>

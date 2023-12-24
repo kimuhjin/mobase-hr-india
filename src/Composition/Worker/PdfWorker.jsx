@@ -122,7 +122,7 @@ const Pdfworker = ({ watch, skillMatrix, img }) => {
               ) : null}
               {watch("deputyTeamLeader") ? (
                 <Text style={{ fontSize: 14, marginBottom: 4 }}>
-                  Deputy Team Leader: {watch("deputyTeamLeader")}
+                  Deputy Supervisor: {watch("deputyTeamLeader")}
                 </Text>
               ) : null}
             </View>

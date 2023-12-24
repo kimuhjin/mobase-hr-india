@@ -50,7 +50,7 @@ const columns = [
     headerName: "Soldering Certificate",
     flex: 1,
   },
-  { field: "deputyTeamLeader", headerName: "Deputy Team Leader", flex: 1 },
+  { field: "deputyTeamLeader", headerName: "Deputy Supervisor", flex: 1 },
 ];
 
 export const WorkerDataGrid = () => {

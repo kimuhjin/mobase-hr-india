@@ -544,7 +544,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                         <MenuItem value="machine operator">
                           machine operator
                         </MenuItem>
-                        <MenuItem value="team_leader">team leader</MenuItem>
+                        <MenuItem value="team_leader">Supervisor</MenuItem>
                         <MenuItem value="feeder">feeder</MenuItem>
                       </Select>
                     )}
@@ -645,13 +645,13 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                   )}
                 />
                 <FormControl fullWidth>
-                  <InputLabel>Deputy Team Leader</InputLabel>
+                  <InputLabel>Deputy Supervisor</InputLabel>
                   <Controller
                     name="deputyTeamLeader"
                     control={control}
                     defaultValue=""
                     render={({ field }) => (
-                      <Select fullWidth {...field} label={"Deputy Team Leader"}>
+                      <Select fullWidth {...field} label={"Deputy Supervisor"}>
                         <MenuItem value="YES">YES</MenuItem>
                         <MenuItem value="NO">NO</MenuItem>
                       </Select>

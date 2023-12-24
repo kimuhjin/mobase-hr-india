@@ -364,7 +364,7 @@ export const ManageBoard = ({
                 }}
               >
                 <Typography sx={{ fontWeight: 700, fontSize: "13px" }}>
-                  Team Leader
+                  Supervisor
                 </Typography>
                 <LeaderCard leaderId={leader?.id} />
               </Stack>
@@ -378,7 +378,7 @@ export const ManageBoard = ({
                 }}
               >
                 <Typography sx={{ fontWeight: 700, fontSize: "13px" }}>
-                  Team Leader
+                  Supervisor
                 </Typography>
                 <Stack sx={{ width: "100%" }}>
                   <Stack
@@ -413,7 +413,7 @@ export const ManageBoard = ({
               borderBottomRightRadius: "10px",
             }}
           >
-            <BoardCount label={"Team Leader"} value={leader ? 1 : 0} />
+            <BoardCount label={"Supervisor"} value={leader ? 1 : 0} />
             <BoardCount
               label={"Worker"}
               value={
