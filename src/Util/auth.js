@@ -2,8 +2,8 @@ import Cookies from "js-cookie";
 import { loginUserList } from "../Constant/loginUserList";
 import CryptoJS from "crypto-js";
 export const groupListObj = {
-  smt: "SMD(smt)",
-  eol: "SMD(eol)",
+  smt: "SMT(smt)",
+  eol: "SMT(eol)",
   switch: "ASS'Y(switch)",
   keyset: "ASS'Y(keyset)",
   guest: "GUEST",

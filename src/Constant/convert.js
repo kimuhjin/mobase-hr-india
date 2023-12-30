@@ -1,6 +1,6 @@
 export const groupObj = {
-  smt: "SMD(smt)",
-  eol: "SMD(eol)",
+  smt: "SMT(smt)",
+  eol: "SMT(eol)",
   switch: "ASS'Y(switch)",
   keyset: "ASS'Y(keyset)",
 };
