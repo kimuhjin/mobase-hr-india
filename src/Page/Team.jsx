@@ -10,6 +10,8 @@ import { BOARD_TEAM } from "../Constant/route";
 export const GROUP_LIST = [
   { label: "SMD(smt)", id: "smt" },
   { label: "SMD(eol)", id: "eol" },
+  { label: "ASS'Y(switch)", id: "switch" },
+  { label: "ASS'Y(keyset)", id: "keyset" },
 ];
 export const Team = () => {
   const [selectedBoardId, setSelectedBoardId] = useState("smt");
@@ -58,6 +60,8 @@ export const Team = () => {
             >
               <MenuItem value="smt">{`SMD(smt)`}</MenuItem>
               <MenuItem value="eol">{`SMD(eol)`}</MenuItem>
+              <MenuItem value="switch">{`ASS'Y(switch)`}</MenuItem>
+              <MenuItem value="keyset">{`ASS'Y(keyset)`}</MenuItem>
             </Select>
           )}
         </Stack>

@@ -4,6 +4,8 @@ import CryptoJS from "crypto-js";
 export const groupListObj = {
   smt: "SMD(smt)",
   eol: "SMD(eol)",
+  switch: "ASS'Y(switch)",
+  keyset: "ASS'Y(keyset)",
   guest: "GUEST",
 };
 export const auth = (() => {
