@@ -99,13 +99,15 @@ export const BoardsContainer = ({ id, readonly = false, isExpand }) => {
             })}
           </Stack>
           {!readonly && (
-            <Button
-              onClick={handleSave}
-              variant="contained"
-              sx={{ marginTop: "16px" }}
-            >
-              Save
-            </Button>
+            <Stack sx={{ position: "absolute", top: "33px", right: "438px" }}>
+              <Button
+                onClick={handleSave}
+                variant="contained"
+                sx={{ width: "100px" }}
+              >
+                Save
+              </Button>
+            </Stack>
           )}
         </Stack>
       )}

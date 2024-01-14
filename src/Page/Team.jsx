@@ -19,7 +19,14 @@ export const Team = () => {
   const navigate = useNavigate();
   console.log(auth.role);
   return (
-    <Stack sx={{ width: "100%", padding: "20px", overflowY: "auto" }}>
+    <Stack
+      sx={{
+        width: "100%",
+        padding: "20px",
+        overflowY: "auto",
+        position: "relative",
+      }}
+    >
       <Stack
         sx={{
           width: "100%",
