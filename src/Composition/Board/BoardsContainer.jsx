@@ -40,9 +40,12 @@ export const BoardsContainer = ({ id, readonly = false, isExpand }) => {
     try {
       const commentRef = doc(db, "boards", id);
       setIsLoading(true);
-
-      const res = await setDoc(commentRef, { boards }, { merge: true });
-      alert("save successfully");
+      if (boards.length > 0) {
+        const res = await setDoc(commentRef, { boards }, { merge: true });
+        alert("save successfully");
+      } else {
+        throw new Error("save board with empty");
+      }
     } catch (error) {
       console.error("Error saving data:", error);
       alert("error! board save");

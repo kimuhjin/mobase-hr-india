@@ -24,42 +24,18 @@ export const sample_board_data = [
     label: "1th shift",
     column: ["no1", "no2", "no3", "no4", "no5"],
     row: ["o1", "o2", "o3"],
-    item: [
-      {
-        row: 0,
-        column: 0,
-        user: {
-          id: "123123",
-        },
-      },
-    ],
+    item: [],
   },
   {
     label: "2nd shift",
     column: ["no1", "no2", "no3", "no4", "no5"],
     row: ["o1", "o2", "o3"],
-    item: [
-      {
-        row: 0,
-        column: 0,
-        user: {
-          id: "123123",
-        },
-      },
-    ],
+    item: [],
   },
   {
     label: "3rd shift",
     column: ["no1", "no2", "no3", "no4", "no5"],
     row: ["o1", "o2", "o3"],
-    item: [
-      {
-        row: 0,
-        column: 0,
-        user: {
-          id: "123123",
-        },
-      },
-    ],
+    item: [],
   },
 ];
