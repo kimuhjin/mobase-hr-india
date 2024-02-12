@@ -6,6 +6,7 @@ export const groupListObj = {
   eol: "SMT(eol)",
   switch: "ASS'Y(switch)",
   keyset: "ASS'Y(keyset)",
+  quality_team: "Quality team",
   guest: "GUEST",
 };
 export const auth = (() => {

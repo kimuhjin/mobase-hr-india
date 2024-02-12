@@ -476,6 +476,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                         <MenuItem value="eol">{`SMT(eol)`}</MenuItem>
                         <MenuItem value="switch">{`ASS'Y(switch)`}</MenuItem>
                         <MenuItem value="keyset">{`ASS'Y(keyset)`}</MenuItem>
+                        <MenuItem value="quality_team">{`Quality team`}</MenuItem>
                       </Select>
                     )}
                   />
@@ -542,6 +543,10 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                         <MenuItem value="machine operator">
                           machine operator
                         </MenuItem>
+                        <MenuItem value="quality team operator">
+                          quality team operator
+                        </MenuItem>
+
                         <MenuItem value="team_leader">Supervisor</MenuItem>
                         <MenuItem value="feeder">feeder</MenuItem>
                       </Select>

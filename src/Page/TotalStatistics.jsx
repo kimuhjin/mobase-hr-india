@@ -15,17 +15,17 @@ const TotalStatistics = () => {
   }.${date.getDate()}`;
 
   const getStatus = (boards, workers) => {
-    const mobaseBoards = boards.map((board) => {
-      const newItem = board.item.filter((i) => {
-        const worker = workers.find((worker) => worker?.id === i?.user?.id);
-        return worker.company === "mobase";
+    const mobaseBoards = boards?.map((board) => {
+      const newItem = board?.item?.filter((i) => {
+        const worker = workers?.find((worker) => worker?.id === i?.user?.id);
+        return worker?.company === "mobase";
       });
       return { ...board, item: newItem };
     });
-    const outsourcingBoards = boards.map((board) => {
-      const newItem = board.item.filter((i) => {
-        const worker = workers.find((worker) => worker?.id === i?.user?.id);
-        return worker.company !== "mobase";
+    const outsourcingBoards = boards?.map((board) => {
+      const newItem = board?.item.filter((i) => {
+        const worker = workers?.find((worker) => worker?.id === i?.user?.id);
+        return worker?.company !== "mobase";
       });
       return { ...board, item: newItem };
     });

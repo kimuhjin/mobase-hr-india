@@ -84,6 +84,7 @@ const Board = () => {
             <MenuItem value="eol">{`SMT(eol)`}</MenuItem>
             <MenuItem value="switch">{`ASS'Y(switch)`}</MenuItem>
             <MenuItem value="keyset">{`ASS'Y(keyset)`}</MenuItem>
+            <MenuItem value="quality_team">{`Quality team`}</MenuItem>
           </Select>
           {/* <IconButton
             sx={{

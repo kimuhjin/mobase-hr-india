@@ -28,7 +28,7 @@ export const Header = () => {
 const FloorDisplay = ({ floor }) => {
   const FLOOR_INDEX = {
     0: "0th",
-    1: "1th",
+    1: "1st",
     2: "2nd",
     3: "3th",
     4: "4th",

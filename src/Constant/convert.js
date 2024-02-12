@@ -3,6 +3,7 @@ export const groupObj = {
   eol: "SMT(eol)",
   switch: "ASS'Y(switch)",
   keyset: "ASS'Y(keyset)",
+  quality_team: "Quality team",
 };
 
 export const groupTitle = (value) => {

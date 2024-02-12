@@ -5,4 +5,5 @@ export const loginUserList = [
   { id: "eol", password: "mobase", role: "eol" },
   { id: "switch", password: "mobase", role: "switch" },
   { id: "keyset", password: "mobase", role: "keyset" },
+  { id: "quality_team", password: "mobase", role: "quality_team" },
 ];

@@ -2,7 +2,7 @@ export const init = [
   {
     column: ["no1", "no2", "no3"],
     item: [],
-    label: "1th shift",
+    label: "1st shift",
     row: ["o1", "o2", "o3"],
   },
   {
@@ -21,7 +21,7 @@ export const init = [
 
 export const sample_board_data = [
   {
-    label: "1th shift",
+    label: "1st shift",
     column: ["no1", "no2", "no3", "no4", "no5"],
     row: ["o1", "o2", "o3"],
     item: [],
