@@ -4,6 +4,7 @@ export const groupObj = {
   switch: "ASS'Y(switch)",
   keyset: "ASS'Y(keyset)",
   quality_team: "Quality team",
+  material_team: "Material team",
 };
 
 export const groupTitle = (value) => {

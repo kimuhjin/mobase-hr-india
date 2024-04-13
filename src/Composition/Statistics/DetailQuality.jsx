@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import { HeaderShift } from "../../Page/TotalStatistics";
 
 export const DetailQuality = ({ boards }) => {

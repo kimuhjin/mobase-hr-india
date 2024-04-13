@@ -7,6 +7,7 @@ export const groupListObj = {
   switch: "ASS'Y(switch)",
   keyset: "ASS'Y(keyset)",
   quality_team: "Quality team",
+  material_team: "Material team",
   guest: "GUEST",
 };
 export const auth = (() => {
