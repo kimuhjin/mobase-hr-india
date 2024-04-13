@@ -42,9 +42,12 @@ const NumberToAlphabet = (alphabet) => {
       return "E";
   }
 };
-export const EmployeeSkillMatrix = ({ setValue, watch }) => {
-  const [skillMatrix, setSkillMatrix] = useState([]);
-
+export const EmployeeSkillMatrix = ({
+  setValue,
+  watch,
+  skillMatrix,
+  setSkillMatrix,
+}) => {
   const getSum = (skillMatrix) => {
     return skillMatrix.reduce((accumulator, currentObject) => {
       return accumulator + AlphabetToNumber(currentObject.level);

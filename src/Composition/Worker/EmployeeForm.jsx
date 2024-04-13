@@ -26,19 +26,21 @@ import { AiOutlinePrinter } from "react-icons/ai";
 import { documentOpenToWindow } from "../../Util/pdf";
 import Pdfworker from "./PdfWorker";
 import PdfCetificate from "./PdfCetificate";
+import { AreaList } from "../../Constant/AreaList";
 
 export const EmployeeForm = ({ isNew, workerInfo }) => {
   const { setValue, watch, handleSubmit, control } = useForm();
   const [isLoading, setIsLoading] = useState(false);
+  const [skillMatrix, setSkillMatrix] = useState([]);
   const navigate = useNavigate();
-  console.log(workerInfo);
+
   const isAdmin = auth.role === "admin";
   const isDisabled = !isAdmin;
-  useEffect(() => {
-    if (!watch("group")) {
-      setValue("group", auth.role);
-    }
-  }, [auth.role]);
+  // useEffect(() => {
+  //   if (!watch("group")) {
+  //     setValue("group", auth.role);
+  //   }
+  // }, [auth.role]);
 
   useEffect(() => {
     if (workerInfo) {
@@ -182,9 +184,6 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
     const mimeType = "image/png";
     const imageBlob = base64ToBlob(base64Image, mimeType);
     const imageUrl = URL.createObjectURL(imageBlob);
-
-    console.log(watch("inspectorCertificateDate"));
-    console.log(watch("solderingCertificateDate"));
 
     await documentOpenToWindow(<PdfCetificate watch={watch} img={imageUrl} />);
   };
@@ -470,16 +469,43 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                     name="group"
                     control={control}
                     defaultValue=""
-                    render={({ field }) => (
-                      <Select fullWidth {...field} label={"Group"}>
-                        <MenuItem value="smt">{`SMT(smt)`}</MenuItem>
-                        <MenuItem value="eol">{`SMT(eol)`}</MenuItem>
-                        <MenuItem value="switch">{`ASS'Y(switch)`}</MenuItem>
-                        <MenuItem value="keyset">{`ASS'Y(keyset)`}</MenuItem>
-                        <MenuItem value="quality_team">{`Quality team`}</MenuItem>
-                        <MenuItem value="material_team">{`Material team`}</MenuItem>
-                      </Select>
-                    )}
+                    render={({ field }) => {
+                      const { onChange } = field;
+                      return (
+                        <Select
+                          fullWidth
+                          {...field}
+                          label={"Group"}
+                          onChange={(e) => {
+                            if (watch("group") === "") {
+                              onChange(e);
+                              return;
+                            }
+                            if (
+                              watch("group") !== "" &&
+                              window.confirm(
+                                "If you change the group, area and skill matrix will be clear. Do you still want to change it?"
+                              )
+                            ) {
+                              // reset area
+                              setValue("area", "");
+                              // reset skill matrix
+                              setValue("skillMatrix", "E");
+                              setValue("skillMatrixDetail", []);
+                              setSkillMatrix([]);
+                              onChange(e);
+                            }
+                          }}
+                        >
+                          <MenuItem value="smt">{`SMT(smt)`}</MenuItem>
+                          <MenuItem value="eol">{`SMT(eol)`}</MenuItem>
+                          <MenuItem value="switch">{`ASS'Y(switch)`}</MenuItem>
+                          <MenuItem value="keyset">{`ASS'Y(keyset)`}</MenuItem>
+                          <MenuItem value="quality_team">{`Quality team`}</MenuItem>
+                          <MenuItem value="material_team">{`Material team`}</MenuItem>
+                        </Select>
+                      );
+                    }}
                   />
                 </FormControl>
                 <Controller
@@ -520,17 +546,44 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                     name="area"
                     control={control}
                     defaultValue=""
-                    render={({ field }) => (
-                      <Select fullWidth {...field} label={"Area"}>
-                        <MenuItem value="key_set">KEY SET</MenuItem>
-                        <MenuItem value="c_pad/0fd">C-PAD / 0FD</MenuItem>
-                        <MenuItem value="multifunction">MULTIFUNCTION</MenuItem>
-                        <MenuItem value="remocon">REMOCON</MenuItem>
-                        <MenuItem value="pw/console">PW / CONSOLE</MenuItem>
-                        <MenuItem value="renault">RENAULT</MenuItem>
-                        <MenuItem value="smt">SMT</MenuItem>
-                      </Select>
-                    )}
+                    render={({ field }) => {
+                      const { onChange } = field;
+                      return (
+                        <Select
+                          fullWidth
+                          {...field}
+                          label={"Area"}
+                          onChange={(e) => {
+                            if (watch("area") === "") {
+                              onChange(e);
+                              return;
+                            }
+                            if (
+                              watch("area") !== "" &&
+                              window.confirm(
+                                "If you change the area, skill matrix will be clear. Do you still want to change it?"
+                              )
+                            ) {
+                              // reset skill matrix
+                              setValue("skillMatrix", "E");
+                              setValue("skillMatrixDetail", []);
+                              setSkillMatrix([]);
+                              onChange(e);
+                            }
+                          }}
+                        >
+                          {(AreaList[watch("group")] || []).map(
+                            ({ label, value }) => {
+                              return (
+                                <MenuItem value={value} key={value}>
+                                  {label}
+                                </MenuItem>
+                              );
+                            }
+                          )}
+                        </Select>
+                      );
+                    }}
                   />
                 </FormControl>
                 <FormControl fullWidth>
@@ -701,7 +754,12 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
           >
             Skill Matrix
           </Typography>
-          <EmployeeSkillMatrix setValue={setValue} watch={watch} />
+          <EmployeeSkillMatrix
+            setValue={setValue}
+            watch={watch}
+            skillMatrix={skillMatrix}
+            setSkillMatrix={setSkillMatrix}
+          />
         </Stack>
       </Stack>
     </>
