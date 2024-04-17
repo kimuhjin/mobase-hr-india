@@ -37,11 +37,6 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
 
   const isAdmin = auth.role === "admin";
   const isDisabled = !isAdmin;
-  // useEffect(() => {
-  //   if (!watch("group")) {
-  //     setValue("group", auth.role);
-  //   }
-  // }, [auth.role]);
 
   useEffect(() => {
     if (workerInfo) {
@@ -466,7 +461,9 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                   <Controller
                     name="group"
                     control={control}
-                    defaultValue=""
+                    defaultValue={
+                      watch("group") || auth.role === "admin" ? "" : auth.role
+                    }
                     render={({ field }) => {
                       const { onChange } = field;
                       return (
