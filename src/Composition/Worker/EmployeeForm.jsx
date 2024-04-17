@@ -27,6 +27,7 @@ import { documentOpenToWindow } from "../../Util/pdf";
 import Pdfworker from "./PdfWorker";
 import PdfCetificate from "./PdfCetificate";
 import { AreaList } from "../../Constant/AreaList";
+import { getColor } from "../../Util/getColor";
 
 export const EmployeeForm = ({ isNew, workerInfo }) => {
   const { setValue, watch, handleSubmit, control } = useForm();
@@ -269,14 +270,11 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                             height: "100%",
                             justifyContent: "center",
                             alignItems: "center",
-                            backgroundColor:
-                              watch("company") === "mobase"
-                                ? "blue"
-                                : "skyblue",
                             maxHeight: "180px",
                             writingMode: "vertical-lr",
                             textOrientation: "upright",
                             letterSpacing: "-5px",
+                            ...getColor(watch("company")),
                           }}
                         >
                           {watch("company")}
@@ -535,7 +533,8 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                     render={({ field }) => (
                       <Select fullWidth {...field} label={"Company"}>
                         <MenuItem value="mobase">Mobase</MenuItem>
-                        <MenuItem value="outsourcing">Outsourcing</MenuItem>
+                        <MenuItem value="get">Get</MenuItem>
+                        <MenuItem value="cl">Cl</MenuItem>
                       </Select>
                     )}
                   />

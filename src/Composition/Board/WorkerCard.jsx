@@ -3,6 +3,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase-config";
 import { skillMatrixWithDate } from "../../Constant/convert";
+import { getColor } from "../../Util/getColor";
 
 export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
   const [workerInfo, setWorkerInfo] = useState(null);
@@ -75,12 +76,10 @@ export const WorkerCard = ({ readonly, handleDragStart, cellIndex, user }) => {
                 maxWidth: "6px",
                 justifyContent: "center",
                 alignItems: "center",
-                backgroundColor:
-                  workerInfo?.company === "mobase" ? "blue" : "skyblue",
-
                 writingMode: "vertical-lr",
                 textOrientation: "upright",
                 letterSpacing: "-5px",
+                ...getColor(workerInfo?.company),
               }}
             />
 
