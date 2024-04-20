@@ -30,7 +30,13 @@ import { AreaList } from "../../Constant/AreaList";
 import { getColor } from "../../Util/getColor";
 
 export const EmployeeForm = ({ isNew, workerInfo }) => {
-  const { setValue, watch, handleSubmit, control } = useForm();
+  const {
+    setValue,
+    watch,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const [skillMatrix, setSkillMatrix] = useState([]);
   const navigate = useNavigate();
@@ -47,13 +53,16 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
   }, [workerInfo, setValue]);
 
   const onSubmit = async (data) => {
-    const { name } = data;
+    if (!data.profileImage) {
+      alert("profileImage is required");
+      return;
+    }
     const id = workerInfo.id || uuid();
 
     try {
       setIsLoading(true);
       const commentRef = doc(db, "worker", id);
-      const res = await setDoc(commentRef, { ...data, id }, { merge: true });
+      await setDoc(commentRef, { ...data, id }, { merge: true });
       alert("save successfully");
       navigate(WORKER);
     } catch (error) {
@@ -183,7 +192,6 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
 
     await documentOpenToWindow(<PdfCetificate watch={watch} img={imageUrl} />);
   };
-
   return (
     <>
       <LoadingDim isLoading={isLoading} />
@@ -464,6 +472,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                     defaultValue={
                       watch("group") || auth.role === "admin" ? "" : auth.role
                     }
+                    rules={{ required: "group is required" }}
                     render={({ field }) => {
                       const { onChange } = field;
                       return (
@@ -471,6 +480,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                           fullWidth
                           {...field}
                           label={"Group"}
+                          error={errors["group"]?.type === "required"}
                           onChange={(e) => {
                             if (watch("group") === "") {
                               onChange(e);
@@ -507,8 +517,14 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                   name="name"
                   control={control}
                   defaultValue=""
+                  rules={{ required: "name is required" }}
                   render={({ field }) => (
-                    <TextField label="Name" fullWidth {...field} />
+                    <TextField
+                      label="Name"
+                      fullWidth
+                      {...field}
+                      error={errors["name"]?.type === "required"}
+                    />
                   )}
                 />
 
@@ -516,8 +532,14 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                   name="employeeNumber"
                   control={control}
                   defaultValue=""
+                  rules={{ required: "employeeNumber is required" }}
                   render={({ field }) => (
-                    <TextField label="Employee Number" fullWidth {...field} />
+                    <TextField
+                      label="Employee Number"
+                      fullWidth
+                      {...field}
+                      error={errors["employeeNumber"]?.type === "required"}
+                    />
                   )}
                 />
 
@@ -527,8 +549,14 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                     name="company"
                     control={control}
                     defaultValue=""
+                    rules={{ required: "company is required" }}
                     render={({ field }) => (
-                      <Select fullWidth {...field} label={"Company"}>
+                      <Select
+                        fullWidth
+                        {...field}
+                        label={"Company"}
+                        error={errors["company"]?.type === "required"}
+                      >
                         <MenuItem value="mobase">Mobase</MenuItem>
                         <MenuItem value="get">Get</MenuItem>
                         <MenuItem value="cl">Cl</MenuItem>
