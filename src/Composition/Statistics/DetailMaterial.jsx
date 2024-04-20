@@ -21,11 +21,11 @@ export const DetailMaterial = ({ boards }) => {
         data: [accumulatedStatus, ...status?.["mobaseParsed"]],
       };
     });
-    const data_outsourcing = boards.map(({ label, status }) => {
+    const data_get = boards.map(({ label, status }) => {
       let accumulatedStatus = {};
 
       // 각 status 객체를 순회하며
-      status?.["outsourcingParsed"].forEach((stat) => {
+      status?.["getParsed"].forEach((stat) => {
         for (let key in stat) {
           // 해당 키가 누적 상태 객체에 없으면 추가하고, 있으면 값 누적
           if (!accumulatedStatus[key]) {
@@ -36,12 +36,31 @@ export const DetailMaterial = ({ boards }) => {
       });
       return {
         label,
-        data: [accumulatedStatus, ...status?.["outsourcingParsed"]],
+        data: [accumulatedStatus, ...status?.["getParsed"]],
+      };
+    });
+    const data_cl = boards.map(({ label, status }) => {
+      let accumulatedStatus = {};
+
+      // 각 status 객체를 순회하며
+      status?.["clParsed"].forEach((stat) => {
+        for (let key in stat) {
+          // 해당 키가 누적 상태 객체에 없으면 추가하고, 있으면 값 누적
+          if (!accumulatedStatus[key]) {
+            accumulatedStatus[key] = 0;
+          }
+          accumulatedStatus[key] += stat[key];
+        }
+      });
+      return {
+        label,
+        data: [accumulatedStatus, ...status?.["clParsed"]],
       };
     });
 
     const result_mobase = [];
-    const result_outsourcing = [];
+    const result_get = [];
+    const result_cl = [];
 
     // Initialize result with zeros
     for (let i = 0; i < data_mobase[0]?.data?.length; i++) {
@@ -62,26 +81,44 @@ export const DetailMaterial = ({ boards }) => {
     }
 
     // Initialize result with zeros
-    for (let i = 0; i < data_outsourcing[0]?.data?.length; i++) {
+    for (let i = 0; i < data_get[0]?.data?.length; i++) {
       const initialData = {};
-      for (let key in data_outsourcing[0]?.data[i]) {
+      for (let key in data_get[0]?.data[i]) {
         initialData[key] = 0;
       }
-      result_outsourcing.push(initialData);
+      result_get.push(initialData);
     }
 
     // Accumulate data
-    for (let i = 0; i < data_outsourcing.length; i++) {
-      for (let j = 0; j < data_outsourcing[i].data.length; j++) {
-        for (let key in data_outsourcing[i].data[j]) {
-          result_outsourcing[j][key] += data_outsourcing[i].data[j][key];
+    for (let i = 0; i < data_get.length; i++) {
+      for (let j = 0; j < data_get[i].data.length; j++) {
+        for (let key in data_get[i].data[j]) {
+          result_get[j][key] += data_get[i].data[j][key];
+        }
+      }
+    }
+    // Initialize result with zeros
+    for (let i = 0; i < data_cl[0]?.data?.length; i++) {
+      const initialData = {};
+      for (let key in data_cl[0]?.data[i]) {
+        initialData[key] = 0;
+      }
+      result_cl.push(initialData);
+    }
+
+    // Accumulate data
+    for (let i = 0; i < data_cl.length; i++) {
+      for (let j = 0; j < data_cl[i].data.length; j++) {
+        for (let key in data_cl[i].data[j]) {
+          result_cl[j][key] += data_cl[i].data[j][key];
         }
       }
     }
 
     return {
       result_mobase,
-      result_outsourcing,
+      result_get,
+      result_cl,
     };
   };
   return (
@@ -173,168 +210,7 @@ export const DetailMaterial = ({ boards }) => {
             boards.filter((i) => ["material_team"].includes(i.process))
           )}
         />
-        {/* <Stack
-          sx={{
-            width: "100%",
-            flexDirection: "row",
-            borderBottom: "1px solid black",
-            backgroundColor: "#b5a991",
-          }}
-        >
-          <Stack
-            sx={{
-              width: "100%",
-              minHeight: "40px",
-              flexDirection: "row",
-            }}
-          >
-            <Stack sx={{ width: "19.6%", flexDirection: "row" }}>
-              <Stack
-                sx={{
-                  width: "68.5%",
-                  height: "100%",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRight: "1px solid black",
-                  fontSize: "12px",
-                  fontWeight: "700",
-                }}
-              >
-                Total
-              </Stack>
-              <Stack
-                sx={{
-                  width: "31.5%",
-                  height: "100%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRight: "1px solid black",
-                  fontSize: "10px",
-                  fontWeight: "700",
-                }}
-              >
-                <Stack
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    borderBottom: "1px solid black",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  Mobase
-                </Stack>
-                <Stack
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  Outsourcing
-                </Stack>
-              </Stack>
-            </Stack>
-            <Stack sx={{ width: "83.5%" }}>
-              <Stack
-                sx={{
-                  flexDirection: "row",
-                  borderBottom: "1px solid black",
-                  minHeight: "20px",
-                }}
-              >
-                {sumBoard(
-                  boards.filter((i) => ["material_team"].includes(i.process))
-                )?.result_mobase.map((i, index) => {
-                  const isLast =
-                    index ===
-                    sumBoard(
-                      boards.filter((i) => ["material_team"].includes(i.process))
-                    )?.result_mobase.length -
-                      1;
-                  return (
-                    <Stack
-                      sx={{
-                        width: "25%",
-                        flexDirection: "row",
-                        "> *": {
-                          justifyContent: "center",
-                          alignItems: "center",
-                          borderRight: "1px solid black",
-                          textAlign: "center",
-                        },
-                        fontSize: "12px",
-                        fontWeight: "400",
-                      }}
-                    >
-                      <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.worker}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.feederMaterial}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.feederTrash}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.sick}</Stack>
-                      <Stack
-                        sx={{
-                          width: "20%",
-                          borderRight: isLast
-                            ? "none !important"
-                            : "1px solid black",
-                        }}
-                      >
-                        {i.vacation}
-                      </Stack>
-                    </Stack>
-                  );
-                })}
-              </Stack>
-              <Stack sx={{ flexDirection: "row", height: "20px" }}>
-                {sumBoard(
-                  boards.filter((i) => ["material_team"].includes(i.process))
-                )?.result_outsourcing.map((i, index) => {
-                  const isLast =
-                    index ===
-                    sumBoard(
-                      boards.filter((i) => ["material_team"].includes(i.process))
-                    )?.result_outsourcing?.length -
-                      1;
-                  return (
-                    <Stack
-                      sx={{
-                        width: "25%",
-                        flexDirection: "row",
-                        "> *": {
-                          justifyContent: "center",
-                          alignItems: "center",
-                          borderRight: "1px solid black",
-                          textAlign: "center",
-                        },
-                        fontSize: "12px",
-                        fontWeight: "400",
-                      }}
-                    >
-                      <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.worker}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.feederMaterial}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.feederTrash}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.sick}</Stack>
-                      <Stack
-                        sx={{
-                          width: "20%",
-                          borderRight: isLast
-                            ? "none !important"
-                            : "1px solid black",
-                        }}
-                      >
-                        {i.vacation}
-                      </Stack>
-                    </Stack>
-                  );
-                })}
-              </Stack>
-            </Stack>
-          </Stack>
-        </Stack> */}
+
         <Stack
           sx={{
             width: "100%",
@@ -346,7 +222,7 @@ export const DetailMaterial = ({ boards }) => {
           <Stack
             sx={{
               width: "100%",
-              minHeight: "40px",
+
               flexDirection: "row",
             }}
           >
@@ -391,11 +267,22 @@ export const DetailMaterial = ({ boards }) => {
                   sx={{
                     width: "100%",
                     height: "100%",
+                    borderBottom: "1px solid black",
                     justifyContent: "center",
                     alignItems: "center",
                   }}
                 >
-                  Outsourcing
+                  Get
+                </Stack>
+                <Stack
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  Cl
                 </Stack>
               </Stack>
             </Stack>
@@ -454,17 +341,71 @@ export const DetailMaterial = ({ boards }) => {
                   );
                 })}
               </Stack>
-              <Stack sx={{ flexDirection: "row", height: "20px" }}>
+              <Stack
+                sx={{
+                  flexDirection: "row",
+                  height: "20px",
+                  borderBottom: "1px solid black",
+                }}
+              >
                 {sumBoard(
                   boards.filter((i) => ["material_team"].includes(i.process))
-                )?.result_outsourcing.map((i, index) => {
+                )?.result_get.map((i, index) => {
                   const isLast =
                     index ===
                     sumBoard(
                       boards.filter((i) =>
                         ["material_team"].includes(i.process)
                       )
-                    )?.result_outsourcing?.length -
+                    )?.result_get?.length -
+                      1;
+                  return (
+                    <Stack
+                      sx={{
+                        width: "25%",
+                        flexDirection: "row",
+                        "> *": {
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderRight: "1px solid black",
+                          textAlign: "center",
+                        },
+                        fontSize: "12px",
+                        fontWeight: "400",
+                      }}
+                    >
+                      <Stack
+                        sx={{
+                          width: "100%",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderRight: isLast
+                            ? "none !important"
+                            : "1px solid black",
+                        }}
+                      >
+                        {i.leader +
+                          i.worker +
+                          i.feederMaterial +
+                          i.feederTrash +
+                          i.sick +
+                          i.vacation}
+                      </Stack>
+                    </Stack>
+                  );
+                })}
+              </Stack>
+              <Stack sx={{ flexDirection: "row", height: "20px" }}>
+                {sumBoard(
+                  boards.filter((i) => ["material_team"].includes(i.process))
+                )?.result_cl.map((i, index) => {
+                  const isLast =
+                    index ===
+                    sumBoard(
+                      boards.filter((i) =>
+                        ["material_team"].includes(i.process)
+                      )
+                    )?.result_cl?.length -
                       1;
                   return (
                     <Stack
@@ -552,13 +493,22 @@ const Area = ({ area, boards, sum }) => {
               accumulatedStatus_mobase[key] += stat[key];
             }
           });
-          let accumulatedStatus_outsourcing = {};
-          status?.["outsourcingParsed"].forEach((stat) => {
+          let accumulatedStatus_get = {};
+          status?.["getParsed"].forEach((stat) => {
             for (let key in stat) {
-              if (!accumulatedStatus_outsourcing[key]) {
-                accumulatedStatus_outsourcing[key] = 0;
+              if (!accumulatedStatus_get[key]) {
+                accumulatedStatus_get[key] = 0;
               }
-              accumulatedStatus_outsourcing[key] += stat[key];
+              accumulatedStatus_get[key] += stat[key];
+            }
+          });
+          let accumulatedStatus_cl = {};
+          status?.["clParsed"].forEach((stat) => {
+            for (let key in stat) {
+              if (!accumulatedStatus_cl[key]) {
+                accumulatedStatus_cl[key] = 0;
+              }
+              accumulatedStatus_cl[key] += stat[key];
             }
           });
           return (
@@ -611,16 +561,26 @@ const Area = ({ area, boards, sum }) => {
                     width: "100%",
                     height: "100%",
                     justifyContent: "center",
+                    borderBottom: "1px solid black",
                     alignItems: "center",
                   }}
                 >
-                  Outsourcing
+                  Get
+                </Stack>
+                <Stack
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  Cl
                 </Stack>
               </Stack>
               <Stack
                 sx={{
                   width: "83.5%",
-                  minHeight: "40px",
                 }}
               >
                 <Stack
@@ -677,53 +637,102 @@ const Area = ({ area, boards, sum }) => {
                 <Stack
                   sx={{
                     flexDirection: "row",
+                    borderBottom: "1px solid black",
                     minHeight: "20px",
                   }}
                 >
-                  {[
-                    accumulatedStatus_outsourcing,
-                    ...status?.["outsourcingParsed"],
-                  ].map((i, index) => {
-                    const isLast =
-                      index ===
-                      [
-                        accumulatedStatus_outsourcing,
-                        ...status?.["outsourcingParsed"],
-                      ].length -
-                        1;
-                    return (
-                      <Stack
-                        sx={{
-                          width: "25%",
-                          flexDirection: "row",
-                          "> *": {
-                            justifyContent: "center",
-                            alignItems: "center",
-                            borderRight: "1px solid black",
-                            textAlign: "center",
-                          },
-                          fontSize: "12px",
-                          fontWeight: "400",
-                        }}
-                      >
-                        <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
-                        <Stack sx={{ width: "20%" }}>{i.worker}</Stack>
-                        <Stack sx={{ width: "20%" }}>{i.feederMaterial}</Stack>
-                        <Stack sx={{ width: "20%" }}>{i.feederTrash}</Stack>
-                        <Stack sx={{ width: "20%" }}>{i.sick}</Stack>
+                  {[accumulatedStatus_get, ...status?.["getParsed"]].map(
+                    (i, index) => {
+                      const isLast =
+                        index ===
+                        [accumulatedStatus_get, ...status?.["getParsed"]]
+                          .length -
+                          1;
+                      return (
                         <Stack
                           sx={{
-                            width: "20%",
-                            borderRight: isLast
-                              ? "none !important"
-                              : "1px solid black",
+                            width: "25%",
+                            flexDirection: "row",
+                            "> *": {
+                              justifyContent: "center",
+                              alignItems: "center",
+                              borderRight: "1px solid black",
+                              textAlign: "center",
+                            },
+                            fontSize: "12px",
+                            fontWeight: "400",
                           }}
                         >
-                          {i.vacation}
+                          <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
+                          <Stack sx={{ width: "20%" }}>{i.worker}</Stack>
+                          <Stack sx={{ width: "20%" }}>
+                            {i.feederMaterial}
+                          </Stack>
+                          <Stack sx={{ width: "20%" }}>{i.feederTrash}</Stack>
+                          <Stack sx={{ width: "20%" }}>{i.sick}</Stack>
+                          <Stack
+                            sx={{
+                              width: "20%",
+                              borderRight: isLast
+                                ? "none !important"
+                                : "1px solid black",
+                            }}
+                          >
+                            {i.vacation}
+                          </Stack>
                         </Stack>
-                      </Stack>
-                    );
-                  })}
+                      );
+                    }
+                  )}
+                </Stack>
+                <Stack
+                  sx={{
+                    flexDirection: "row",
+                    minHeight: "20px",
+                  }}
+                >
+                  {[accumulatedStatus_cl, ...status?.["clParsed"]].map(
+                    (i, index) => {
+                      const isLast =
+                        index ===
+                        [accumulatedStatus_cl, ...status?.["clParsed"]].length -
+                          1;
+                      return (
+                        <Stack
+                          sx={{
+                            width: "25%",
+                            flexDirection: "row",
+                            "> *": {
+                              justifyContent: "center",
+                              alignItems: "center",
+                              borderRight: "1px solid black",
+                              textAlign: "center",
+                            },
+                            fontSize: "12px",
+                            fontWeight: "400",
+                          }}
+                        >
+                          <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
+                          <Stack sx={{ width: "20%" }}>{i.worker}</Stack>
+                          <Stack sx={{ width: "20%" }}>
+                            {i.feederMaterial}
+                          </Stack>
+                          <Stack sx={{ width: "20%" }}>{i.feederTrash}</Stack>
+                          <Stack sx={{ width: "20%" }}>{i.sick}</Stack>
+                          <Stack
+                            sx={{
+                              width: "20%",
+                              borderRight: isLast
+                                ? "none !important"
+                                : "1px solid black",
+                            }}
+                          >
+                            {i.vacation}
+                          </Stack>
+                        </Stack>
+                      );
+                    }
+                  )}
                 </Stack>
               </Stack>
             </Stack>
@@ -731,7 +740,6 @@ const Area = ({ area, boards, sum }) => {
         })}
         <Stack
           sx={{
-            minHeight: "40px",
             width: "100%",
             flexDirection: "row",
           }}
@@ -778,11 +786,22 @@ const Area = ({ area, boards, sum }) => {
               sx={{
                 width: "100%",
                 height: "100%",
+                borderBottom: "1px solid black",
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
-              Outsourcing
+              Get
+            </Stack>
+            <Stack
+              sx={{
+                width: "100%",
+                height: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Cl
             </Stack>
           </Stack>
           <Stack
@@ -835,9 +854,53 @@ const Area = ({ area, boards, sum }) => {
                 );
               })}
             </Stack>
+            <Stack
+              sx={{
+                flexDirection: "row",
+                height: "20px",
+                borderBottom: "1px solid black",
+              }}
+            >
+              {sum?.result_get.map((i, index) => {
+                const isLast = index === sum?.result_get.length - 1;
+                return (
+                  <Stack
+                    sx={{
+                      width: "25%",
+                      flexDirection: "row",
+                      "> *": {
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderRight: "1px solid black",
+                        textAlign: "center",
+                        backgroundColor: "#d9cdb3",
+                      },
+                      fontSize: "12px",
+                      fontWeight: "400",
+                    }}
+                  >
+                    <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
+                    <Stack sx={{ width: "20%" }}>{i.worker}</Stack>
+                    <Stack sx={{ width: "20%" }}>{i.feederMaterial}</Stack>
+                    <Stack sx={{ width: "20%" }}>{i.feederTrash}</Stack>
+                    <Stack sx={{ width: "20%" }}>{i.sick}</Stack>
+                    <Stack
+                      sx={{
+                        width: "20%",
+                        borderRight: isLast
+                          ? "none !important"
+                          : "1px solid black",
+                      }}
+                    >
+                      {i.vacation}
+                    </Stack>
+                  </Stack>
+                );
+              })}
+            </Stack>
             <Stack sx={{ flexDirection: "row", height: "20px" }}>
-              {sum?.result_outsourcing.map((i, index) => {
-                const isLast = index === sum?.result_outsourcing.length - 1;
+              {sum?.result_cl.map((i, index) => {
+                const isLast = index === sum?.result_cl.length - 1;
                 return (
                   <Stack
                     sx={{

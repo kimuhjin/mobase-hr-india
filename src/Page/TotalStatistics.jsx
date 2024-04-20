@@ -27,10 +27,26 @@ const TotalStatistics = () => {
     const outsourcingBoards = boards?.map((board) => {
       const newItem = board?.item.filter((i) => {
         const worker = workers?.find((worker) => worker?.id === i?.user?.id);
-        return worker?.company !== "mobase";
+        return worker?.company === "outsourcing";
       });
       return { ...board, item: newItem };
     });
+
+    const getBoards = boards?.map((board) => {
+      const newItem = board?.item.filter((i) => {
+        const worker = workers?.find((worker) => worker?.id === i?.user?.id);
+        return worker?.company === "get";
+      });
+      return { ...board, item: newItem };
+    });
+    const clBoards = boards?.map((board) => {
+      const newItem = board?.item.filter((i) => {
+        const worker = workers?.find((worker) => worker?.id === i?.user?.id);
+        return worker?.company === "cl";
+      });
+      return { ...board, item: newItem };
+    });
+
     const totalParsed = boards.map(({ item, column, leader }) => {
       const sickIndices = [];
       const vacationIndices = [];
@@ -128,8 +144,8 @@ const TotalStatistics = () => {
         });
 
         const leaderUser = workers?.find((worker) => worker?.id === leader?.id)
-          ? workers?.find((worker) => worker?.id === leader?.id)?.company !==
-            "mobase"
+          ? workers?.find((worker) => worker?.id === leader?.id)?.company ===
+            "outsourcing"
           : false;
         const sickUsers = item.filter((item) =>
           sickIndices.includes(item.column)
@@ -159,11 +175,98 @@ const TotalStatistics = () => {
         };
       }
     );
+    const getParsed = getBoards.map(({ item, column, leader }) => {
+      const sickIndices = [];
+      const vacationIndices = [];
+      const feederMaterialIndices = [];
+      const feederTrashIndices = [];
+      column.forEach((col, index) => {
+        if (col.includes("Sick")) sickIndices.push(index);
+        if (col.includes("Vacation")) vacationIndices.push(index);
+        if (col.includes("Feeder material")) feederMaterialIndices.push(index);
+        if (col.includes("Feeder Trash")) feederTrashIndices.push(index);
+      });
 
+      const leaderUser = workers?.find((worker) => worker?.id === leader?.id)
+        ? workers?.find((worker) => worker?.id === leader?.id)?.company ===
+          "get"
+        : false;
+      const sickUsers = item.filter((item) =>
+        sickIndices.includes(item.column)
+      ).length;
+      const vacationUsers = item.filter((item) =>
+        vacationIndices.includes(item.column)
+      ).length;
+
+      const feederMaterialUsers = item.filter((item) =>
+        feederMaterialIndices.includes(item.column)
+      ).length;
+      const feederTrashUsers = item.filter((item) =>
+        feederTrashIndices.includes(item.column)
+      ).length;
+      return {
+        leader: leaderUser ? 1 : 0,
+        worker:
+          item.length -
+          sickUsers -
+          vacationUsers -
+          feederMaterialUsers -
+          feederTrashUsers,
+        sick: sickUsers,
+        vacation: vacationUsers,
+        feederMaterial: feederMaterialUsers,
+        feederTrash: feederTrashUsers,
+      };
+    });
+
+    const clParsed = clBoards.map(({ item, column, leader }) => {
+      const sickIndices = [];
+      const vacationIndices = [];
+      const feederMaterialIndices = [];
+      const feederTrashIndices = [];
+      column.forEach((col, index) => {
+        if (col.includes("Sick")) sickIndices.push(index);
+        if (col.includes("Vacation")) vacationIndices.push(index);
+        if (col.includes("Feeder material")) feederMaterialIndices.push(index);
+        if (col.includes("Feeder Trash")) feederTrashIndices.push(index);
+      });
+
+      const leaderUser = workers?.find((worker) => worker?.id === leader?.id)
+        ? workers?.find((worker) => worker?.id === leader?.id)?.company === "cl"
+        : false;
+      const sickUsers = item.filter((item) =>
+        sickIndices.includes(item.column)
+      ).length;
+      const vacationUsers = item.filter((item) =>
+        vacationIndices.includes(item.column)
+      ).length;
+
+      const feederMaterialUsers = item.filter((item) =>
+        feederMaterialIndices.includes(item.column)
+      ).length;
+      const feederTrashUsers = item.filter((item) =>
+        feederTrashIndices.includes(item.column)
+      ).length;
+      return {
+        leader: leaderUser ? 1 : 0,
+        worker:
+          item.length -
+          sickUsers -
+          vacationUsers -
+          feederMaterialUsers -
+          feederTrashUsers,
+        sick: sickUsers,
+        vacation: vacationUsers,
+        feederMaterial: feederMaterialUsers,
+        feederTrash: feederTrashUsers,
+      };
+    });
     return {
       totalParsed,
       mobaseParsed,
       outsourcingParsed,
+      getParsed,
+      clParsed,
     };
   };
 
