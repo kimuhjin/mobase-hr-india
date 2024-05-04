@@ -5,6 +5,7 @@ export const groupObj = {
   keyset: "ASS'Y(keyset)",
   quality_team: "Quality team",
   material_team: "Material team",
+  sales_team: "Sales team",
 };
 
 export const groupTitle = (value) => {

@@ -12,4 +12,5 @@ export const AreaList = {
   keyset: [],
   quality_team: [],
   material_team: [],
+  sales_team: [],
 };

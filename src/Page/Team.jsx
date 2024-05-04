@@ -14,6 +14,7 @@ export const GROUP_LIST = [
   { label: "ASS'Y(keyset)", id: "keyset" },
   { label: "Quality team", id: "quality_team" },
   { label: "Material team", id: "material_team" },
+  { label: "Sales team", id: "sales_team" },
 ];
 export const Team = () => {
   const [selectedBoardId, setSelectedBoardId] = useState("smt");
@@ -73,6 +74,7 @@ export const Team = () => {
               <MenuItem value="keyset">{`ASS'Y(keyset)`}</MenuItem>
               <MenuItem value="quality_team">{`Quality team`}</MenuItem>
               <MenuItem value="material_team">{`Material team`}</MenuItem>
+              <MenuItem value="sales_team">{`Sales team`}</MenuItem>
             </Select>
           )}
         </Stack>

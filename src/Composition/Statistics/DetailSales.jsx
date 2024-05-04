@@ -1,7 +1,7 @@
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import { HeaderShift } from "../../Page/TotalStatistics";
 
-export const Details = ({ boards }) => {
+export const DetailSales = ({ boards }) => {
   const sumBoard = (boards) => {
     const data_mobase = boards.map(({ label, status }) => {
       let accumulatedStatus = {};
@@ -21,7 +21,6 @@ export const Details = ({ boards }) => {
         data: [accumulatedStatus, ...status?.["mobaseParsed"]],
       };
     });
-
     const data_get = boards.map(({ label, status }) => {
       let accumulatedStatus = {};
 
@@ -40,7 +39,6 @@ export const Details = ({ boards }) => {
         data: [accumulatedStatus, ...status?.["getParsed"]],
       };
     });
-
     const data_cl = boards.map(({ label, status }) => {
       let accumulatedStatus = {};
 
@@ -61,7 +59,6 @@ export const Details = ({ boards }) => {
     });
 
     const result_mobase = [];
-
     const result_get = [];
     const result_cl = [];
 
@@ -100,7 +97,6 @@ export const Details = ({ boards }) => {
         }
       }
     }
-
     // Initialize result with zeros
     for (let i = 0; i < data_cl[0]?.data?.length; i++) {
       const initialData = {};
@@ -118,35 +114,15 @@ export const Details = ({ boards }) => {
         }
       }
     }
+
     return {
       result_mobase,
-
       result_get,
       result_cl,
     };
   };
   return (
-    <Stack sx={{ width: "100%", minHeight: "auto" }}>
-      <Stack
-        sx={{
-          marginTop: "12px",
-          height: "28px",
-          alignItems: "center",
-          flexDirection: "row",
-        }}
-      >
-        <Typography
-          sx={{
-            fontWeight: 700,
-            fontSize: "18px",
-            width: "100%",
-            lineHeight: "20px",
-          }}
-        >
-          Details
-        </Typography>
-      </Stack>
-
+    <Stack sx={{ width: "100%", marginTop: "12px" }}>
       <Stack
         sx={{
           width: "100%",
@@ -228,299 +204,13 @@ export const Details = ({ boards }) => {
           </Stack>
         </Stack>
         <Area
-          area="ASS'Y"
-          boards={boards.filter(
-            (i) =>
-              ![
-                "smt",
-                "eol",
-                "quality_team",
-                "material_team",
-                "sales_team",
-              ].includes(i.process)
-          )}
+          area="Sales"
+          boards={boards.filter((i) => ["sales_team"].includes(i.process))}
           sum={sumBoard(
-            boards.filter(
-              (i) =>
-                ![
-                  "smt",
-                  "eol",
-                  "quality_team",
-                  "material_team",
-                  "sales_team",
-                ].includes(i.process)
-            )
+            boards.filter((i) => ["sales_team"].includes(i.process))
           )}
         />
-        <Area
-          area="SMT"
-          boards={boards.filter((i) => ["smt", "eol"].includes(i.process))}
-          sum={sumBoard(
-            boards.filter((i) => ["smt", "eol"].includes(i.process))
-          )}
-        />
-        <Stack
-          sx={{
-            width: "100%",
-            flexDirection: "row",
-            borderBottom: "1px solid black",
-            backgroundColor: "#b5a991",
-          }}
-        >
-          <Stack
-            sx={{
-              width: "100%",
 
-              flexDirection: "row",
-            }}
-          >
-            <Stack sx={{ width: "19.6%", flexDirection: "row" }}>
-              <Stack
-                sx={{
-                  width: "68.5%",
-                  height: "100%",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRight: "1px solid black",
-                  fontSize: "12px",
-                  fontWeight: "700",
-                }}
-              >
-                Total
-              </Stack>
-              <Stack
-                sx={{
-                  width: "31.5%",
-                  height: "100%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRight: "1px solid black",
-                  fontSize: "10px",
-                  fontWeight: "700",
-                }}
-              >
-                <Stack
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    borderBottom: "1px solid black",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  Mobase
-                </Stack>
-
-                <Stack
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    borderBottom: "1px solid black",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  Get
-                </Stack>
-                <Stack
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  Cl
-                </Stack>
-              </Stack>
-            </Stack>
-            <Stack sx={{ width: "83.5%" }}>
-              <Stack
-                sx={{
-                  flexDirection: "row",
-                  borderBottom: "1px solid black",
-                  minHeight: "20px",
-                }}
-              >
-                {sumBoard(
-                  boards.filter(
-                    (i) =>
-                      !["quality_team", "material_team", "sales_team"].includes(
-                        i.process
-                      )
-                  )
-                )?.result_mobase.map((i, index) => {
-                  const isLast =
-                    index ===
-                    sumBoard(
-                      boards.filter(
-                        (i) =>
-                          ![
-                            "quality_team",
-                            "material_team",
-                            "sales_team",
-                          ].includes(i.process)
-                      )
-                    )?.result_mobase.length -
-                      1;
-                  return (
-                    <Stack
-                      sx={{
-                        width: "25%",
-                        flexDirection: "row",
-                        "> *": {
-                          justifyContent: "center",
-                          alignItems: "center",
-                          borderRight: "1px solid black",
-                          textAlign: "center",
-                        },
-                        fontSize: "12px",
-                        fontWeight: "400",
-                      }}
-                    >
-                      <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.worker}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.feederMaterial}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.feederTrash}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.sick}</Stack>
-                      <Stack
-                        sx={{
-                          width: "20%",
-                          borderRight: isLast
-                            ? "none !important"
-                            : "1px solid black",
-                        }}
-                      >
-                        {i.vacation}
-                      </Stack>
-                    </Stack>
-                  );
-                })}
-              </Stack>
-
-              <Stack
-                sx={{
-                  flexDirection: "row",
-                  height: "20px",
-                  borderBottom: "1px solid black",
-                }}
-              >
-                {sumBoard(
-                  boards.filter(
-                    (i) =>
-                      !["quality_team", "material_team", "sales_team"].includes(
-                        i.process
-                      )
-                  )
-                )?.result_get.map((i, index) => {
-                  const isLast =
-                    index ===
-                    sumBoard(
-                      boards.filter(
-                        (i) =>
-                          ![
-                            "quality_team",
-                            "material_team",
-                            "sales_team",
-                          ].includes(i.process)
-                      )
-                    )?.result_get?.length -
-                      1;
-                  return (
-                    <Stack
-                      sx={{
-                        width: "25%",
-                        flexDirection: "row",
-                        "> *": {
-                          justifyContent: "center",
-                          alignItems: "center",
-                          borderRight: "1px solid black",
-                          textAlign: "center",
-                        },
-                        fontSize: "12px",
-                        fontWeight: "400",
-                      }}
-                    >
-                      <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.worker}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.feederMaterial}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.feederTrash}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.sick}</Stack>
-                      <Stack
-                        sx={{
-                          width: "20%",
-                          borderRight: isLast
-                            ? "none !important"
-                            : "1px solid black",
-                        }}
-                      >
-                        {i.vacation}
-                      </Stack>
-                    </Stack>
-                  );
-                })}
-              </Stack>
-              <Stack sx={{ flexDirection: "row", height: "20px" }}>
-                {sumBoard(
-                  boards.filter(
-                    (i) =>
-                      !["quality_team", "material_team", "sales_team"].includes(
-                        i.process
-                      )
-                  )
-                )?.result_cl.map((i, index) => {
-                  const isLast =
-                    index ===
-                    sumBoard(
-                      boards.filter(
-                        (i) =>
-                          ![
-                            "quality_team",
-                            "material_team",
-                            "sales_team",
-                          ].includes(i.process)
-                      )
-                    )?.result_cl?.length -
-                      1;
-                  return (
-                    <Stack
-                      sx={{
-                        width: "25%",
-                        flexDirection: "row",
-                        "> *": {
-                          justifyContent: "center",
-                          alignItems: "center",
-                          borderRight: "1px solid black",
-                          textAlign: "center",
-                        },
-                        fontSize: "12px",
-                        fontWeight: "400",
-                      }}
-                    >
-                      <Stack sx={{ width: "20%" }}>{i.leader}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.worker}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.feederMaterial}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.feederTrash}</Stack>
-                      <Stack sx={{ width: "20%" }}>{i.sick}</Stack>
-                      <Stack
-                        sx={{
-                          width: "20%",
-                          borderRight: isLast
-                            ? "none !important"
-                            : "1px solid black",
-                        }}
-                      >
-                        {i.vacation}
-                      </Stack>
-                    </Stack>
-                  );
-                })}
-              </Stack>
-            </Stack>
-          </Stack>
-        </Stack>
         <Stack
           sx={{
             width: "100%",
@@ -573,13 +263,12 @@ export const Details = ({ boards }) => {
                 >
                   Mobase
                 </Stack>
-
                 <Stack
                   sx={{
                     width: "100%",
                     height: "100%",
-                    justifyContent: "center",
                     borderBottom: "1px solid black",
+                    justifyContent: "center",
                     alignItems: "center",
                   }}
                 >
@@ -606,24 +295,12 @@ export const Details = ({ boards }) => {
                 }}
               >
                 {sumBoard(
-                  boards.filter(
-                    (i) =>
-                      !["quality_team", "material_team", "sales_team"].includes(
-                        i.process
-                      )
-                  )
+                  boards.filter((i) => ["sales_team"].includes(i.process))
                 )?.result_mobase.map((i, index) => {
                   const isLast =
                     index ===
                     sumBoard(
-                      boards.filter(
-                        (i) =>
-                          ![
-                            "quality_team",
-                            "material_team",
-                            "sales_team",
-                          ].includes(i.process)
-                      )
+                      boards.filter((i) => ["sales_team"].includes(i.process))
                     )?.result_mobase.length -
                       1;
                   return (
@@ -662,7 +339,6 @@ export const Details = ({ boards }) => {
                   );
                 })}
               </Stack>
-
               <Stack
                 sx={{
                   flexDirection: "row",
@@ -671,25 +347,13 @@ export const Details = ({ boards }) => {
                 }}
               >
                 {sumBoard(
-                  boards.filter(
-                    (i) =>
-                      !["quality_team", "material_team", "sales_team"].includes(
-                        i.process
-                      )
-                  )
+                  boards.filter((i) => ["sales_team"].includes(i.process))
                 )?.result_get.map((i, index) => {
                   const isLast =
                     index ===
                     sumBoard(
-                      boards.filter(
-                        (i) =>
-                          ![
-                            "quality_team",
-                            "material_team",
-                            "sales_team",
-                          ].includes(i.process)
-                      )
-                    )?.result_get.length -
+                      boards.filter((i) => ["sales_team"].includes(i.process))
+                    )?.result_get?.length -
                       1;
                   return (
                     <Stack
@@ -727,32 +391,15 @@ export const Details = ({ boards }) => {
                   );
                 })}
               </Stack>
-              <Stack
-                sx={{
-                  flexDirection: "row",
-                  height: "20px",
-                }}
-              >
+              <Stack sx={{ flexDirection: "row", height: "20px" }}>
                 {sumBoard(
-                  boards.filter(
-                    (i) =>
-                      !["quality_team", "material_team", "sales_team"].includes(
-                        i.process
-                      )
-                  )
+                  boards.filter((i) => ["sales_team"].includes(i.process))
                 )?.result_cl.map((i, index) => {
                   const isLast =
                     index ===
                     sumBoard(
-                      boards.filter(
-                        (i) =>
-                          ![
-                            "quality_team",
-                            "material_team",
-                            "sales_team",
-                          ].includes(i.process)
-                      )
-                    )?.result_cl.length -
+                      boards.filter((i) => ["sales_team"].includes(i.process))
+                    )?.result_cl?.length -
                       1;
                   return (
                     <Stack
@@ -840,7 +487,6 @@ const Area = ({ area, boards, sum }) => {
               accumulatedStatus_mobase[key] += stat[key];
             }
           });
-
           let accumulatedStatus_get = {};
           status?.["getParsed"].forEach((stat) => {
             for (let key in stat) {
@@ -885,6 +531,7 @@ const Area = ({ area, boards, sum }) => {
                 sx={{
                   width: "6.18%",
                   height: "100%",
+
                   justifyContent: "center",
                   alignItems: "center",
                   borderRight: "1px solid black",
@@ -903,13 +550,12 @@ const Area = ({ area, boards, sum }) => {
                 >
                   Mobase
                 </Stack>
-
                 <Stack
                   sx={{
                     width: "100%",
                     height: "100%",
-                    borderBottom: "1px solid black",
                     justifyContent: "center",
+                    borderBottom: "1px solid black",
                     alignItems: "center",
                   }}
                 >
@@ -982,12 +628,11 @@ const Area = ({ area, boards, sum }) => {
                     }
                   )}
                 </Stack>
-
                 <Stack
                   sx={{
                     flexDirection: "row",
-                    minHeight: "20px",
                     borderBottom: "1px solid black",
+                    minHeight: "20px",
                   }}
                 >
                   {[accumulatedStatus_get, ...status?.["getParsed"]].map(
@@ -1131,7 +776,6 @@ const Area = ({ area, boards, sum }) => {
             >
               Mobase
             </Stack>
-
             <Stack
               sx={{
                 width: "100%",
@@ -1204,7 +848,6 @@ const Area = ({ area, boards, sum }) => {
                 );
               })}
             </Stack>
-
             <Stack
               sx={{
                 flexDirection: "row",

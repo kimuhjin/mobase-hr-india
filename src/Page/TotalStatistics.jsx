@@ -7,6 +7,7 @@ import { LoadingDim } from "../Composition/Common/LoadingDim";
 import { Details } from "../Composition/Statistics/Details";
 import { DetailQuality } from "../Composition/Statistics/DetailQuality";
 import { DetailMaterial } from "../Composition/Statistics/DetailMaterial";
+import { DetailSales } from "../Composition/Statistics/DetailSales";
 const TotalStatistics = () => {
   const [boards, setBoards] = useState([]);
 
@@ -460,16 +461,24 @@ const TotalStatistics = () => {
                 area="ASS'Y"
                 boards={boards.filter(
                   (i) =>
-                    !["smt", "eol", "quality_team", "material_team"].includes(
-                      i.process
-                    )
+                    ![
+                      "smt",
+                      "eol",
+                      "quality_team",
+                      "material_team",
+                      "sales_team",
+                    ].includes(i.process)
                 )}
                 sum={sumBoard(
                   boards.filter(
                     (i) =>
-                      !["smt", "eol", "quality_team", "material_team"].includes(
-                        i.process
-                      )
+                      ![
+                        "smt",
+                        "eol",
+                        "quality_team",
+                        "material_team",
+                        "sales_team",
+                      ].includes(i.process)
                   )
                 )}
               />
@@ -516,7 +525,11 @@ const TotalStatistics = () => {
                     {sumBoard(
                       boards.filter(
                         (i) =>
-                          !["quality_team", "material_team"].includes(i.process)
+                          ![
+                            "quality_team",
+                            "material_team",
+                            "sales_team",
+                          ].includes(i.process)
                       )
                     ).map((i, index) => {
                       const isLast =
@@ -524,9 +537,11 @@ const TotalStatistics = () => {
                         sumBoard(
                           boards.filter(
                             (i) =>
-                              !["quality_team", "material_team"].includes(
-                                i.process
-                              )
+                              ![
+                                "quality_team",
+                                "material_team",
+                                "sales_team",
+                              ].includes(i.process)
                           )
                         ).length -
                           1;
@@ -601,7 +616,11 @@ const TotalStatistics = () => {
                     {sumBoard(
                       boards.filter(
                         (i) =>
-                          !["quality_team", "material_team"].includes(i.process)
+                          ![
+                            "quality_team",
+                            "material_team",
+                            "sales_team",
+                          ].includes(i.process)
                       )
                     ).map((i, index) => {
                       const isLast =
@@ -609,9 +628,11 @@ const TotalStatistics = () => {
                         sumBoard(
                           boards.filter(
                             (i) =>
-                              !["quality_team", "material_team"].includes(
-                                i.process
-                              )
+                              ![
+                                "quality_team",
+                                "material_team",
+                                "sales_team",
+                              ].includes(i.process)
                           )
                         ).length -
                           1;
@@ -977,9 +998,170 @@ const TotalStatistics = () => {
               </Stack>
             </Stack>
           </Stack>
+          {/* SALES TEAM */}
+          <Stack
+            sx={{
+              width: "100%",
+              minHeight: "auto",
+              fontSize: "12px",
+              borderRadius: "6px",
+              marginTop: "12px",
+            }}
+          >
+            <Stack
+              sx={{
+                width: "100%",
+                height: "100%",
+                border: "1px solid black",
+                borderRadius: "6px",
+                overflow: "hidden",
+              }}
+            >
+              {/* HEADER */}
+              <Stack
+                sx={{
+                  width: "100%",
+                  minHeight: "80px",
+                  flexDirection: "row",
+                  borderBottom: "1px solid black",
+                  backgroundColor: "#d9cdb3",
+                  fontWeight: "bold",
+                  color: "#0a0a8f",
+
+                  "> *": {
+                    borderRight: "1px solid black",
+                    "&:last-child": {
+                      borderRight: "none",
+                    },
+                  },
+                }}
+              >
+                <Stack
+                  sx={{
+                    width: "3%",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: "12px",
+                    fontWeight: "700",
+                    minHeight: "25px",
+                  }}
+                >
+                  Area
+                </Stack>
+                <Stack
+                  sx={{
+                    width: "16%",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: "12px",
+                    fontWeight: "700",
+                    minHeight: "25px",
+                  }}
+                >
+                  Process
+                </Stack>
+                <Stack
+                  sx={{
+                    width: "81%",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <HeaderShift title="Total" />
+                  <HeaderShift title="1st Shift" />
+                  <HeaderShift title="2nd Shift" />
+                  <HeaderShift title="3rd Shift" isLast={true} />
+                </Stack>
+              </Stack>
+              <Area
+                area="Sales"
+                boards={boards.filter((i) =>
+                  ["sales_team"].includes(i.process)
+                )}
+                sum={sumBoard(
+                  boards.filter((i) => ["sales_team"].includes(i.process))
+                )}
+              />
+
+              <Stack
+                sx={{
+                  width: "100%",
+                  flexDirection: "row",
+                  // borderBottom: "1px solid black",
+                  backgroundColor: "#b5a991",
+                }}
+              >
+                <Stack
+                  sx={{
+                    width: "100%",
+                    minHeight: "30px",
+                    flexDirection: "row",
+                  }}
+                >
+                  <Stack
+                    sx={{
+                      width: "19.96%",
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRight: "1px solid black",
+                      fontSize: "12px",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Total Sum
+                  </Stack>
+                  <Stack sx={{ width: "85%", flexDirection: "row" }}>
+                    {sumBoard(
+                      boards.filter((i) => ["sales_team"].includes(i.process))
+                    ).map((i, index) => {
+                      const isLast = index === sumBoard(boards).length - 1;
+                      return (
+                        <Stack
+                          sx={{
+                            width: "25%",
+                            flexDirection: "row",
+                            "> *": {
+                              justifyContent: "center",
+                              alignItems: "center",
+                              borderRight: "1px solid black",
+                              textAlign: "center",
+                            },
+                            fontSize: "12px",
+                            fontWeight: "400",
+                          }}
+                        >
+                          <Stack
+                            sx={{
+                              width: "100%",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              borderRight: isLast
+                                ? "none !important"
+                                : "1px solid black",
+                            }}
+                          >
+                            {i.leader +
+                              i.worker +
+                              i.feederMaterial +
+                              i.feederTrash +
+                              i.sick +
+                              i.vacation}
+                          </Stack>
+                        </Stack>
+                      );
+                    })}
+                  </Stack>
+                </Stack>
+              </Stack>
+            </Stack>
+          </Stack>
           <Details boards={boards} />
           <DetailQuality boards={boards} />
           <DetailMaterial boards={boards} />
+          <DetailSales boards={boards} />
         </Stack>
       )}
     </Stack>

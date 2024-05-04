@@ -508,6 +508,7 @@ export const EmployeeForm = ({ isNew, workerInfo }) => {
                           <MenuItem value="keyset">{`ASS'Y(keyset)`}</MenuItem>
                           <MenuItem value="quality_team">{`Quality team`}</MenuItem>
                           <MenuItem value="material_team">{`Material team`}</MenuItem>
+                          <MenuItem value="sales_team">{`Sales team`}</MenuItem>
                         </Select>
                       );
                     }}
