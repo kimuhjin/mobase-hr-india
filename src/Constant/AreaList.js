@@ -32,6 +32,7 @@ export const AreaList = {
     { label: "ESCL MAIN", value: "escl_main" },
   ],
   quality_team: [],
+  quality_assy_team: [],
   material_team: [],
   sales_team: [],
 };

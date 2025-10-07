@@ -1,16 +1,13 @@
-import { IconButton, MenuItem, Select, Stack, Typography } from "@mui/material";
-import React, { useEffect, useLayoutEffect } from "react";
+import { MenuItem, Select, Stack, Typography } from "@mui/material";
+import React, { useEffect } from "react";
 import { BoardsContainer } from "../Composition/Board/BoardsContainer";
 import { useState } from "react";
-import { BiExpand, BiCollapse } from "react-icons/bi";
 import { GROUP_LIST } from "./Team";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 const Board = () => {
   const [selectedBoardId, setSelectedBoardId] = useState("");
   const [isExpand, setIsExpand] = useState(false);
-  const onExpandButtonClick = () => {
-    setIsExpand((prev) => !prev);
-  };
+
   const date = new Date();
   const today = `${date.getFullYear()}.${
     date.getMonth() + 1
@@ -84,24 +81,11 @@ const Board = () => {
             <MenuItem value="eol">{`SMT(eol)`}</MenuItem>
             <MenuItem value="switch">{`ASS'Y(switch)`}</MenuItem>
             <MenuItem value="keyset">{`ASS'Y(keyset)`}</MenuItem>
-            <MenuItem value="quality_team">{`Quality team`}</MenuItem>
+            <MenuItem value="quality_team">{`Quality (SMT/IQC)`}</MenuItem>
+            <MenuItem value="quality_assy_team">{`Quality (Assy)`}</MenuItem>
             <MenuItem value="material_team">{`Material team`}</MenuItem>
             <MenuItem value="sales_team">{`Sales team`}</MenuItem>
           </Select>
-          {/* <IconButton
-            sx={{
-              marginLeft: "16px",
-              width: "30px",
-              height: "30px",
-            }}
-            onClick={onExpandButtonClick}
-          >
-            {isExpand ? (
-              <BiCollapse size={"24px"} color="#333333" />
-            ) : (
-              <BiExpand size={"24px"} color="#333333" />
-            )}
-          </IconButton> */}
         </Stack>
       </Stack>
 

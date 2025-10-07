@@ -235,6 +235,7 @@ export const Details = ({ boards }) => {
                 "smt",
                 "eol",
                 "quality_team",
+                "quality_assy_team",
                 "material_team",
                 "sales_team",
               ].includes(i.process)
@@ -246,6 +247,7 @@ export const Details = ({ boards }) => {
                   "smt",
                   "eol",
                   "quality_team",
+                  "quality_assy_team",
                   "material_team",
                   "sales_team",
                 ].includes(i.process)
@@ -347,9 +349,12 @@ export const Details = ({ boards }) => {
                 {sumBoard(
                   boards.filter(
                     (i) =>
-                      !["quality_team", "material_team", "sales_team"].includes(
-                        i.process
-                      )
+                      ![
+                        "quality_team",
+                        "quality_assy_team",
+                        "material_team",
+                        "sales_team",
+                      ].includes(i.process)
                   )
                 )?.result_mobase.map((i, index) => {
                   const isLast =
@@ -359,6 +364,7 @@ export const Details = ({ boards }) => {
                         (i) =>
                           ![
                             "quality_team",
+                            "quality_assy_team",
                             "material_team",
                             "sales_team",
                           ].includes(i.process)
@@ -410,9 +416,12 @@ export const Details = ({ boards }) => {
                 {sumBoard(
                   boards.filter(
                     (i) =>
-                      !["quality_team", "material_team", "sales_team"].includes(
-                        i.process
-                      )
+                      ![
+                        "quality_team",
+                        "quality_assy_team",
+                        "material_team",
+                        "sales_team",
+                      ].includes(i.process)
                   )
                 )?.result_get.map((i, index) => {
                   const isLast =
@@ -422,6 +431,7 @@ export const Details = ({ boards }) => {
                         (i) =>
                           ![
                             "quality_team",
+                            "quality_assy_team",
                             "material_team",
                             "sales_team",
                           ].includes(i.process)
@@ -466,9 +476,12 @@ export const Details = ({ boards }) => {
                 {sumBoard(
                   boards.filter(
                     (i) =>
-                      !["quality_team", "material_team", "sales_team"].includes(
-                        i.process
-                      )
+                      ![
+                        "quality_team",
+                        "quality_assy_team",
+                        "material_team",
+                        "sales_team",
+                      ].includes(i.process)
                   )
                 )?.result_cl.map((i, index) => {
                   const isLast =
@@ -478,6 +491,7 @@ export const Details = ({ boards }) => {
                         (i) =>
                           ![
                             "quality_team",
+                            "quality_assy_team",
                             "material_team",
                             "sales_team",
                           ].includes(i.process)
@@ -608,9 +622,12 @@ export const Details = ({ boards }) => {
                 {sumBoard(
                   boards.filter(
                     (i) =>
-                      !["quality_team", "material_team", "sales_team"].includes(
-                        i.process
-                      )
+                      ![
+                        "quality_team",
+                        "quality_assy_team",
+                        "material_team",
+                        "sales_team",
+                      ].includes(i.process)
                   )
                 )?.result_mobase.map((i, index) => {
                   const isLast =
@@ -620,6 +637,7 @@ export const Details = ({ boards }) => {
                         (i) =>
                           ![
                             "quality_team",
+                            "quality_assy_team",
                             "material_team",
                             "sales_team",
                           ].includes(i.process)
@@ -673,9 +691,12 @@ export const Details = ({ boards }) => {
                 {sumBoard(
                   boards.filter(
                     (i) =>
-                      !["quality_team", "material_team", "sales_team"].includes(
-                        i.process
-                      )
+                      ![
+                        "quality_team",
+                        "quality_assy_team",
+                        "material_team",
+                        "sales_team",
+                      ].includes(i.process)
                   )
                 )?.result_get.map((i, index) => {
                   const isLast =
@@ -685,6 +706,7 @@ export const Details = ({ boards }) => {
                         (i) =>
                           ![
                             "quality_team",
+                            "quality_assy_team",
                             "material_team",
                             "sales_team",
                           ].includes(i.process)
@@ -736,9 +758,12 @@ export const Details = ({ boards }) => {
                 {sumBoard(
                   boards.filter(
                     (i) =>
-                      !["quality_team", "material_team", "sales_team"].includes(
-                        i.process
-                      )
+                      ![
+                        "quality_team",
+                        "quality_assy_team",
+                        "material_team",
+                        "sales_team",
+                      ].includes(i.process)
                   )
                 )?.result_cl.map((i, index) => {
                   const isLast =
@@ -748,6 +773,7 @@ export const Details = ({ boards }) => {
                         (i) =>
                           ![
                             "quality_team",
+                            "quality_assy_team",
                             "material_team",
                             "sales_team",
                           ].includes(i.process)

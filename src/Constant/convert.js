@@ -3,7 +3,8 @@ export const groupObj = {
   eol: "SMT(eol)",
   switch: "ASS'Y(switch)",
   keyset: "ASS'Y(keyset)",
-  quality_team: "Quality team",
+  quality_team: "Quality (SMT/IQC)",
+  quality_assy_team: "Quality (Assy)",
   material_team: "Material team",
   sales_team: "Sales team",
 };

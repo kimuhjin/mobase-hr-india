@@ -205,9 +205,13 @@ export const DetailQuality = ({ boards }) => {
         </Stack>
         <Area
           area="Quality"
-          boards={boards.filter((i) => ["quality_team"].includes(i.process))}
+          boards={boards.filter((i) =>
+            ["quality_team", "quality_assy_team"].includes(i.process)
+          )}
           sum={sumBoard(
-            boards.filter((i) => ["quality_team"].includes(i.process))
+            boards.filter((i) =>
+              ["quality_team", "quality_assy_team"].includes(i.process)
+            )
           )}
         />
 
@@ -295,12 +299,18 @@ export const DetailQuality = ({ boards }) => {
                 }}
               >
                 {sumBoard(
-                  boards.filter((i) => ["quality_team"].includes(i.process))
+                  boards.filter((i) =>
+                    ["quality_team", "quality_assy_team"].includes(i.process)
+                  )
                 )?.result_mobase.map((i, index) => {
                   const isLast =
                     index ===
                     sumBoard(
-                      boards.filter((i) => ["quality_team"].includes(i.process))
+                      boards.filter((i) =>
+                        ["quality_team", "quality_assy_team"].includes(
+                          i.process
+                        )
+                      )
                     )?.result_mobase.length -
                       1;
                   return (
@@ -347,12 +357,18 @@ export const DetailQuality = ({ boards }) => {
                 }}
               >
                 {sumBoard(
-                  boards.filter((i) => ["quality_team"].includes(i.process))
+                  boards.filter((i) =>
+                    ["quality_team", "quality_assy_team"].includes(i.process)
+                  )
                 )?.result_get.map((i, index) => {
                   const isLast =
                     index ===
                     sumBoard(
-                      boards.filter((i) => ["quality_team"].includes(i.process))
+                      boards.filter((i) =>
+                        ["quality_team", "quality_assy_team"].includes(
+                          i.process
+                        )
+                      )
                     )?.result_get?.length -
                       1;
                   return (
@@ -393,12 +409,18 @@ export const DetailQuality = ({ boards }) => {
               </Stack>
               <Stack sx={{ flexDirection: "row", height: "20px" }}>
                 {sumBoard(
-                  boards.filter((i) => ["quality_team"].includes(i.process))
+                  boards.filter((i) =>
+                    ["quality_team", "quality_assy_team"].includes(i.process)
+                  )
                 )?.result_cl.map((i, index) => {
                   const isLast =
                     index ===
                     sumBoard(
-                      boards.filter((i) => ["quality_team"].includes(i.process))
+                      boards.filter((i) =>
+                        ["quality_team", "quality_assy_team"].includes(
+                          i.process
+                        )
+                      )
                     )?.result_cl?.length -
                       1;
                   return (

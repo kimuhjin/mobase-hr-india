@@ -12,7 +12,8 @@ export const GROUP_LIST = [
   { label: "SMT(eol)", id: "eol" },
   { label: "ASS'Y(switch)", id: "switch" },
   { label: "ASS'Y(keyset)", id: "keyset" },
-  { label: "Quality team", id: "quality_team" },
+  { label: "Quality (SMT/IQC)", id: "quality_team" },
+  { label: "Quality (Assy)", id: "quality_assy_team" },
   { label: "Material team", id: "material_team" },
   { label: "Sales team", id: "sales_team" },
 ];
@@ -72,7 +73,8 @@ export const Team = () => {
               <MenuItem value="eol">{`SMT(eol)`}</MenuItem>
               <MenuItem value="switch">{`ASS'Y(switch)`}</MenuItem>
               <MenuItem value="keyset">{`ASS'Y(keyset)`}</MenuItem>
-              <MenuItem value="quality_team">{`Quality team`}</MenuItem>
+              <MenuItem value="quality_team">{`Quality (SMT/IQC)`}</MenuItem>
+              <MenuItem value="quality_assy_team">{`Quality (Assy)`}</MenuItem>
               <MenuItem value="material_team">{`Material team`}</MenuItem>
               <MenuItem value="sales_team">{`Sales team`}</MenuItem>
             </Select>

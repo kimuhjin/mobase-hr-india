@@ -8,6 +8,7 @@ import { Details } from "../Composition/Statistics/Details";
 import { DetailQuality } from "../Composition/Statistics/DetailQuality";
 import { DetailMaterial } from "../Composition/Statistics/DetailMaterial";
 import { DetailSales } from "../Composition/Statistics/DetailSales";
+
 const TotalStatistics = () => {
   const [boards, setBoards] = useState([]);
 
@@ -465,6 +466,7 @@ const TotalStatistics = () => {
                       "smt",
                       "eol",
                       "quality_team",
+                      "quality_assy_team",
                       "material_team",
                       "sales_team",
                     ].includes(i.process)
@@ -476,6 +478,7 @@ const TotalStatistics = () => {
                         "smt",
                         "eol",
                         "quality_team",
+                        "quality_assy_team",
                         "material_team",
                         "sales_team",
                       ].includes(i.process)
@@ -527,6 +530,7 @@ const TotalStatistics = () => {
                         (i) =>
                           ![
                             "quality_team",
+                            "quality_assy_team",
                             "material_team",
                             "sales_team",
                           ].includes(i.process)
@@ -539,6 +543,7 @@ const TotalStatistics = () => {
                             (i) =>
                               ![
                                 "quality_team",
+                                "quality_assy_team",
                                 "material_team",
                                 "sales_team",
                               ].includes(i.process)
@@ -618,6 +623,7 @@ const TotalStatistics = () => {
                         (i) =>
                           ![
                             "quality_team",
+                            "quality_assy_team",
                             "material_team",
                             "sales_team",
                           ].includes(i.process)
@@ -630,6 +636,7 @@ const TotalStatistics = () => {
                             (i) =>
                               ![
                                 "quality_team",
+                                "quality_assy_team",
                                 "material_team",
                                 "sales_team",
                               ].includes(i.process)
@@ -756,10 +763,12 @@ const TotalStatistics = () => {
               <Area
                 area="Quality"
                 boards={boards.filter((i) =>
-                  ["quality_team"].includes(i.process)
+                  ["quality_team", "quality_assy_team"].includes(i.process)
                 )}
                 sum={sumBoard(
-                  boards.filter((i) => ["quality_team"].includes(i.process))
+                  boards.filter((i) =>
+                    ["quality_team", "quality_assy_team"].includes(i.process)
+                  )
                 )}
               />
 
@@ -793,7 +802,11 @@ const TotalStatistics = () => {
                   </Stack>
                   <Stack sx={{ width: "85%", flexDirection: "row" }}>
                     {sumBoard(
-                      boards.filter((i) => ["quality_team"].includes(i.process))
+                      boards.filter((i) =>
+                        ["quality_team", "quality_assy_team"].includes(
+                          i.process
+                        )
+                      )
                     ).map((i, index) => {
                       const isLast = index === sumBoard(boards).length - 1;
                       return (
