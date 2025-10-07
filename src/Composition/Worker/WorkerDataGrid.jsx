@@ -8,6 +8,7 @@ import { db } from "../../firebase-config";
 import { LoadingDim } from "../Common/LoadingDim";
 import { auth } from "../../Util/auth";
 import { groupObj } from "../../Constant/convert";
+import * as XLSX from "xlsx";
 const columns = [
   {
     field: "profileImage",
@@ -64,6 +65,46 @@ export const WorkerDataGrid = () => {
   const onNewButtonClick = () => {
     navigate(`${WORKER_CRUD}/new`);
   };
+
+  const onExportButtonClick = () => {
+    // 엑셀 데이터 준비
+    const exportData = workerList.map((worker) => {
+      // Skill Matrix Detail을 문자열로 변환
+      const skillMatrixDetail = worker.skillMatrixDetail
+        ? worker.skillMatrixDetail
+            .map((skill) => `${skill.processName}: ${skill.level}`)
+            .join(", ")
+        : "";
+
+      return {
+        "Employee Number": worker.employeeNumber || "",
+        "Name": worker.name || "",
+        "Group": groupObj[worker.group] || worker.group || "",
+        "Company": worker.company || "",
+        "Position": worker.position || "",
+        "Area": worker.area || "",
+        "Skill Matrix": worker.skillMatrix || "",
+        "Skill Matrix Detail": skillMatrixDetail,
+        "Date of Employment": worker.employmentDate || "",
+        "Date of Employment (Mobase)": worker.employmentDate_Mobase || "",
+        "Inspector Certificate": worker.inspectorCertificate || "",
+        "Inspector Certificate Date": worker.inspectorCertificateDate || "",
+        "Soldering Certificate": worker.solderingCertificate || "",
+        "Soldering Certificate Date": worker.solderingCertificateDate || "",
+        "Deputy Supervisor": worker.deputyTeamLeader || "",
+        "Disabled": worker.disabled ? "YES" : "NO",
+      };
+    });
+
+    // 워크북 생성
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Workers");
+
+    // 파일 다운로드
+    const fileName = `workers_${new Date().toISOString().split('T')[0]}.xlsx`;
+    XLSX.writeFile(workbook, fileName);
+  };
   const getWorkerList = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "worker"));
@@ -100,15 +141,26 @@ export const WorkerDataGrid = () => {
             <Typography sx={{ fontSize: "28px", fontWeight: "700" }}>
               Worker
             </Typography>
-            <Button
-              variant="contained"
-              sx={{ width: "100px", height: "48px" }}
-              onClick={onNewButtonClick}
-            >
-              <Typography variant="button" sx={{ fontSize: "16px" }}>
-                New
-              </Typography>
-            </Button>
+            <Stack sx={{ flexDirection: "row", gap: "12px" }}>
+              <Button
+                variant="outlined"
+                sx={{ width: "100px", height: "48px" }}
+                onClick={onExportButtonClick}
+              >
+                <Typography variant="button" sx={{ fontSize: "16px" }}>
+                  Export
+                </Typography>
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ width: "100px", height: "48px" }}
+                onClick={onNewButtonClick}
+              >
+                <Typography variant="button" sx={{ fontSize: "16px" }}>
+                  New
+                </Typography>
+              </Button>
+            </Stack>
           </Stack>
           <Stack
             sx={{
