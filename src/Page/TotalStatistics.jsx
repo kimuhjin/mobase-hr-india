@@ -465,6 +465,7 @@ const TotalStatistics = () => {
                     ![
                       "smt",
                       "eol",
+                      "sol",
                       "quality_team",
                       "quality_assy_team",
                       "material_team",
@@ -477,6 +478,7 @@ const TotalStatistics = () => {
                       ![
                         "smt",
                         "eol",
+                        "sol",
                         "quality_team",
                         "quality_assy_team",
                         "material_team",
@@ -488,10 +490,12 @@ const TotalStatistics = () => {
               <Area
                 area="SMT"
                 boards={boards.filter((i) =>
-                  ["smt", "eol"].includes(i.process)
+                  ["smt", "eol", "sol"].includes(i.process)
                 )}
                 sum={sumBoard(
-                  boards.filter((i) => ["smt", "eol"].includes(i.process))
+                  boards.filter((i) =>
+                    ["smt", "eol", "sol"].includes(i.process)
+                  )
                 )}
               />
               <Stack

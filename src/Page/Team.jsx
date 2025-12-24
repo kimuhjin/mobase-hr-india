@@ -10,6 +10,7 @@ import { BOARD_TEAM } from "../Constant/route";
 export const GROUP_LIST = [
   { label: "SMT(smt)", id: "smt" },
   { label: "SMT(eol)", id: "eol" },
+  { label: "SMT(sol)", id: "sol" },
   { label: "ASS'Y(switch)", id: "switch" },
   { label: "ASS'Y(keyset)", id: "keyset" },
   { label: "Quality (SMT/IQC)", id: "quality_team" },
@@ -71,6 +72,7 @@ export const Team = () => {
             >
               <MenuItem value="smt">{`SMT(smt)`}</MenuItem>
               <MenuItem value="eol">{`SMT(eol)`}</MenuItem>
+              <MenuItem value="sol">{`SMT(sol)`}</MenuItem>
               <MenuItem value="switch">{`ASS'Y(switch)`}</MenuItem>
               <MenuItem value="keyset">{`ASS'Y(keyset)`}</MenuItem>
               <MenuItem value="quality_team">{`Quality (SMT/IQC)`}</MenuItem>

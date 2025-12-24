@@ -79,6 +79,7 @@ const Board = () => {
           >
             <MenuItem value="smt">{`SMT(smt)`}</MenuItem>
             <MenuItem value="eol">{`SMT(eol)`}</MenuItem>
+            <MenuItem value="sol">{`SMT(sol)`}</MenuItem>
             <MenuItem value="switch">{`ASS'Y(switch)`}</MenuItem>
             <MenuItem value="keyset">{`ASS'Y(keyset)`}</MenuItem>
             <MenuItem value="quality_team">{`Quality (SMT/IQC)`}</MenuItem>

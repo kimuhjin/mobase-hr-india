@@ -234,6 +234,7 @@ export const Details = ({ boards }) => {
               ![
                 "smt",
                 "eol",
+                "sol",
                 "quality_team",
                 "quality_assy_team",
                 "material_team",
@@ -246,6 +247,7 @@ export const Details = ({ boards }) => {
                 ![
                   "smt",
                   "eol",
+                  "sol",
                   "quality_team",
                   "quality_assy_team",
                   "material_team",
