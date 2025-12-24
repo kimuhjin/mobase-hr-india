@@ -258,9 +258,11 @@ export const Details = ({ boards }) => {
         />
         <Area
           area="SMT"
-          boards={boards.filter((i) => ["smt", "eol"].includes(i.process))}
+          boards={boards.filter((i) =>
+            ["smt", "eol", "sol"].includes(i.process)
+          )}
           sum={sumBoard(
-            boards.filter((i) => ["smt", "eol"].includes(i.process))
+            boards.filter((i) => ["smt", "eol", "sol"].includes(i.process))
           )}
         />
         <Stack
